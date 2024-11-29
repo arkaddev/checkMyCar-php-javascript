@@ -1,30 +1,67 @@
 <?php
 session_start();
 
-// Odczytaj dane z pliku JSON
-$users_json = file_get_contents('data/users.json');
-$users = json_decode($users_json, true);
 
 
+// Parametry połączenia
+$config = include('config/db_config.php');
+// Tworzymy połączenie
+$conn = mysqli_connect($config['servername'], $config['username'], $config['password'], $config['dbname']);
+
+
+// Sprawdzamy, czy połączenie się powiodło
+if (!$conn) {
+    // Jeśli połączenie nie uda się, wyświetli się błąd
+    //die("Połączenie nie powiodło się: " . mysqli_connect_error());
+} else {
+    // Jeśli połączenie jest udane, wyświetlamy komunikat
+    //echo "Połączenie z bazą danych powiodło się!";
+}
+
+
+// Jeśli formularz został wysłany
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Pobierz dane z formularza
-    $username = $_POST["username"];
-    $password = $_POST["password"];
+    $user_username = $_POST["username"];
+    $user_password = $_POST["password"];
+    
+  // Przygotowanie zapytania
+    $sql = "SELECT * FROM users WHERE username = ?";
+    $stmt = $conn->prepare($sql);
 
-    // Sprawdź, czy użytkownik istnieje w danych
-    foreach ($users as $user) {
-        if ($user["username"] === $username && $user["password"] === $password) {
-        
-          $_SESSION["username"] = $username; // Ustaw zmienną sesji
-          $_SESSION["role"] = $user["role"];
-          header("Location: home.php"); // Przekieruj na stronę powitalną
-          exit();
-        }
+    // Sprawdzamy, czy zapytanie zostało przygotowane poprawnie
+    if ($stmt === false) {
+        die("Błąd w przygotowaniu zapytania: " . $conn->error);
     }
 
-    // Jeśli nie udało się zalogować, wyświetl komunikat
-    $error = "Błędna nazwa użytkownika lub hasło.";
+    // Zwiąż parametr z zapytaniem (parametr typu string)
+    $stmt->bind_param("s", $user_username);  // "s" oznacza typ string
+    $stmt->execute();
+
+    // Pobierz wynik
+    $result = $stmt->get_result();
+    $user = $result->fetch_assoc();
+
+    // Sprawdź, czy użytkownik istnieje i czy hasło jest poprawne
+    if ($user && password_verify($user_password, $user['password'])) {
+        // Hasło jest poprawne, ustaw zmienne sesji
+        $_SESSION["username"] = $user['username'];
+        $_SESSION["role"] = $user['role'];
+        $_SESSION["id"] = $user['id'];
+
+        // Przekierowanie na stronę powitalną
+        header("Location: home.php");
+        exit();
+    } else {
+        // Jeśli dane logowania są niepoprawne
+        $error = "Błędna nazwa użytkownika lub hasło.";
+    }
 }
+
+
+// Zamykamy połączenie
+mysqli_close($conn);
+
 ?>
 
 <!DOCTYPE html>

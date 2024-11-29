@@ -6,6 +6,7 @@ if (!isset($_SESSION["username"])) {
     exit();
 }
 ?>
+  
 <!DOCTYPE html>
 <html lang="pl">
 <head>
@@ -15,8 +16,14 @@ if (!isset($_SESSION["username"])) {
 </head>
 <body>
   
+  <?php if (isset($_SESSION['id'])): ?>
+        <h1>Twoje id to: <?= htmlspecialchars($_SESSION['id']) ?>!</h1>
+    <?php else: ?>
+        <p>Nie przypisano id.</p>
+    <?php endif; ?>
+  
   <?php if (isset($_SESSION['role'])): ?>
-        <h1>Twoja rola to: <?= htmlspecialchars($_SESSION['role']) ?>!</h1>
+  <h1>Twoja rola to: <?= htmlspecialchars($_SESSION['role']) ?>!</h1>
     <?php else: ?>
         <p>Nie przypisano roli.</p>
     <?php endif; ?>
@@ -28,54 +35,90 @@ if (!isset($_SESSION["username"])) {
     <a href="logout.php">Wyloguj się</a>
 </body>
 </html>
+
+
+      
+   
+
+
+
+
 <?php
-// Odczytaj dane z pliku JSON
-$cars_json = file_get_contents('data/cars.json');
-$cars = json_decode($cars_json, true);
+// Parametry połączenia
+$config = include('config/db_config.php');
+// Tworzymy połączenie
+$conn = mysqli_connect($config['servername'], $config['username'], $config['password'], $config['dbname']);
+
+// Sprawdzamy, czy połączenie się powiodło
+if (!$conn) {
+    // Jeśli połączenie nie uda się, wyświetli się błąd
+    die("Połączenie nie powiodło się: " . mysqli_connect_error());
+} else {
+    // Jeśli połączenie jest udane, wyświetlamy komunikat
+    echo "Połączenie z bazą danych powiodło się!";
+}
+
+// Sprawdzenie połączenia inny spososb
+//if ($conn->connect_error) {
+//    die("Connection failed: " . $conn->connect_error);
+//}
 
 // Sprawdzamy rolę użytkownika
 $user_role = isset($_SESSION['role']) ? $_SESSION['role'] : '';  
-      
-// Sprawdź, czy dane zostały załadowane poprawnie
-if ($cars === null) {
-    echo "Błąd przy wczytywaniu danych.";
-    exit;
+
+  
+  
+// Przygotowanie zapytania SQL, aby pobrać dane samochodów
+$sql = "SELECT id, brand, model, year, mileage, user_id FROM cars";
+
+// Jeśli użytkownik nie jest administratorem, dodajemy warunek, by pokazać tylko samochody przypisane do tego użytkownika
+if ($user_role !== 'admin') {
+    $sql .= " WHERE user_id = '" . $conn->real_escape_string($_SESSION['id']) . "'";
 }
 
-// Wybrane nagłówki (kolumny), które mają być wyświetlone
-$selected_headers = ['id', 'brand', 'model', 'year', 'username', 'mileage'];
+// Wykonaj zapytanie
+$result = $conn->query($sql);
 
-// Rozpocznij tabelę HTML
-echo '<table border="1" cellpadding="5" cellspacing="0">'; // Ustalamy wygląd tabeli
-
-// Wyświetl nagłówki tabeli
-echo '<tr>';
-foreach ($selected_headers as $header) {
-    echo "<th>" . ucfirst($header) . "</th>";
-}
-echo '</tr>';
-
-      
-      
-      
-      
-      foreach ($cars as $car) {
-    // Jeśli użytkownik jest "user", to sprawdzamy, czy "username" odpowiada zalogowanemu użytkownikowi
-    if ($user_role !== 'admin' && $car['username'] !== $_SESSION['username']) {
-        continue; // Jeśli nie jest to jego rekord, to przechodzimy do następnego
-    }
-
-    // Wyświetl dane dla danego samochodu
+// Sprawdzenie, czy zapytanie zwróciło jakieś wyniki
+if ($result->num_rows > 0) {
+    // Wyświetlanie danych w tabeli HTML
+    echo '<table border="1" cellpadding="5" cellspacing="0">';
     echo '<tr>';
-    foreach ($selected_headers as $header) {
-        echo "<td>" . htmlspecialchars($car[$header]) . "</td>";
-    }
+    echo '<th>ID</th>';
+    echo '<th>Marka</th>';
+    echo '<th>Model</th>';
+    echo '<th>Rok</th>';
+    echo '<th>Użytkownik</th>';
+    echo '<th>Przebieg</th>';
     echo '</tr>';
+    
+    // Wyświetlanie danych samochodów
+    while ($row = $result->fetch_assoc()) {
+        echo '<tr>';
+        echo '<td>' . htmlspecialchars($row['id']) . '</td>';
+        echo '<td>' . htmlspecialchars($row['brand']) . '</td>';
+        echo '<td>' . htmlspecialchars($row['model']) . '</td>';
+        echo '<td>' . htmlspecialchars($row['year']) . '</td>';
+        echo '<td>' . htmlspecialchars($row['user_id']) . '</td>';
+        echo '<td>' . htmlspecialchars($row['mileage']) . '</td>';
+      
+        echo '</tr>';
+    }
+    
+    echo '</table>';
+} else {
+    echo "Brak danych.";
 }
-      
-      
-      
 
-// Zakończ tabelę
-echo '</table>';
+
+
+
+// Zamykamy połączenie
+mysqli_close($conn);
 ?>
+
+
+
+
+
+
