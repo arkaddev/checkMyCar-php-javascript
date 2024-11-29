@@ -22,5 +22,6 @@ and tells you when the next replacement is due (e.g. oil, brakes)
 
  ## Roadmap
 ### v0.1
-- login
-- logout
+- loging with database
+- adding new parts
+- displaying data by roles
