@@ -1,22 +1,28 @@
 <?php
 session_start();
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $username = $_POST['username'] ?? '';
-    $password = $_POST['password'] ?? '';
+// Odczytaj dane z pliku JSON
+$users_json = file_get_contents('data/users.json');
+$users = json_decode($users_json, true);
 
-    // Prosta walidacja
-    $correctUsername = "admin";
-    $correctPassword = "a";
 
-    if ($username === $correctUsername && $password === $correctPassword) {
-        $_SESSION['loggedin'] = true;
-        $_SESSION['username'] = $username;
-        header('Location: home.php'); // Przekierowanie po zalogowaniu
-        exit();
-    } else {
-        $error = "Nieprawidłowa nazwa użytkownika lub hasło.";
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Pobierz dane z formularza
+    $username = $_POST["username"];
+    $password = $_POST["password"];
+
+    // Sprawdź, czy użytkownik istnieje w danych
+    foreach ($users as $user) {
+        if ($user["username"] === $username && $user["password"] === $password) {
+        
+          $_SESSION["username"] = $username; // Ustaw zmienną sesji
+          header("Location: home.php"); // Przekieruj na stronę powitalną
+          exit();
+        }
     }
+
+    // Jeśli nie udało się zalogować, wyświetl komunikat
+    $error = "Błędna nazwa użytkownika lub hasło.";
 }
 ?>
 

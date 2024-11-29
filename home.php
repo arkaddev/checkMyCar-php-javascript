@@ -1,7 +1,8 @@
 <?php
 session_start();
-if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
-    header('Location: login.php');
+// Sprawdź, czy użytkownik jest zalogowany
+if (!isset($_SESSION["username"])) {
+    header("Location: login.php");
     exit();
 }
 ?>
