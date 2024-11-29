@@ -2,26 +2,37 @@
     {
         "id": 1,
         "username": "admin",
-        "password": "a"
+        "password": "a",
+        "role": "admin"
     },
     {
         "id": 2,
         "username": "arek",
-        "password": "arek"
+        "password": "arek",
+        "role": "user"
     },
     {
         "id": 3,
         "username": "wiktoria",
-        "password": "wiktoria"
+        "password": "wiktoria",
+        "role": "user"
     },
     {
         "id": 4,
         "username": "stanislaw",
-        "password": "stanislaw"
+        "password": "stanislaw",
+        "role": "user"
     },
     {
         "id": 5,
         "username": "anna",
-        "password": "anna"
+        "password": "anna",
+        "role": "user"
+    },
+    {
+        "id": 6,
+        "username": "patryk",
+        "password": "patryk",
+        "role": "user"
     }
 ]

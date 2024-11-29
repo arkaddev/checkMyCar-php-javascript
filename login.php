@@ -16,6 +16,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if ($user["username"] === $username && $user["password"] === $password) {
         
           $_SESSION["username"] = $username; // Ustaw zmienną sesji
+          $_SESSION["role"] = $user["role"];
           header("Location: home.php"); // Przekieruj na stronę powitalną
           exit();
         }
