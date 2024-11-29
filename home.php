@@ -69,7 +69,7 @@ $user_role = isset($_SESSION['role']) ? $_SESSION['role'] : '';
   
   
 // Przygotowanie zapytania SQL, aby pobrać dane samochodów
-$sql = "SELECT id, brand, model, year, mileage, user_id FROM cars";
+$sql = "SELECT id, model, year, mileage, user_id FROM cars";
 
 // Jeśli użytkownik nie jest administratorem, dodajemy warunek, by pokazać tylko samochody przypisane do tego użytkownika
 if ($user_role !== 'admin') {
@@ -85,10 +85,11 @@ if ($result->num_rows > 0) {
     echo '<table border="1" cellpadding="5" cellspacing="0">';
     echo '<tr>';
     echo '<th>ID</th>';
-    echo '<th>Marka</th>';
-    echo '<th>Model</th>';
+    echo '<th>Marka i model</th>';
     echo '<th>Rok</th>';
     echo '<th>Użytkownik</th>';
+    echo '<th>Ubezpieczenie</th>';
+    echo '<th>Przeglad</th>';
     echo '<th>Przebieg</th>';
     echo '</tr>';
     
@@ -96,12 +97,22 @@ if ($result->num_rows > 0) {
     while ($row = $result->fetch_assoc()) {
         echo '<tr>';
         echo '<td>' . htmlspecialchars($row['id']) . '</td>';
-        echo '<td>' . htmlspecialchars($row['brand']) . '</td>';
         echo '<td>' . htmlspecialchars($row['model']) . '</td>';
         echo '<td>' . htmlspecialchars($row['year']) . '</td>';
         echo '<td>' . htmlspecialchars($row['user_id']) . '</td>';
+        echo '<td>' . htmlspecialchars($row['insurance']) . '</td>';
+        echo '<td>' . htmlspecialchars($row['technical_inspection']) . '</td>';
         echo '<td>' . htmlspecialchars($row['mileage']) . '</td>';
-      
+     
+
+// Link do formularza dodawania części
+    echo '<td>';
+    echo '<a href="add_part_form.php?car_id=' . htmlspecialchars($row['id']) . '">Dodaj wymiane</a>';
+    echo '</td>';
+    echo '</tr>';
+
+
+
         echo '</tr>';
     }
     
