@@ -4,6 +4,7 @@
 - Summary
 - Technologies
 - Tools
+- Roadmap
 
 ## Summary
 The program helps in car management. 
@@ -23,5 +24,6 @@ and tells you when the next replacement is due (e.g. oil, brakes)
  ## Roadmap
 ### v0.1
 - loging with database
-- adding new parts
 - displaying data by roles
+- adding new parts
+- displaying menu using JS
