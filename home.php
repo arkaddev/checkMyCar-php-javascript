@@ -34,7 +34,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['car_id'], $_POST['mil
     exit();
 }
 
-
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['car_id'], $_POST['insurance'])) {
+    $car_id = intval($_POST['car_id']);
+    $insurance = $conn->real_escape_string($_POST['insurance']);
+    
+  $update_query = "UPDATE cars SET insurance = '$insurance' WHERE id = $car_id";
+    if ($conn->query($update_query) === TRUE) {
+        echo json_encode(['status' => 'success', 'message' => 'Ubezpieczenie zostało zaktualizowane']);
+    } else {
+        echo json_encode(['status' => 'error', 'message' => 'Błąd podczas aktualizacji przebiegu']);
+    }
+    exit();
+}
 
 
 
@@ -101,7 +112,7 @@ mysqli_close($conn);
     <title>Witaj</title>
   <style>
         /* glowne menu dodawania, okno z edycja przebiegu */
-        #menu-add, #edit-mileage {
+        #menu-add, #edit-mileage, #edit-insurance {
             display: none;
             position: fixed;
             top: 20%;
@@ -115,13 +126,13 @@ mysqli_close($conn);
             z-index: 1000;
         }
       
-        #menu-add button, #edit-mileage button{
+        #menu-add button, #edit-mileage button, #edit-insurance button{
             display: block;
             width: 100%;
             margin: 5px 0;
         }
     
-        #edit-mileage input[type="number"] {
+        #edit-mileage input[type="number"], #edit-insurance input[type="date"] {
             width: 100%;
             padding: 10px;
             margin: 10px 0;
@@ -142,7 +153,7 @@ mysqli_close($conn);
         <h2>Dodaj wymianę</h2>
         <p>Wybierz opcję:</p>
         <button onclick="menuEditMileage()">Aktualizacja przebiegu</button>
-        <button onclick="menuAddOption('editInsurance')">Nowe ubezpieczenie</button>
+        <button onclick="menuEditInsurance()">Nowe ubezpieczenie</button>
         <button onclick="menuAddOption('editInspection')">Nowy przegląd</button>
         <button onclick="menuAddOption('editTire')">Wymiana opon</button>
         <button onclick="closeMenuAdd()">Anuluj</button>
@@ -157,7 +168,15 @@ mysqli_close($conn);
             <input type="number" id="mileage-input" name="mileage" min="100000" max="999999" required>
             <button type="submit" onclick="editMileage()">Zatwierdź</button>
             <button type="button" onclick="closeMenuEditMileage()">Anuluj</button>
-        </form>
+     </form>
+  
+  <form id="edit-insurance">
+        <h2>Nowe ubezpieczenie:</h2>
+            <label for="insurance-input">Podaj termin:</label>
+            <input type="date" id="insurance-input" name="insurance-input" required>
+            <button type="submit" onclick="editInsurance()">Zatwierdź</button>
+            <button type="button" onclick="closeMenuEditInsurance()">Anuluj</button>
+  </form>
         
     
 </body>
@@ -165,6 +184,7 @@ mysqli_close($conn);
 
 
  <script>
+   
         let selectedCarId = null;
 
         // Funkcja otwierająca glowne menu dodawania
@@ -192,6 +212,21 @@ mysqli_close($conn);
             document.getElementById('edit-mileage').style.display = 'none';
            
         }
+   
+   // Funkcja otwierająca okno z edycja ubezpieczenia
+        function menuEditInsurance() {
+        
+        document.getElementById('edit-insurance').style.display = 'block';        
+        }
+   
+        // Funkcja zamykająca okno z edycja ubezpieczenia
+        function closeMenuEditInsurance() {
+            document.getElementById('edit-insurance').style.display = 'none';
+           
+        }
+   
+   
+   
    
        // Funkcja aktualizująca przebieg w bazie danych
         function editMileage() {
@@ -225,11 +260,43 @@ mysqli_close($conn);
         .catch(error => {
             console.error("Wystąpił błąd:", error);
             alert("Wystąpił błąd podczas aktualizacji przebiegu.");
-        });
-   
-   
-   
-           
+        });      
    }
    
+   
+   
+   // Funkcja aktualizująca przebieg w bazie danych
+        function editInsurance() {
+   
+    event.preventDefault(); // Zapobiega domyślnemu działaniu formularza
+
+        const insurance = document.getElementById('insurance-input').value;
+        
+        if (!selectedCarId) {
+            alert("Nie wybrano samochodu.");
+            return;
+        }
+
+        // Wysłanie zapytania POST do serwera
+        fetch("", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded"
+            },
+            body: `car_id=${selectedCarId}&insurance=${insurance}`
+        })
+        .then(response => response.json()) // Parsowanie odpowiedzi jako JSON
+        .then(data => {
+            if (data.status === "success") {
+                alert(data.message); // Wyświetlenie komunikatu sukcesu
+                location.reload(); // Odświeżenie strony
+            } else {
+                alert(data.message); // Wyświetlenie komunikatu błędu
+            }
+        })
+        .catch(error => {
+            console.error("Wystąpił błąd:", error);
+            alert("Wystąpił błąd podczas aktualizacji przebiegu.");
+        });      
+   }
     </script>
