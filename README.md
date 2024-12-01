@@ -27,3 +27,4 @@ and tells you when the next replacement is due (e.g. oil, brakes)
 - displaying data by roles
 - adding new parts
 - displaying menu using JS
+- editing mileage, technical inspection and adding new parts by user
