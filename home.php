@@ -6,37 +6,52 @@ if (!isset($_SESSION["username"])) {
     exit();
 }
 ?>
- <?php
+
+
+<?php
+//baza danych
 $config = include('config/db_config.php');
-// Tworzymy połączenie
 $conn = mysqli_connect($config['servername'], $config['username'], $config['password'], $config['dbname']);
 
-// Sprawdzamy, czy połączenie się powiodło
 if (!$conn) {
-    die("Połączenie nie powiodło się: " . mysqli_connect_error());
-} else {
-    echo "Połączenie z bazą danych powiodło się!";
+    die("Połączenie nie powiodło się: " . mysqli_connect_error());} 
+
+
+
+
+
+// Obsługa zapisu przebiegu w bazie danych
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['car_id'], $_POST['mileage'])) {
+    $car_id = intval($_POST['car_id']);
+    $mileage = intval($_POST['mileage']);
+
+    $update_query = "UPDATE cars SET mileage = $mileage WHERE id = $car_id";
+    if ($conn->query($update_query) === TRUE) {
+        echo json_encode(['status' => 'success', 'message' => 'Przebieg został zaktualizowany']);
+    } else {
+        echo json_encode(['status' => 'error', 'message' => 'Błąd podczas aktualizacji przebiegu']);
+    }
+    exit();
 }
+
+
+
+
+
 
 
 // Sprawdzamy rolę użytkownika
 $user_role = isset($_SESSION['role']) ? $_SESSION['role'] : '';  
-
-
 // Przygotowanie zapytania SQL, aby pobrać dane samochodów
-$sql = "SELECT id, model, year, mileage, user_id FROM cars";
+$sql = "SELECT id, model, year, user_id, insurance, technical_inspection, mileage FROM cars";
 
 // Jeśli użytkownik nie jest administratorem, dodajemy warunek, by pokazać tylko samochody przypisane do tego użytkownika
 if ($user_role !== 'admin') {
-    $sql .= " WHERE user_id = '" . mysqli_real_escape_string($conn, $_SESSION['id']) . "'";
-}
+    $sql .= " WHERE user_id = '" . mysqli_real_escape_string($conn, $_SESSION['id']) . "'";}
 
 
-// Wykonaj zapytanie
 $result = mysqli_query($conn, $sql);
-// Sprawdzenie, czy zapytanie zwróciło jakieś wyniki
-if ($result->num_rows > 0) {
-    // Wyświetlanie danych w tabeli HTML
+if (mysqli_num_rows($result) > 0){
     echo '<table border="1" cellpadding="5" cellspacing="0">';
     echo '<tr>';
     echo '<th>ID</th>';
@@ -46,10 +61,11 @@ if ($result->num_rows > 0) {
     echo '<th>Ubezpieczenie</th>';
     echo '<th>Przeglad</th>';
     echo '<th>Przebieg</th>';
+    echo '<th>Opcje</th>';
     echo '</tr>';
     
-    // Wyświetlanie danych samochodów
-    while ($row = $result->fetch_assoc()) {
+    
+    while ($row = mysqli_fetch_assoc($result)) {
         echo '<tr>';
         echo '<td>' . htmlspecialchars($row['id']) . '</td>';
         echo '<td>' . htmlspecialchars($row['model']) . '</td>';
@@ -58,41 +74,31 @@ if ($result->num_rows > 0) {
         echo '<td>' . htmlspecialchars($row['insurance']) . '</td>';
         echo '<td>' . htmlspecialchars($row['technical_inspection']) . '</td>';
         echo '<td>' . htmlspecialchars($row['mileage']) . '</td>';
-     
-
-// Link do formularza dodawania części
-    echo '<td>';
-    //echo '<a href="add_part_form.php?car_id=' . htmlspecialchars($row['id']) . '">Dodaj wymiane php</a>';
+        
+      echo '<td>';
+      echo '<button onclick="openMenuAdd(' . htmlspecialchars($row['id']) . ')">Dodaj wymianę js</button>';
+      echo '</td>';
       
-         
-      
-    echo '</td>';
-      
-echo '<td>';
-echo '<button onclick="openMenuAdd(' . htmlspecialchars($row['id']) . ')">Dodaj wymianę js</button>';
-echo '</td>';
-      
-    echo '</tr>';
-   
-      
-
-        echo '</tr>';
-    }
+      echo '</tr>';}
     
     echo '</table>';
 } else {
     echo "Brak danych.";
 }
 
-
-
-
-
 // Zamykamy połączenie
 mysqli_close($conn);
 ?> 
+
+
+
+
 <!DOCTYPE html>
 <html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Witaj</title>
   <style>
         /* glowne menu dodawania, okno z edycja przebiegu */
         #menu-add, #edit-mileage {
@@ -121,14 +127,16 @@ mysqli_close($conn);
             margin: 10px 0;
         }
     </style>
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Witaj</title>
 </head>
 <body>
  
- 
+  
+  
+  
+  
+  
+  
+  
     
     <div id="menu-add">
         <h2>Dodaj wymianę</h2>
@@ -152,32 +160,6 @@ mysqli_close($conn);
         </form>
         
     
-  
-  
-  
-  
-  
-  
-  
-  <?php if (isset($_SESSION['id'])): ?>
-        <h1>Twoje id to: <?= htmlspecialchars($_SESSION['id']) ?>!</h1>
-    <?php else: ?>
-        <p>Nie przypisano id.</p>
-    <?php endif; ?>
-  
-  <?php if (isset($_SESSION['role'])): ?>
-  <h1>Twoja rola to: <?= htmlspecialchars($_SESSION['role']) ?>!</h1>
-    <?php else: ?>
-        <p>Nie przypisano roli.</p>
-    <?php endif; ?>
-  
-  
-    <h1>Witaj, <?= htmlspecialchars($_SESSION['username']) ?>!</h1>
-  
-    <p>Jesteś zalogowany.</p>
-    <a href="logout.php">Wyloguj się</a>
-  
-  
 </body>
 </html>
 
@@ -202,8 +184,7 @@ mysqli_close($conn);
         // Funkcja otwierająca okno z edycja przebiegu
         function menuEditMileage() {
         
-   document.getElementById('edit-mileage').style.display = 'block';
-            closeMenuAdd();
+        document.getElementById('edit-mileage').style.display = 'block';        
         }
    
         // Funkcja zamykająca okno z edycja przebiegu
@@ -214,14 +195,41 @@ mysqli_close($conn);
    
        // Funkcja aktualizująca przebieg w bazie danych
         function editMileage() {
-           
+   
+    event.preventDefault(); // Zapobiega domyślnemu działaniu formularza
+
+        const mileage = document.getElementById('mileage-input').value;
+        
+        if (!selectedCarId) {
+            alert("Nie wybrano samochodu.");
+            return;
         }
+
+        // Wysłanie zapytania POST do serwera
+        fetch("", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded"
+            },
+            body: `car_id=${selectedCarId}&mileage=${mileage}`
+        })
+        .then(response => response.json()) // Parsowanie odpowiedzi jako JSON
+        .then(data => {
+            if (data.status === "success") {
+                alert(data.message); // Wyświetlenie komunikatu sukcesu
+                location.reload(); // Odświeżenie strony
+            } else {
+                alert(data.message); // Wyświetlenie komunikatu błędu
+            }
+        })
+        .catch(error => {
+            console.error("Wystąpił błąd:", error);
+            alert("Wystąpił błąd podczas aktualizacji przebiegu.");
+        });
+   
+   
+   
+           
+   }
+   
     </script>
-
-
-
-
-
-
-
-
