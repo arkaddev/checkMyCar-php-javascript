@@ -13,9 +13,22 @@
             align-items: center;
             height: 100vh;
             margin: 0;
-            background-color: #f3f3f3;
+            background-color: #fff;
             color: #333;
         }
+      
+       .frame {
+            width: 600px; /* Szerokość prostokąta */
+            height: 300px; /* Wysokość prostokąta */
+            border: 2px solid #000; /* Grubość i kolor ramki */
+            background-color: #f3f3f3; /* Opcjonalny kolor wnętrza */
+      
+            display: flex;
+            flex-direction: column; /* Układ w kolumnie */
+            justify-content: center; /* Wyśrodkowanie w pionie */
+            align-items: center; /* Wyśrodkowanie w poziomie */
+        }
+      
         h1 {
             font-size: 2.5em;
             color: #0078D7;
@@ -41,11 +54,13 @@
     </style>
 </head>
 <body>
-    <h1>Witaj na Check My Car</h1>
+    <div class="frame">
+   <h1>Witaj na Check My Car</h1>
     <div class="button-container">
         <button onclick="createAccount()">Utwórz konto</button>
         <button onclick="login()">Zaloguj</button>
     </div>
+  </div>
 
     <script>
         function createAccount() {
