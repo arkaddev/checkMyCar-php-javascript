@@ -7,18 +7,14 @@ if (!isset($_SESSION["username"])) {
 }
 ?>
 
-
 <?php
-//baza danych
+// Baza danych
 $config = include('config/db_config.php');
 $conn = mysqli_connect($config['servername'], $config['username'], $config['password'], $config['dbname']);
 
 if (!$conn) {
-    die("Połączenie nie powiodło się: " . mysqli_connect_error());} 
-
-
-
-
+    die("Połączenie nie powiodło się: " . mysqli_connect_error());
+}
 
 // Obsługa zapisu przebiegu w bazie danych
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['car_id'], $_POST['mileage'])) {
@@ -38,11 +34,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['car_id'], $_POST['ins
     $car_id = intval($_POST['car_id']);
     $insurance = $conn->real_escape_string($_POST['insurance']);
     
-  $update_query = "UPDATE cars SET insurance = '$insurance' WHERE id = $car_id";
+    $update_query = "UPDATE cars SET insurance = '$insurance' WHERE id = $car_id";
     if ($conn->query($update_query) === TRUE) {
         echo json_encode(['status' => 'success', 'message' => 'Ubezpieczenie zostało zaktualizowane']);
     } else {
-        echo json_encode(['status' => 'error', 'message' => 'Błąd podczas aktualizacji przebiegu']);
+        echo json_encode(['status' => 'error', 'message' => 'Błąd podczas aktualizacji ubezpieczenia']);
     }
     exit();
 }
@@ -51,15 +47,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['car_id'], $_POST['ins
     $car_id = intval($_POST['car_id']);
     $inspection = $conn->real_escape_string($_POST['inspection']);
     
-  $update_query = "UPDATE cars SET technical_inspection = '$inspection' WHERE id = $car_id";
+    $update_query = "UPDATE cars SET technical_inspection = '$inspection' WHERE id = $car_id";
     if ($conn->query($update_query) === TRUE) {
-        echo json_encode(['status' => 'success', 'message' => 'Ubezpieczenie zostało zaktualizowane']);
+        echo json_encode(['status' => 'success', 'message' => 'Przegląd został zaktualizowany']);
     } else {
-        echo json_encode(['status' => 'error', 'message' => 'Błąd podczas aktualizacji przebiegu']);
+        echo json_encode(['status' => 'error', 'message' => 'Błąd podczas aktualizacji przeglądu']);
     }
     exit();
 }
-
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['car_id'], $_POST['partName'])) {
     $car_id = intval($_POST['car_id']);
@@ -70,18 +65,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['car_id'], $_POST['par
     $part_mileage = intval($_POST['partMileage']);
     $part_next = intval($_POST['partNext']);
     
-  
-  $update_query = "INSERT INTO parts (id, name, number, price, exchange_date, kilometers_status, next_exchange_km, car_id) 
-            VALUES (NULL, '$part_name', '$part_number', '$part_price', '$part_date', '$part_mileage', '$part_next', '$car_id')";
+    $update_query = "INSERT INTO parts (id, name, number, price, exchange_date, kilometers_status, next_exchange_km, car_id) 
+                     VALUES (NULL, '$part_name', '$part_number', '$part_price', '$part_date', '$part_mileage', '$part_next', '$car_id')";
   
     if ($conn->query($update_query) === TRUE) {
-        echo json_encode(['status' => 'success', 'message' => 'Ubezpieczenie zostało zaktualizowane']);
+        echo json_encode(['status' => 'success', 'message' => 'Część została dodana']);
     } else {
-        echo json_encode(['status' => 'error', 'message' => 'Błąd podczas aktualizacji przebiegu']);
+        echo json_encode(['status' => 'error', 'message' => 'Błąd podczas dodawania części']);
     }
     exit();
 }
-
 
 // Sprawdzamy rolę użytkownika
 $user_role = isset($_SESSION['role']) ? $_SESSION['role'] : '';  
@@ -90,11 +83,11 @@ $sql = "SELECT id, model, year, user_id, insurance, technical_inspection, mileag
 
 // Jeśli użytkownik nie jest administratorem, dodajemy warunek, by pokazać tylko samochody przypisane do tego użytkownika
 if ($user_role !== 'admin') {
-    $sql .= " WHERE user_id = '" . mysqli_real_escape_string($conn, $_SESSION['id']) . "'";}
-
+    $sql .= " WHERE user_id = '" . mysqli_real_escape_string($conn, $_SESSION['id']) . "'";
+}
 
 $result = mysqli_query($conn, $sql);
-if (mysqli_num_rows($result) > 0){
+if (mysqli_num_rows($result) > 0) {
     echo '<table border="1" cellpadding="5" cellspacing="0">';
     echo '<tr>';
     echo '<th>ID</th>';
@@ -107,7 +100,6 @@ if (mysqli_num_rows($result) > 0){
     echo '<th>Opcje</th>';
     echo '</tr>';
     
-    
     while ($row = mysqli_fetch_assoc($result)) {
         echo '<tr>';
         echo '<td>' . htmlspecialchars($row['id']) . '</td>';
@@ -118,12 +110,15 @@ if (mysqli_num_rows($result) > 0){
         echo '<td>' . htmlspecialchars($row['technical_inspection']) . '</td>';
         echo '<td>' . htmlspecialchars($row['mileage']) . '</td>';
         
-      echo '<td>';
-      echo '<button onclick="openMenuAdd(' . htmlspecialchars($row['id']) . ')">Dodaj wymianę js</button>';
-      echo '</td>';
-      
-      echo '</tr>';}
-    
+        echo '<td>';
+        echo '<button onclick="openMenuAdd(' . htmlspecialchars($row['id']) . ')">Dodaj</button>';
+        echo '<button onclick="openInfo(' . htmlspecialchars($row['id']) . ')">Info</button>';
+        echo '<button onclick="o(' . htmlspecialchars($row['id']) . ')">Historia</button>';
+        echo '<button onclick="o(' . htmlspecialchars($row['id']) . ')">Serwis</button>';
+        echo '</td>';
+        
+        echo '</tr>';
+    }
     echo '</table>';
 } else {
     echo "Brak danych.";
@@ -133,16 +128,13 @@ if (mysqli_num_rows($result) > 0){
 mysqli_close($conn);
 ?> 
 
-
-
-
 <!DOCTYPE html>
 <html lang="pl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Witaj</title>
-  <style>
+    <style>
         /* glowne menu dodawania, okno z edycja przebiegu */
         #menu-add, #edit-mileage, #edit-insurance, #edit-inspection, #new-part {
             display: none;
@@ -172,15 +164,6 @@ mysqli_close($conn);
     </style>
 </head>
 <body>
- 
-  
-  
-  
-  
-  
-  
-  
-    
     <div id="menu-add">
         <h2>Dodaj wymianę</h2>
         <p>Wybierz opcję:</p>
@@ -191,7 +174,7 @@ mysqli_close($conn);
         <button onclick="menuEditTire()">Wymiana opon</button>
         <button onclick="closeMenuAdd()">Anuluj</button>
     </div>
-  
+
     <form id="edit-mileage">
         <h2>Aktualizacja przebiegu:</h2>
         <label for="mileage-input">Podaj nowy przebieg w km (6 cyfr):</label>
@@ -241,6 +224,9 @@ mysqli_close($conn);
         <button type="button" onclick="closeMenuNewPart()">Anuluj</button>
     </form>
   
+ 
+  
+  
   
   
 </body>
@@ -248,88 +234,71 @@ mysqli_close($conn);
 
 
  <script>
-   
-        let selectedCarId = null;
+    let selectedCarId = null;
 
-        // Funkcja otwierająca glowne menu dodawania
-        function openMenuAdd(carId) {
-            selectedCarId = carId;
-            document.getElementById('menu-add').style.display = 'block';
-           
-        }
+    // Funkcja otwierająca główne menu dodawania
+    function openMenuAdd(carId) {
+        selectedCarId = carId;
+        document.getElementById('menu-add').style.display = 'block';
+    }
 
-        // Funkcja zamykająca glowne menu dodawania
-        function closeMenuAdd() {
-            selectedCarId = null;
-            document.getElementById('menu-add').style.display = 'none';
-           
-        }
+    // Funkcja zamykająca główne menu dodawania
+    function closeMenuAdd() {
+        selectedCarId = null;
+        document.getElementById('menu-add').style.display = 'none';
+    }
 
-        // Funkcja otwierająca okno z edycja przebiegu
-        function menuEditMileage() {
-        
-        document.getElementById('edit-mileage').style.display = 'block';        
-        }
-   
-        // Funkcja zamykająca okno z edycja przebiegu
-        function closeMenuEditMileage() {
-            document.getElementById('edit-mileage').style.display = 'none';
-           
-        }
-   
-   // Funkcja otwierająca okno z edycja ubezpieczenia
-        function menuEditInsurance() {
-        document.getElementById('edit-insurance').style.display = 'block';}
-   
-   // Funkcja zamykająca okno z edycja ubezpieczenia
-        function closeMenuEditInsurance() {
-        document.getElementById('edit-insurance').style.display = 'none';}
-   
-   // Funkcja otwierająca okno z edycja przegladu
-        function menuEditInspection() {
-        document.getElementById('edit-inspection').style.display = 'block';}
-   
-   // Funkcja zamykająca okno z edycja przegladu
-        function closeMenuEditInspection() {
-        document.getElementById('edit-inspection').style.display = 'none';}
-   
-   // Funkcja otwierająca okno z wymiana czesci
-        function menuNewPart() {
-        document.getElementById('new-part').style.display = 'block';}
-   
-   // Funkcja zamykająca okno z wymiana czesci
-        function closeMenuNewPart() {
-        document.getElementById('new-part').style.display = 'none';}
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-       // Funkcja aktualizująca przebieg w bazie danych
-        function editMileage() {
-   
-    event.preventDefault(); // Zapobiega domyślnemu działaniu formularza
+    // Funkcja otwierająca okno z edycją przebiegu
+    function menuEditMileage() {
+        document.getElementById('edit-mileage').style.display = 'block';
+    }
+
+    // Funkcja zamykająca okno z edycją przebiegu
+    function closeMenuEditMileage() {
+        document.getElementById('edit-mileage').style.display = 'none';
+    }
+
+    // Funkcja otwierająca okno z edycją ubezpieczenia
+    function menuEditInsurance() {
+        document.getElementById('edit-insurance').style.display = 'block';
+    }
+
+    // Funkcja zamykająca okno z edycją ubezpieczenia
+    function closeMenuEditInsurance() {
+        document.getElementById('edit-insurance').style.display = 'none';
+    }
+
+    // Funkcja otwierająca okno z edycją przeglądu
+    function menuEditInspection() {
+        document.getElementById('edit-inspection').style.display = 'block';
+    }
+
+    // Funkcja zamykająca okno z edycją przeglądu
+    function closeMenuEditInspection() {
+        document.getElementById('edit-inspection').style.display = 'none';
+    }
+
+    // Funkcja otwierająca okno z wymianą części
+    function menuNewPart() {
+        document.getElementById('new-part').style.display = 'block';
+    }
+
+    // Funkcja zamykająca okno z wymianą części
+    function closeMenuNewPart() {
+        document.getElementById('new-part').style.display = 'none';
+    }
+
+    // Funkcja aktualizująca przebieg w bazie danych
+    function editMileage() {
+        event.preventDefault(); // Zapobiega domyślnemu działaniu formularza
 
         const mileage = document.getElementById('mileage-input').value;
-        
+
         if (!selectedCarId) {
             alert("Nie wybrano samochodu.");
             return;
         }
 
-   
         // Wysłanie zapytania POST do serwera
         fetch("", {
             method: "POST",
@@ -350,18 +319,15 @@ mysqli_close($conn);
         .catch(error => {
             console.error("Wystąpił błąd:", error);
             alert("Wystąpił błąd podczas aktualizacji przebiegu.");
-        });      
-   }
-   
-   
-   
-   // Funkcja aktualizująca przebieg w bazie danych
-        function editInsurance() {
-   
-    event.preventDefault(); // Zapobiega domyślnemu działaniu formularza
+        });
+    }
+
+    // Funkcja aktualizująca ubezpieczenie w bazie danych
+    function editInsurance() {
+        event.preventDefault(); // Zapobiega domyślnemu działaniu formularza
 
         const insurance = document.getElementById('insurance-input').value;
-        
+
         if (!selectedCarId) {
             alert("Nie wybrano samochodu.");
             return;
@@ -386,16 +352,15 @@ mysqli_close($conn);
         })
         .catch(error => {
             console.error("Wystąpił błąd:", error);
-            alert("Wystąpił błąd podczas aktualizacji przebiegu.");
-        });      
-   }
-   
-   
-   
-   // Funkcja aktualizująca przebieg w bazie danych
-        function editInspection() {
-             event.preventDefault(); // Zapobiega domyślnemu działaniu formularza
-             const inspection = document.getElementById('inspection-input').value;
+            alert("Wystąpił błąd podczas aktualizacji ubezpieczenia.");
+        });
+    }
+
+    // Funkcja aktualizująca przegląd w bazie danych
+    function editInspection() {
+        event.preventDefault(); // Zapobiega domyślnemu działaniu formularza
+
+        const inspection = document.getElementById('inspection-input').value;
 
         // Wysłanie zapytania POST do serwera
         fetch("", {
@@ -416,23 +381,20 @@ mysqli_close($conn);
         })
         .catch(error => {
             console.error("Wystąpił błąd:", error);
-            alert("Wystąpił błąd podczas aktualizacji przebiegu.");
-        });      
-   }
-   
-   
-   // Funkcja aktualizująca przebieg w bazie danych
-        function addNewPart() {
-             event.preventDefault(); // Zapobiega domyślnemu działaniu formularza
-             
-   const partName = document.getElementById('add-part-name-input').value;
-   const partNumber = document.getElementById('add-part-number-input').value;
-   const partPrice = document.getElementById('add-part-price-input').value;
-   const partDate = document.getElementById('add-part-date-input').value;
-   const partMileage = document.getElementById('add-part-mileage-input').value;
-   const partNext = document.getElementById('add-part-next-input').value;
-   
-   
+            alert("Wystąpił błąd podczas aktualizacji przeglądu.");
+        });
+    }
+
+    // Funkcja dodająca nową część do bazy danych
+    function addNewPart() {
+        event.preventDefault(); // Zapobiega domyślnemu działaniu formularza
+
+        const partName = document.getElementById('add-part-name-input').value;
+        const partNumber = document.getElementById('add-part-number-input').value;
+        const partPrice = document.getElementById('add-part-price-input').value;
+        const partDate = document.getElementById('add-part-date-input').value;
+        const partMileage = document.getElementById('add-part-mileage-input').value;
+        const partNext = document.getElementById('add-part-next-input').value;
 
         // Wysłanie zapytania POST do serwera
         fetch("", {
@@ -453,8 +415,7 @@ mysqli_close($conn);
         })
         .catch(error => {
             console.error("Wystąpił błąd:", error);
-            alert("Wystąpił błąd podczas aktualizacji przebiegu.");
-        });      
-   }
-   
-    </script>
+            alert("Wystąpił błąd podczas dodawania części.");
+        });
+    }
+</script>
