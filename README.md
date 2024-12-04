@@ -28,10 +28,11 @@ and tells you when the next replacement is due (e.g. oil, brakes)
 - adding new parts
 - displaying menu using JS
 - editing mileage, technical inspection and adding new parts by user
-- changing password
-- password hashing
 
 ### v0.2
 - displaying info about specyfic car
 - history of parts replacement
 - info about upcoming car service
+- creating new users
+- changing password
+- password hashing
