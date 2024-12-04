@@ -30,3 +30,8 @@ and tells you when the next replacement is due (e.g. oil, brakes)
 - editing mileage, technical inspection and adding new parts by user
 - changing password
 - password hashing
+
+### v0.2
+- displaying info about specyfic car
+- history of parts replacement
+- info about upcoming car service
