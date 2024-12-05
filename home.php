@@ -107,10 +107,43 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['car_id_history']))  {
     exit();
 }
   
-  
+  if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['car_id_service']))  {
+    $car_id = intval($_POST['car_id_service']);
+    
+    //$query = "SELECT * FROM parts WHERE car_id = $car_id";
+    
+    $query = "
+        SELECT 
+            parts.car_id, 
+            parts.name, 
+            parts.number, 
+            parts.price, 
+            parts.exchange_date, 
+            parts.kilometers_status, 
+            parts.next_exchange_km,
+            (parts.next_exchange_km + parts.kilometers_status  - cars.mileage) AS when_exchange
+        FROM parts 
+        JOIN cars ON parts.car_id = cars.id
+        WHERE parts.car_id = $car_id
+        ORDER BY when_exchange ASC
+    ";
+    
+    
+    $result = $conn->query($query);
+    
+    if ($result->num_rows > 0) {
+        $data = $result->fetch_all(MYSQLI_ASSOC);
+        echo json_encode(['status' => 'success', 'data' => $data]);
+    } else {
+        echo json_encode(['status' => 'error', 'message' => 'Brak danych o samochodzie']);
+    }
+    exit();
+}
   
 
-
+    
+    
+  
 
 
 // Sprawdzamy rolę użytkownika
@@ -151,7 +184,7 @@ if (mysqli_num_rows($result) > 0) {
         echo '<button onclick="openMenuAdd(' . htmlspecialchars($row['id']) . ')">Dodaj</button>';
         echo '<button onclick="openInfo(' . htmlspecialchars($row['id']) . ')">Info</button>';
         echo '<button onclick="openHistory(' . htmlspecialchars($row['id']) . ')">Historia</button>';
-        echo '<button onclick="o2(' . htmlspecialchars($row['id']) . ')">Serwis</button>';
+        echo '<button onclick="openService(' . htmlspecialchars($row['id']) . ')">Serwis</button>';
         echo '</td>';
         
         echo '</tr>';
@@ -188,7 +221,7 @@ mysqli_close($conn);
         }
       
       
-      #menu-history {
+      #menu-history, #menu-service {
             display: none;
             position: fixed;
             top: 20%;
@@ -298,6 +331,14 @@ mysqli_close($conn);
         <!-- dane z tabeli cars_info -->
     </div>
     <button onclick="closeMenuHistory()">Zamknij</button>
+</div>
+  
+  <div id="menu-service">
+    <h2>Informacje o serwisie:</h2>
+    <div id="service-content">
+        <!-- dane z tabeli cars_info -->
+    </div>
+    <button onclick="closeMenuService()">Zamknij</button>
 </div>
   
 </body>
@@ -610,7 +651,81 @@ function closeMenuHistory() {
 }
   
    
-   
+   function openService(carId) {
+    selectedCarId = carId;
+
+    const serviceContent = document.getElementById('service-content');
+    serviceContent.innerHTML = "<p>Ładowanie danych...</p>"; // Wiadomość oczekiwania
+    document.getElementById('menu-service').style.display = 'block';
+
+    // Wysłanie zapytania POST do serwera
+    fetch("", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+        },
+        body: `car_id_service=${selectedCarId}`
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === "success") {
+            let tableHTML = `
+                <table border="1" style="width: 100%; border-collapse: collapse;">
+                    <thead>
+                        <tr>
+                            <th>Id samochodu</th>
+                            <th>Nazwa części</th>
+                            <th>Numer seryjny części</th>
+                            <th>Cena</th>
+                            <th>Data wymiany</th>
+                            <th>Przebieg</th>
+                            <th>Następna wymiana</th>
+                            <th>Kiedy wymiana</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+
+            data.data.forEach(service => {
+                   // Pomiń wpisy, gdzie next_exchange_km wynosi 0
+            if (service.next_exchange_km === "0") return;   
+                      
+                tableHTML += `
+                    <tr>
+                        <td>${service.car_id}</td>
+                        <td>${service.name}</td>
+                        <td>${service.number}</td>
+                        <td>${service.price}</td>
+                        <td>${service.exchange_date}</td>
+                        <td>${service.kilometers_status}</td>
+                        <td>${service.next_exchange_km}</td>
+                        <td>${service.when_exchange}</td>
+                    </tr>
+                `;
+            });
+
+            tableHTML += `
+                    </tbody>
+                </table>
+            `;
+
+            serviceContent.innerHTML = tableHTML; // Wstawienie tabeli do kontenera
+        } else {
+            serviceContent.innerHTML = `<p>${data.message}</p>`;
+        }
+    })
+    .catch(error => {
+        console.error("Wystąpił błąd:", error);
+        serviceContent.innerHTML = "<p>Wystąpił błąd podczas pobierania danych.</p>";
+    });
+}
+
+
+function closeMenuService() {
+    selectedCarId = null;
+    document.getElementById('menu-service').style.display = 'none';
+}
+  
    
    
    
