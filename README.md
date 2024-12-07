@@ -33,6 +33,16 @@ and tells you when the next replacement is due (e.g. oil, brakes)
 - displaying info about specyfic car
 - history of parts replacement
 - info about upcoming car service
+  
+### v0.3
 - creating new users
 - changing password
 - password hashing
+- creating new cars
+  
+### v0.4
+- insurance and technical inspection reminder
+- statistics of kilometers traveled
+- fuel cost analysis
+
+  

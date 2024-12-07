@@ -65,8 +65,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['car_id'], $_POST['par
     $part_mileage = intval($_POST['partMileage']);
     $part_next = intval($_POST['partNext']);
     
-    $update_query = "INSERT INTO parts (id, name, number, price, exchange_date, kilometers_status, next_exchange_km, car_id) 
-                     VALUES (NULL, '$part_name', '$part_number', '$part_price', '$part_date', '$part_mileage', '$part_next', '$car_id')";
+    $update_query = "INSERT INTO parts (id, name, number, price, exchange_date, kilometers_status, next_exchange_km, car_id, is_replaced) 
+                     VALUES (NULL, '$part_name', '$part_number', '$part_price', '$part_date', '$part_mileage', '$part_next', '$car_id', '0')";
   
     if ($conn->query($update_query) === TRUE) {
         echo json_encode(['status' => 'success', 'message' => 'Część została dodana']);
@@ -75,6 +75,92 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['car_id'], $_POST['par
     }
     exit();
 }
+
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['car_id_info']))  {
+    $car_id = intval($_POST['car_id_info']);
+    
+    $query = "SELECT * FROM cars_info WHERE car_id = $car_id";
+    $result = $conn->query($query);
+    
+    if ($result->num_rows > 0) {
+        $data = $result->fetch_all(MYSQLI_ASSOC);
+        echo json_encode(['status' => 'success', 'data' => $data]);
+    } else {
+        echo json_encode(['status' => 'error', 'message' => 'Brak danych o samochodzie']);
+    }
+    exit();
+}
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['car_id_history']))  {
+    $car_id = intval($_POST['car_id_history']);
+    
+    $query = "SELECT * FROM parts WHERE car_id = $car_id";
+    $result = $conn->query($query);
+    
+    if ($result->num_rows > 0) {
+        $data = $result->fetch_all(MYSQLI_ASSOC);
+        echo json_encode(['status' => 'success', 'data' => $data]);
+    } else {
+        echo json_encode(['status' => 'error', 'message' => 'Brak danych o samochodzie']);
+    }
+    exit();
+}
+  
+  if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['car_id_service']))  {
+    $car_id = intval($_POST['car_id_service']);
+    
+    //$query = "SELECT * FROM parts WHERE car_id = $car_id";
+    
+    $query = "
+        SELECT
+            parts.id,
+            parts.car_id, 
+            parts.name, 
+            parts.number, 
+            parts.price, 
+            parts.exchange_date, 
+            parts.kilometers_status, 
+            parts.next_exchange_km,
+            (parts.next_exchange_km + parts.kilometers_status  - cars.mileage) AS when_exchange
+        FROM parts 
+        JOIN cars ON parts.car_id = cars.id
+        WHERE parts.car_id = $car_id AND parts.is_replaced = 0
+        ORDER BY when_exchange ASC
+    ";
+    
+    
+    $result = $conn->query($query);
+    
+    if ($result->num_rows > 0) {
+        $data = $result->fetch_all(MYSQLI_ASSOC);
+        echo json_encode(['status' => 'success', 'data' => $data]);
+    } else {
+        echo json_encode(['status' => 'error', 'message' => 'Brak danych o samochodzie']);
+    }
+    exit();
+}
+  
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['part_id_service']))  {
+    $part_id = intval($_POST['part_id_service']);
+    
+    $query = "UPDATE parts SET is_replaced = 1 WHERE parts.id = $part_id; ";
+   if ($conn->query($query) === TRUE) {
+        echo json_encode(['status' => 'success', 'message' => 'Dane zostały zaktualizowane']);
+    } else {
+        echo json_encode(['status' => 'error', 'message' => 'Błąd podczas aktualizacji danych']);
+    }
+    exit();
+}
+
+    
+ 
+   
+       
+
+  
+
 
 // Sprawdzamy rolę użytkownika
 $user_role = isset($_SESSION['role']) ? $_SESSION['role'] : '';  
@@ -113,8 +199,8 @@ if (mysqli_num_rows($result) > 0) {
         echo '<td>';
         echo '<button onclick="openMenuAdd(' . htmlspecialchars($row['id']) . ')">Dodaj</button>';
         echo '<button onclick="openInfo(' . htmlspecialchars($row['id']) . ')">Info</button>';
-        echo '<button onclick="o(' . htmlspecialchars($row['id']) . ')">Historia</button>';
-        echo '<button onclick="o(' . htmlspecialchars($row['id']) . ')">Serwis</button>';
+        echo '<button onclick="openHistory(' . htmlspecialchars($row['id']) . ')">Historia</button>';
+        echo '<button onclick="openService(' . htmlspecialchars($row['id']) . ')">Serwis</button>';
         echo '</td>';
         
         echo '</tr>';
@@ -136,7 +222,7 @@ mysqli_close($conn);
     <title>Witaj</title>
     <style>
         /* glowne menu dodawania, okno z edycja przebiegu */
-        #menu-add, #edit-mileage, #edit-insurance, #edit-inspection, #new-part {
+        #menu-add, #edit-mileage, #edit-insurance, #edit-inspection, #new-part, #menu-info {
             display: none;
             position: fixed;
             top: 20%;
@@ -150,7 +236,22 @@ mysqli_close($conn);
             z-index: 1000;
         }
       
-        #menu-add button, #edit-mileage button, #edit-insurance button, #edit-inspection button, #new-part button {
+      
+      #menu-history, #menu-service {
+            display: none;
+            position: fixed;
+            top: 20%;
+            left: 50%;
+            transform: translate(-50%, -20%);
+            width: 1000px;
+            background: white;
+            padding: 20px;
+            aborder: 1px solid #ccc;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+        }
+      
+        #menu-add button, #edit-mileage button, #edit-insurance button, #edit-inspection button, #new-part button, #menu-info button {
             display: block;
             width: 100%;
             margin: 5px 0;
@@ -161,6 +262,12 @@ mysqli_close($conn);
             padding: 10px;
             margin: 10px 0;
         }
+      
+      
+      
+      
+      
+       
     </style>
 </head>
 <body>
@@ -226,8 +333,29 @@ mysqli_close($conn);
   
  
   
+  <div id="menu-info">
+    <h2>Informacje o samochodzie:</h2>
+    <div id="info-content">
+        <!-- dane z tabeli cars_info -->
+    </div>
+    <button onclick="closeMenuInfo()">Zamknij</button>
+</div>
   
+  <div id="menu-history">
+    <h2>Informacje o wymianach części:</h2>
+    <div id="history-content">
+        <!-- dane z tabeli cars_info -->
+    </div>
+    <button onclick="closeMenuHistory()">Zamknij</button>
+</div>
   
+  <div id="menu-service">
+    <h2>Informacje o serwisie:</h2>
+    <div id="service-content">
+        <!-- dane z tabeli cars_info -->
+    </div>
+    <button onclick="closeMenuService()">Zamknij</button>
+</div>
   
 </body>
 </html>
@@ -418,4 +546,238 @@ mysqli_close($conn);
             alert("Wystąpił błąd podczas dodawania części.");
         });
     }
+   
+   
+   
+   function openInfo(carId) {
+    selectedCarId = carId;
+    document.getElementById('info-content').innerHTML = "Ładowanie danych..."; // Wiadomość oczekiwania
+    document.getElementById('menu-info').style.display = 'block';
+
+    // Wysłanie zapytania POST do serwera
+    fetch("", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+        },
+        body: `car_id_info=${selectedCarId}`
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === "success") {
+            const infoContent = document.getElementById('info-content');
+            infoContent.innerHTML = ""; // Wyczyszczenie zawartości
+            data.data.forEach(info => {
+                const infoDiv = document.createElement('div');
+                infoDiv.innerHTML = `
+                    <p><strong>Id samochodu:</strong> ${info.car_id}</p>
+                    <p><strong>Silnik:</strong> ${info.engine_number}</p>
+                    <p><strong>Data produkcji:</strong> ${info.production_date}</p>
+                    <p><strong>Moc km/kw:</strong> ${info.km_kw}</p>
+                    <p><strong>Olej:</strong> ${info.oil_number}</p>
+                    <p><strong>Filtr oleju:</strong> ${info.oil_filter_number}</p>
+                    <p><strong>Filtr powietrza:</strong> ${info.air_filter_number}</p>
+                `;
+                infoContent.appendChild(infoDiv);
+            });
+        } else {
+            document.getElementById('info-content').innerHTML = data.message;
+        }
+    })
+    .catch(error => {
+        console.error("Wystąpił błąd:", error);
+        document.getElementById('info-content').innerHTML = "Wystąpił błąd podczas pobierania danych.";
+    });
+}
+
+function closeMenuInfo() {
+    selectedCarId = null;
+    document.getElementById('menu-info').style.display = 'none';
+}
+  
+   
+  function openHistory(carId) {
+    selectedCarId = carId;
+
+    const historyContent = document.getElementById('history-content');
+    historyContent.innerHTML = "<p>Ładowanie danych...</p>"; // Wiadomość oczekiwania
+    document.getElementById('menu-history').style.display = 'block';
+
+    // Wysłanie zapytania POST do serwera
+    fetch("", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+        },
+        body: `car_id_history=${selectedCarId}`
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === "success") {
+            let tableHTML = `
+                <table border="1" style="width: 100%; border-collapse: collapse;">
+                    <thead>
+                        <tr>
+                            <th>Id samochodu</th>
+                            <th>Nazwa części</th>
+                            <th>Numer seryjny części</th>
+                            <th>Cena</th>
+                            <th>Data wymiany</th>
+                            <th>Przebieg</th>
+                            <th>Następna wymiana</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+
+            data.data.forEach(history => {
+                tableHTML += `
+                    <tr>
+                        <td>${history.car_id}</td>
+                        <td>${history.name}</td>
+                        <td>${history.number}</td>
+                        <td>${history.price}</td>
+                        <td>${history.exchange_date}</td>
+                        <td>${history.kilometers_status}</td>
+                        <td>${history.next_exchange_km}</td>
+                    </tr>
+                `;
+            });
+
+            tableHTML += `
+                    </tbody>
+                </table>
+            `;
+
+            historyContent.innerHTML = tableHTML; // Wstawienie tabeli do kontenera
+        } else {
+            historyContent.innerHTML = `<p>${data.message}</p>`;
+        }
+    })
+    .catch(error => {
+        console.error("Wystąpił błąd:", error);
+        historyContent.innerHTML = "<p>Wystąpił błąd podczas pobierania danych.</p>";
+    });
+}
+
+
+function closeMenuHistory() {
+    selectedCarId = null;
+    document.getElementById('menu-history').style.display = 'none';
+}
+  
+   
+ function openService(carId) {
+    selectedCarId = carId;
+
+    const serviceContent = document.getElementById('service-content');
+    serviceContent.innerHTML = "<p>Ładowanie danych...</p>"; // Wiadomość oczekiwania
+    document.getElementById('menu-service').style.display = 'block';
+
+    // Wysłanie zapytania POST do serwera
+    fetch("", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+        },
+        body: `car_id_service=${selectedCarId}`
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === "success") {
+            let tableHTML = `
+                <table border="1" style="width: 100%; border-collapse: collapse;">
+                    <thead>
+                        <tr>
+                            
+                            <th>Id samochodu</th>
+                            <th>Nazwa części</th>
+                            <th>Numer seryjny części</th>
+                            <th>Cena</th>
+                            <th>Data wymiany</th>
+                            <th>Przebieg</th>
+                            <th>Następna wymiana</th>
+                            <th>Kiedy wymiana</th>
+                            <th>Czy wymieniono?</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+
+            data.data.forEach(service => {
+                // Pomiń wpisy, gdzie next_exchange_km wynosi 0
+                if (service.next_exchange_km === "0") return;
+
+                tableHTML += `
+                    <tr>
+                      
+                        <td>${service.car_id}</td>
+                        <td>${service.name}</td>
+                        <td>${service.number}</td>
+                        <td>${service.price}</td>
+                        <td>${service.exchange_date}</td>
+                        <td>${service.kilometers_status}</td>
+                        <td>${service.next_exchange_km}</td>
+                        <td>${service.when_exchange}</td>
+                        <td>
+                            <button onclick="makeReplaced('${service.id}')">Oznacz jako wymienioną</button>
+                        </td>
+                    </tr>
+                `;
+            });
+
+            tableHTML += `
+                    </tbody>
+                </table>
+            `;
+
+            serviceContent.innerHTML = tableHTML; // Wstawienie tabeli do kontenera
+        } else {
+            serviceContent.innerHTML = `<p>${data.message}</p>`;
+        }
+    })
+    .catch(error => {
+        console.error("Wystąpił błąd:", error);
+        serviceContent.innerHTML = "<p>Wystąpił błąd podczas pobierania danych.</p>";
+    });
+}
+function closeMenuService() {
+    selectedCarId = null;
+    document.getElementById('menu-service').style.display = 'none';
+}
+  
+  
+   
+   
+   
+   
+   
+   function makeReplaced(partId) {
+   selectedPartId = partId;
+   event.preventDefault(); // Zapobiega domyślnemu działaniu formularza
+
+        // Wysłanie zapytania POST do serwera
+        fetch("", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded"
+            },
+            body: `part_id_service=${selectedPartId}`
+        })
+        .then(response => response.json()) // Parsowanie odpowiedzi jako JSON
+        .then(data => {
+            if (data.status === "success") {
+                alert(data.message); // Wyświetlenie komunikatu sukcesu
+                location.reload(); // Odświeżenie strony
+            } else {
+                alert(data.message); // Wyświetlenie komunikatu błędu
+            }
+        })
+        .catch(error => {
+            console.error("Wystąpił błąd:", error);
+            alert("Wystąpił błąd podczas aktualizacji przebiegu.");
+        });
+}
+   
+   
 </script>
