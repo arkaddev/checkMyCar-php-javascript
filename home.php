@@ -77,6 +77,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['car_id'], $_POST['par
 }
 
 
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['car_id'], $_POST['fuelLiters'])) {
+    $car_id = intval($_POST['car_id']);
+    $fuel_liters = $conn->real_escape_string($_POST['fuelLiters']);
+    $fuel_price = intval($_POST['fuelPrice']);
+    $fuel_type = $conn->real_escape_string($_POST['fuelType']);
+    $fuel_date = $conn->real_escape_string($_POST['fuelDate']);
+    $fuel_distance = intval($_POST['fuelDistance']);
+   
+    
+    $update_query = "INSERT INTO fuel (id, liters, price, fuel_type, refueling_date, distance, car_id) 
+                     VALUES (NULL, '$fuel_liters', '$fuel_price', '$fuel_type', '$fuel_date', '$fuel_distance', '$car_id')";
+  
+    if ($conn->query($update_query) === TRUE) {
+        echo json_encode(['status' => 'success', 'message' => 'Część została dodana']);
+    } else {
+        echo json_encode(['status' => 'error', 'message' => 'Błąd podczas dodawania części']);
+    }
+    exit();
+}
+
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['car_id_info']))  {
     $car_id = intval($_POST['car_id_info']);
     
@@ -95,7 +116,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['car_id_info']))  {
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['car_id_history']))  {
     $car_id = intval($_POST['car_id_history']);
     
-    $query = "SELECT * FROM parts WHERE car_id = $car_id";
+    $query = "SELECT * FROM parts WHERE car_id = $car_id ORDER BY kilometers_status ASC";
     $result = $conn->query($query);
     
     if ($result->num_rows > 0) {
@@ -165,7 +186,50 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['part_id_service']))  
 // Sprawdzamy rolę użytkownika
 $user_role = isset($_SESSION['role']) ? $_SESSION['role'] : '';  
 // Przygotowanie zapytania SQL, aby pobrać dane samochodów
+
 $sql = "SELECT id, model, year, user_id, insurance, technical_inspection, mileage FROM cars";
+/*$sql = "
+    SELECT 
+        c.id, 
+        c.model, 
+        c.year, 
+        c.user_id, 
+        c.insurance, 
+        c.technical_inspection, 
+        c.mileage,
+        (f.distance / f.liters) AS fuel_consumption
+    FROM 
+        cars c
+    LEFT JOIN 
+        fuel f 
+    ON 
+        c.id = f.car_id
+";
+*/
+//bez zaokraglania do 2 miejsc po przecinku
+//IFNULL(SUM(f.distance) / SUM(f.liters), 'Brak danych') AS average_fuel_consumption
+$sql = "
+    SELECT 
+        c.id, 
+        c.model, 
+        c.year, 
+        c.user_id, 
+        c.insurance, 
+        c.technical_inspection, 
+        c.mileage,
+        IFNULL(ROUND(SUM(f.distance) / SUM(f.liters), 2), 'Brak danych') AS average_fuel_consumption
+        
+    FROM 
+        cars c
+    LEFT JOIN 
+        fuel f 
+    ON 
+        c.id = f.car_id
+    GROUP BY 
+        c.id, c.model, c.year, c.user_id, c.insurance, c.technical_inspection, c.mileage
+";
+
+
 
 // Jeśli użytkownik nie jest administratorem, dodajemy warunek, by pokazać tylko samochody przypisane do tego użytkownika
 if ($user_role !== 'admin') {
@@ -183,6 +247,7 @@ if (mysqli_num_rows($result) > 0) {
     echo '<th>Ubezpieczenie</th>';
     echo '<th>Przeglad</th>';
     echo '<th>Przebieg</th>';
+    echo '<th>Spalanie</th>';
     echo '<th>Opcje</th>';
     echo '</tr>';
     
@@ -195,6 +260,10 @@ if (mysqli_num_rows($result) > 0) {
         echo '<td>' . htmlspecialchars($row['insurance']) . '</td>';
         echo '<td>' . htmlspecialchars($row['technical_inspection']) . '</td>';
         echo '<td>' . htmlspecialchars($row['mileage']) . '</td>';
+       echo '<td>' . (isset($row['average_fuel_consumption']) ? htmlspecialchars($row['average_fuel_consumption']) : 'Brak danych') . '</td>';
+      
+      
+        
         
         echo '<td>';
         echo '<button onclick="openMenuAdd(' . htmlspecialchars($row['id']) . ')">Dodaj</button>';
@@ -222,7 +291,7 @@ mysqli_close($conn);
     <title>Witaj</title>
     <style>
         /* glowne menu dodawania, okno z edycja przebiegu */
-        #menu-add, #edit-mileage, #edit-insurance, #edit-inspection, #new-part, #menu-info {
+        #menu-add, #edit-mileage, #edit-insurance, #edit-inspection, #new-part, #new-fuel, #menu-info {
             display: none;
             position: fixed;
             top: 20%;
@@ -251,7 +320,7 @@ mysqli_close($conn);
             z-index: 1000;
         }
       
-        #menu-add button, #edit-mileage button, #edit-insurance button, #edit-inspection button, #new-part button, #menu-info button {
+        #menu-add button, #edit-mileage button, #edit-insurance button, #edit-inspection button, #new-part button, #new-fuel button, #menu-info button {
             display: block;
             width: 100%;
             margin: 5px 0;
@@ -279,6 +348,7 @@ mysqli_close($conn);
         <button onclick="menuEditInsurance()">Nowe ubezpieczenie</button>
         <button onclick="menuEditInspection()">Nowy przegląd</button>
         <button onclick="menuEditTire()">Wymiana opon</button>
+        <button onclick="menuNewFuel()">Tankowanie</button>
         <button onclick="closeMenuAdd()">Anuluj</button>
     </div>
 
@@ -329,6 +399,33 @@ mysqli_close($conn);
       
         <button type="submit" onclick="addNewPart()">Zatwierdź</button>
         <button type="button" onclick="closeMenuNewPart()">Anuluj</button>
+    </form>
+  
+  
+  <form id="new-fuel">
+        <h2>Nowe tankowanie:</h2>
+        
+        <label for="add-fuel">Litry:</label>
+        <input type="number" id="add-fuel-liters-input" name="" required><br>
+
+        <label for="add-fuel-type-input">Rodzaj paliwa:</label>
+    <select id="add-fuel-type-input" name="fuel_type" required>
+        <option value="petrol">Benzyna</option>
+        <option value="diesel">Diesel</option>
+        <option value="lpg">LPG</option>
+    </select><br>
+      
+        <label for="add-fuel">Koszt za litr:</label>
+        <input type="number" id="add-fuel-price-input" name="" step="0.01" required><br>
+
+        <label for="add-fuel">Data tankowania:</label><br>
+        <input type="date" id="add-fuel-date-input" name="" required><br>
+
+        <label for="add-fuel">Dystans w km:</label><br>
+        <input type="number" id="add-fuel-distance-input" name="" required><br>
+      
+        <button type="submit" onclick="addNewFuel()">Zatwierdź</button>
+        <button type="button" onclick="closeMenuNewFuel()">Anuluj</button>
     </form>
   
  
@@ -416,6 +513,16 @@ mysqli_close($conn);
         document.getElementById('new-part').style.display = 'none';
     }
 
+   // Funkcja otwierająca okno z tankowaniem
+    function menuNewFuel() {
+        document.getElementById('new-fuel').style.display = 'block';
+    }
+
+    // Funkcja zamykająca okno z tankowaniem
+    function closeMenuNewFuel() {
+        document.getElementById('new-fuel').style.display = 'none';
+    }
+   
     // Funkcja aktualizująca przebieg w bazie danych
     function editMileage() {
         event.preventDefault(); // Zapobiega domyślnemu działaniu formularza
@@ -546,6 +653,47 @@ mysqli_close($conn);
             alert("Wystąpił błąd podczas dodawania części.");
         });
     }
+   
+   
+   // Funkcja dodająca nową część do bazy danych
+    function addNewFuel() {
+        event.preventDefault(); // Zapobiega domyślnemu działaniu formularza
+
+        const fuelLiters = document.getElementById('add-fuel-liters-input').value;
+        const fuelType = document.getElementById('add-fuel-type-input').value;
+        const fuelPrice = document.getElementById('add-fuel-price-input').value;
+        const fuelDate = document.getElementById('add-fuel-date-input').value;
+        const fuelDistance = document.getElementById('add-fuel-distance-input').value;
+       
+        // Wysłanie zapytania POST do serwera
+        fetch("", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded"
+            },
+            body: `car_id=${selectedCarId}&fuelLiters=${fuelLiters}&fuelType=${fuelType}&fuelPrice=${fuelPrice}&fuelDate=${fuelDate}&fuelDistance=${fuelDistance}`
+        })
+        .then(response => response.json()) // Parsowanie odpowiedzi jako JSON
+        .then(data => {
+            if (data.status === "success") {
+                alert(data.message); // Wyświetlenie komunikatu sukcesu
+                location.reload(); // Odświeżenie strony
+            } else {
+                alert(data.message); // Wyświetlenie komunikatu błędu
+            }
+        })
+        .catch(error => {
+            console.error("Wystąpił błąd:", error);
+            alert("Wystąpił błąd podczas dodawania części.");
+        });
+    }
+   
+   
+     
+   
+   
+   
+   
    
    
    
