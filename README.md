@@ -30,19 +30,21 @@ and tells you when the next replacement is due (e.g. oil, brakes)
 - editing mileage, technical inspection and adding new parts by user
 
 ### v0.2
-- displaying info about specyfic car
+- displaying info about specific car
 - history of parts replacement
 - info about upcoming car service
   
 ### v0.3
-- creating new users
+- average fuel consumption
 - changing password
 - password hashing
 - creating new cars
   
 ### v0.4
+- creating new users
 - insurance and technical inspection reminder
 - statistics of kilometers traveled
 - fuel cost analysis
+- creating new users
 
   
