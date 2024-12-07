@@ -113,7 +113,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['car_id_history']))  {
     //$query = "SELECT * FROM parts WHERE car_id = $car_id";
     
     $query = "
-        SELECT 
+        SELECT
+            parts.id,
             parts.car_id, 
             parts.name, 
             parts.number, 
@@ -124,7 +125,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['car_id_history']))  {
             (parts.next_exchange_km + parts.kilometers_status  - cars.mileage) AS when_exchange
         FROM parts 
         JOIN cars ON parts.car_id = cars.id
-        WHERE parts.car_id = $car_id
+        WHERE parts.car_id = $car_id AND parts.is_replaced = 0
         ORDER BY when_exchange ASC
     ";
     
@@ -141,8 +142,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['car_id_history']))  {
 }
   
 
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['part_id_service']))  {
+    $part_id = intval($_POST['part_id_service']);
     
+    $query = "UPDATE parts SET is_replaced = 1 WHERE parts.id = $part_id; ";
+   if ($conn->query($query) === TRUE) {
+        echo json_encode(['status' => 'success', 'message' => 'Dane zostały zaktualizowane']);
+    } else {
+        echo json_encode(['status' => 'error', 'message' => 'Błąd podczas aktualizacji danych']);
+    }
+    exit();
+}
+
     
+ 
+   
+       
+
   
 
 
@@ -651,7 +667,7 @@ function closeMenuHistory() {
 }
   
    
-   function openService(carId) {
+ function openService(carId) {
     selectedCarId = carId;
 
     const serviceContent = document.getElementById('service-content');
@@ -673,6 +689,7 @@ function closeMenuHistory() {
                 <table border="1" style="width: 100%; border-collapse: collapse;">
                     <thead>
                         <tr>
+                            
                             <th>Id samochodu</th>
                             <th>Nazwa części</th>
                             <th>Numer seryjny części</th>
@@ -681,17 +698,19 @@ function closeMenuHistory() {
                             <th>Przebieg</th>
                             <th>Następna wymiana</th>
                             <th>Kiedy wymiana</th>
+                            <th>Czy wymieniono?</th>
                         </tr>
                     </thead>
                     <tbody>
             `;
 
             data.data.forEach(service => {
-                   // Pomiń wpisy, gdzie next_exchange_km wynosi 0
-            if (service.next_exchange_km === "0") return;   
-                      
+                // Pomiń wpisy, gdzie next_exchange_km wynosi 0 lub is_replaced wynosi 1
+                if (service.next_exchange_km === "0") return;
+
                 tableHTML += `
                     <tr>
+                      
                         <td>${service.car_id}</td>
                         <td>${service.name}</td>
                         <td>${service.number}</td>
@@ -700,6 +719,9 @@ function closeMenuHistory() {
                         <td>${service.kilometers_status}</td>
                         <td>${service.next_exchange_km}</td>
                         <td>${service.when_exchange}</td>
+                        <td>
+                            <button onclick="makeReplaced('${service.id}')">Oznacz jako wymienioną</button>
+                        </td>
                     </tr>
                 `;
             });
@@ -719,14 +741,43 @@ function closeMenuHistory() {
         serviceContent.innerHTML = "<p>Wystąpił błąd podczas pobierania danych.</p>";
     });
 }
-
-
 function closeMenuService() {
     selectedCarId = null;
     document.getElementById('menu-service').style.display = 'none';
 }
   
+  
    
+   
+   
+   
+   
+   function makeReplaced(partId) {
+   selectedPartId = partId;
+   event.preventDefault(); // Zapobiega domyślnemu działaniu formularza
+
+        // Wysłanie zapytania POST do serwera
+        fetch("", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded"
+            },
+            body: `part_id_service=${selectedPartId}`
+        })
+        .then(response => response.json()) // Parsowanie odpowiedzi jako JSON
+        .then(data => {
+            if (data.status === "success") {
+                alert(data.message); // Wyświetlenie komunikatu sukcesu
+                location.reload(); // Odświeżenie strony
+            } else {
+                alert(data.message); // Wyświetlenie komunikatu błędu
+            }
+        })
+        .catch(error => {
+            console.error("Wystąpił błąd:", error);
+            alert("Wystąpił błąd podczas aktualizacji przebiegu.");
+        });
+}
    
    
 </script>
