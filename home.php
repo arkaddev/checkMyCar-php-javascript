@@ -65,8 +65,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['car_id'], $_POST['par
     $part_mileage = intval($_POST['partMileage']);
     $part_next = intval($_POST['partNext']);
     
-    $update_query = "INSERT INTO parts (id, name, number, price, exchange_date, kilometers_status, next_exchange_km, car_id) 
-                     VALUES (NULL, '$part_name', '$part_number', '$part_price', '$part_date', '$part_mileage', '$part_next', '$car_id')";
+    $update_query = "INSERT INTO parts (id, name, number, price, exchange_date, kilometers_status, next_exchange_km, car_id, is_replaced) 
+                     VALUES (NULL, '$part_name', '$part_number', '$part_price', '$part_date', '$part_mileage', '$part_next', '$car_id', '0')";
   
     if ($conn->query($update_query) === TRUE) {
         echo json_encode(['status' => 'success', 'message' => 'Część została dodana']);
@@ -705,7 +705,7 @@ function closeMenuHistory() {
             `;
 
             data.data.forEach(service => {
-                // Pomiń wpisy, gdzie next_exchange_km wynosi 0 lub is_replaced wynosi 1
+                // Pomiń wpisy, gdzie next_exchange_km wynosi 0
                 if (service.next_exchange_km === "0") return;
 
                 tableHTML += `
