@@ -36,6 +36,7 @@ and tells you when the next replacement is due (e.g. oil, brakes)
   
 ### v0.3
 - average fuel consumption
+- user panel
 - changing password
 - password hashing
 - creating new cars
