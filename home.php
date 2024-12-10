@@ -340,6 +340,10 @@ mysqli_close($conn);
     </style>
 </head>
 <body>
+  
+  <a href="user.php">User panel</a>
+  
+  
     <div id="menu-add">
         <h2>Dodaj wymianę</h2>
         <p>Wybierz opcję:</p>
