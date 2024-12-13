@@ -28,6 +28,35 @@ $user_role = isset($_SESSION['role']) ? $_SESSION['role'] : '';
 
          
 
+// Zmienna przechowująca dane sesji
+$username = $_SESSION['username'];
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['new_password'])) {
+    // Sprawdzenie, czy nowe hasło jest ustawione
+    if (empty($_POST['new_password'])) {
+        echo json_encode(['status' => 'error', 'message' => 'Proszę wprowadzić nowe hasło']);
+        exit();
+    }
+
+    // Hasło wprowadzone przez użytkownika
+    $new_password = mysqli_real_escape_string($conn, $_POST['new_password']);
+    $hashed_password = password_hash($new_password, PASSWORD_BCRYPT);
+
+    // Zapytanie SQL do aktualizacji hasła
+    $update_query = "UPDATE users SET password = '$hashed_password' WHERE username = '$username'";
+    
+    if ($conn->query($update_query) === TRUE) {
+        echo json_encode(['status' => 'success', 'message' => 'Hasło zostało zaktualizowane']);
+    } else {
+        echo json_encode(['status' => 'error', 'message' => 'Błąd podczas aktualizacji hasła: ' . $conn->error]);
+    }
+    exit();
+}
+
+
+
+
+
 // Zamykamy połączenie
 mysqli_close($conn);
 ?> 
@@ -39,6 +68,14 @@ mysqli_close($conn);
     <title>Witaj</title>
 </head>
 <body>
+  
+  
+  
+  
+  <label for="new_password">Nowe hasło:</label>
+  <input type="password" id="new_password" name="new_password" required>
+   <button onclick="newPassword()">Zmien hasło</button>
+  
  
   <a href="home.php">Powrót do strony głównej</a>
   
@@ -64,3 +101,37 @@ mysqli_close($conn);
 </body>
 </html>
 
+<script>
+  
+  
+  
+   function newPassword() {
+    var newPassword = document.getElementById('new_password').value;
+
+    if (!newPassword) {
+        alert("Proszę wprowadzić nowe hasło");
+        return;
+    }
+
+    fetch("", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+        },
+        body: `new_password=${encodeURIComponent(newPassword)}`
+    })
+    .then(response => response.json()) // Parsowanie odpowiedzi jako JSON
+    .then(data => {
+        if (data.status === "success") {
+            alert(data.message); // Wyświetlenie komunikatu sukcesu
+            location.reload(); // Odświeżenie strony
+  
+        } else {
+            alert(data.message); // Wyświetlenie komunikatu błędu
+        }
+    })
+    alert("Hasło zostało zmienione.");
+}
+  
+  
+    </script>
