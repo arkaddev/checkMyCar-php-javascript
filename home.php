@@ -289,7 +289,14 @@ mysqli_close($conn);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Witaj</title>
-  <script src="js/home.js"></script>
+  <script src="js/menuActions.js"></script>
+  <script src="js/carDataActions.js"></script>
+  <script src="js/partActions.js"></script>
+  <script src="js/fuelActions.js"></script>
+  <script src="js/infoActions.js"></script>
+  <script src="js/historyActions.js"></script>
+  <script src="js/serviceActions.js"></script>
+ 
     <style>
         /* glowne menu dodawania, okno z edycja przebiegu */
         #menu-add, #edit-mileage, #edit-insurance, #edit-inspection, #new-part, #new-fuel, #menu-info {
