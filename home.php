@@ -341,7 +341,16 @@ mysqli_close($conn);
         }
       
       
-      
+      #overlay {
+    display: none; /* Domyślnie ukryta */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* Czarny kolor z 50% przezroczystością */
+    z-index: 999; /* Nakładka nad innymi elementami, ale pod oknem modalnym */
+}
       
       
        
@@ -350,7 +359,7 @@ mysqli_close($conn);
 <body>
   
   <a href="user.php">User panel</a>
-  
+  <div id="overlay"></div>
   
     <div id="menu-add">
         <h2>Dodaj wymianę</h2>
