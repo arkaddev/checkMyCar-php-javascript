@@ -4,6 +4,7 @@ function openService(carId) {
     const serviceContent = document.getElementById('service-content');
     serviceContent.innerHTML = "<p>Ładowanie danych...</p>"; // Wiadomość oczekiwania
     document.getElementById('menu-service').style.display = 'block';
+  document.getElementById('overlay').style.display = 'block';
 
     // Wysłanie zapytania POST do serwera
     fetch("", {
@@ -75,6 +76,7 @@ function openService(carId) {
 function closeMenuService() {
     selectedCarId = null;
     document.getElementById('menu-service').style.display = 'none';
+  document.getElementById('overlay').style.display = 'none';
 }
   
   

@@ -2,6 +2,7 @@
     selectedCarId = carId;
     document.getElementById('info-content').innerHTML = "Ładowanie danych..."; // Wiadomość oczekiwania
     document.getElementById('menu-info').style.display = 'block';
+   document.getElementById('overlay').style.display = 'block';
 
     // Wysłanie zapytania POST do serwera
     fetch("", {
@@ -42,4 +43,5 @@
 function closeMenuInfo() {
     selectedCarId = null;
     document.getElementById('menu-info').style.display = 'none';
+  document.getElementById('overlay').style.display = 'none';
 }

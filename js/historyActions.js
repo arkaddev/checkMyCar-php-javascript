@@ -4,6 +4,7 @@ function openHistory(carId) {
     const historyContent = document.getElementById('history-content');
     historyContent.innerHTML = "<p>Ładowanie danych...</p>"; // Wiadomość oczekiwania
     document.getElementById('menu-history').style.display = 'block';
+  document.getElementById('overlay').style.display = 'block';
 
     // Wysłanie zapytania POST do serwera
     fetch("", {
@@ -66,4 +67,5 @@ function openHistory(carId) {
 function closeMenuHistory() {
     selectedCarId = null;
     document.getElementById('menu-history').style.display = 'none';
+  document.getElementById('overlay').style.display = 'none';
 }
