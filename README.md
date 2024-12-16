@@ -36,13 +36,14 @@ and tells you when the next replacement is due (e.g. oil, brakes)
   
 ### v0.3
 - average fuel consumption
+- menu page
 - user panel
 - changing password
 - password hashing
-- creating new cars
   
 ### v0.4
 - creating new users
+- creating new cars
 - insurance and technical inspection reminder
 - statistics of kilometers traveled
 - fuel cost analysis
