@@ -22,29 +22,31 @@ if (!isset($_SESSION["username"])) {
             background-color: #f4f4f4;
         }
         
+      
         .menu-container {
-            border: 2px solid #333; /* Ramka wokół całego menu */
-            border-radius: 10px; /* Zaokrąglone rogi ramki */
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            width: 700px;
-            margin: 50px auto; /* Wyśrodkowanie na stronie */
-            background-color: #fff; /* Tło menu */
-        }
+    aborder: 2px solid #333; /* Ramka wokół całego menu */
+        border-radius: 5px;
+    apadding: 20px;
+    width: 90vw; /* Kontener zajmuje 90% szerokości ekranu */
+    max-width: 800px; /* Ograniczenie maksymalnej szerokości */
+    margin: 50px auto; /* Wyśrodkowanie */
+    box-sizing: border-box; /* Uwzględnienie paddingu w szerokości */
+      
+      border: 2px solid gray; /* Zmieniony kolor ramki (zielony) */
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Dodanie cienia */
+    background-color: #fff; /* Białe tło dla lepszego efektu */
+}
 
-        .user-container {
-            border: 2px solid #333; /* Ramka wokół nagłówka */
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            width: 100%; /* Rozciągnięcie na całą szerokość menu */
-            padding: 0px 20px;
-            background-color: #fff; /* Tło nagłówka */
-            text-align: center;
-        }
+.user-container {
+    width: 100%; /* Szerokość taka sama jak menu-container */
+    aborder: 2px solid #333; /* Ramka wokół nagłówka */
+    padding: 5px 0; /* Wewnętrzny padding */
+    text-align: center; /* Wyśrodkowanie tekstu */
+    box-sizing: border-box; /* Uwzględnienie paddingu w szerokości */
+   background-color: silver;
+      border-radius: 5px;
+      
+}
         
         .top-menu, .bottom-menu {
             display: flex;
@@ -60,8 +62,8 @@ if (!isset($_SESSION["username"])) {
             text-decoration: none;
             font-size: 16px;
             border-radius: 5px;
-            width: 200px; /* Stała szerokość */
-            height: 200px; /* Stała wysokość */
+            width: 250px; /* Stała szerokość */
+            height: 250px; /* Stała wysokość */
             display: flex;
             justify-content: center;
             align-items: center;
@@ -71,22 +73,22 @@ if (!isset($_SESSION["username"])) {
 
         /* Kolory przycisków */
         .menu-item-1 {
-            background-color: #4CAF50; /* Kolor tła przycisku 1 */
+            background-color: #3F51B5; /* Kolor tła przycisku 1 */
         }
         .menu-item-2 {
             background-color: #2196F3; /* Kolor tła przycisku 2 */
         }
         .menu-item-3 {
-            background-color: #FF5722; /* Kolor tła przycisku 3 */
+            background-color: #3F51B5; /* Kolor tła przycisku 3 */
         }
         .menu-item-4 {
-            background-color: #FFC107; /* Kolor tła przycisku 4 */
+            background-color: #2196F3; /* Kolor tła przycisku 4 */
         }
         .menu-item-5 {
-            background-color: #9C27B0; /* Kolor tła przycisku 5 */
+            background-color: #3F51B5; /* Kolor tła przycisku 5 */
         }
         .menu-item-6 {
-            background-color: #3F51B5; /* Kolor tła przycisku 6 */
+            background-color: #2196F3; /* Kolor tła przycisku 6 */
         }
 
         /* Efekt hover dla każdego przycisku */
@@ -104,17 +106,15 @@ if (!isset($_SESSION["username"])) {
         
         <div class="top-menu">
             <a href="home.php" class="menu-item menu-item-1">Lista pojazdów</a>
-            <a href="#" class="menu-item menu-item-2">Przycisk 2</a>
-            <a href="#" class="menu-item menu-item-3">Przycisk 3</a>
+            <a href="#" class="menu-item menu-item-2">Spalanie</a>
+            <a href="#" class="menu-item menu-item-3">Notatnik</a>
         </div>
         
         <div class="bottom-menu">
-            <a href="#" class="menu-item menu-item-4">Przycisk 4</a>
+            <a href="#" class="menu-item menu-item-4">Statystyki</a>
             <a href="user.php" class="menu-item menu-item-5">Ustawienia</a>
             <a href="logout.php" class="menu-item menu-item-6">Wyloguj</a>
         </div>
     </div>
-</body>
-</html>
 </body>
 </html>
