@@ -50,7 +50,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $_SESSION["id"] = $user['id'];
 
         // Przekierowanie na stronę powitalną
-        header("Location: home.php");
+        header("Location: menu.php");
         exit();
     } else {
         // Jeśli dane logowania są niepoprawne
