@@ -91,10 +91,19 @@ if (!isset($_SESSION["username"])) {
             background-color: #2196F3; /* Kolor tła przycisku 6 */
         }
 
-        /* Efekt hover dla każdego przycisku */
+      
+      /* Efekt hover */
         .menu-item:hover {
-            opacity: 0.8;
+      opacity: 0.8;
+            transform: scale(1.05);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
         }
+
+        .menu-item:active {
+            transform: scale(0.95);
+            box-shadow: inset 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+      
     </style>
 </head>
 <body>
@@ -106,8 +115,8 @@ if (!isset($_SESSION["username"])) {
         
         <div class="top-menu">
             <a href="home.php" class="menu-item menu-item-1">Lista pojazdów</a>
-            <a href="#" class="menu-item menu-item-2">Spalanie</a>
-            <a href="#" class="menu-item menu-item-3">Notatnik</a>
+            <a href="#" class="menu-item menu-item-2">Notatnik</a>
+            <a href="#" class="menu-item menu-item-3">Spalanie</a>
         </div>
         
         <div class="bottom-menu">
