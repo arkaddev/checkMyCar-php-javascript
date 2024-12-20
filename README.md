@@ -43,10 +43,10 @@ and tells you when the next replacement is due (e.g. oil, brakes)
   
 ### v0.4
 - creating new users
-- creating new cars
+- creating new cars, info about cars
 - insurance and technical inspection reminder
+
+### v0.5
 - statistics of kilometers traveled
 - fuel cost analysis
-- creating new users
-
-  
+- log table
