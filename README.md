@@ -44,9 +44,10 @@ and tells you when the next replacement is due (e.g. oil, brakes)
 ### v0.4
 - creating new users
 - creating new cars, info about cars
-- insurance and technical inspection reminder
+- insurance and technical inspection reminder by colors
 
 ### v0.5
 - statistics of kilometers traveled
 - fuel cost analysis
 - log table
+- insurance and technical inspection reminder by email
