@@ -208,6 +208,7 @@ $sql = "SELECT id, model, year, user_id, insurance, technical_inspection, mileag
 */
 //bez zaokraglania do 2 miejsc po przecinku
 //IFNULL(SUM(f.distance) / SUM(f.liters), 'Brak danych') AS average_fuel_consumption
+
 $sql = "
     SELECT 
         c.id, 
@@ -225,16 +226,25 @@ $sql = "
         fuel f 
     ON 
         c.id = f.car_id
+      
+        
     GROUP BY 
         c.id, c.model, c.year, c.user_id, c.insurance, c.technical_inspection, c.mileage
+
 ";
 
 
 
-// Jeśli użytkownik nie jest administratorem, dodajemy warunek, by pokazać tylko samochody przypisane do tego użytkownika
+ //Jeśli użytkownik nie jest administratorem, dodajemy warunek, by pokazać tylko samochody przypisane do tego użytkownika
 if ($user_role !== 'admin') {
     $sql .= " WHERE user_id = '" . mysqli_real_escape_string($conn, $_SESSION['id']) . "'";
+  
+
+
 }
+
+ 
+
 
 $result = mysqli_query($conn, $sql);
 if (mysqli_num_rows($result) > 0) {
@@ -252,12 +262,35 @@ if (mysqli_num_rows($result) > 0) {
     echo '</tr>';
     
     while ($row = mysqli_fetch_assoc($result)) {
+    
+      
+      $insuranceDate = $row['insurance'];
+    $currentDate = date('Y-m-d'); // Pobieramy aktualną datę w formacie Y-m-d
+    
+   // Obliczenie różnicy w dniach między datą ubezpieczenia a bieżącą datą
+    $dateDiff = (strtotime($insuranceDate) - strtotime($currentDate)) / (60 * 60 * 24);
+    
+    // Określenie klasy CSS na podstawie różnicy w dniach
+    if ($dateDiff < 0) {
+        $insuranceClass = 'insurance-expired'; // Czerwony dla przeterminowanego ubezpieczenia
+    } elseif ($dateDiff <= 30) {
+        $insuranceClass = 'insurance-warning'; // Pomarańczowy dla ubezpieczenia bliskiego terminu
+    } else {
+        $insuranceClass = 'insurance-valid'; // Zielony dla ważnego ubezpieczenia
+    }
+    
+      
+      
+   
+      
+      
+      
         echo '<tr>';
         echo '<td>' . htmlspecialchars($row['id']) . '</td>';
         echo '<td>' . htmlspecialchars($row['model']) . '</td>';
         echo '<td>' . htmlspecialchars($row['year']) . '</td>';
         echo '<td>' . htmlspecialchars($row['user_id']) . '</td>';
-        echo '<td>' . htmlspecialchars($row['insurance']) . '</td>';
+        echo '<td class="' . $insuranceClass . '">' . htmlspecialchars($row['insurance']) . '</td>';
         echo '<td>' . htmlspecialchars($row['technical_inspection']) . '</td>';
         echo '<td>' . htmlspecialchars($row['mileage']) . '</td>';
        echo '<td>' . (isset($row['average_fuel_consumption']) ? htmlspecialchars($row['average_fuel_consumption']) : 'Brak danych') . '</td>';
@@ -352,13 +385,24 @@ mysqli_close($conn);
     z-index: 999; /* Nakładka nad innymi elementami, ale pod oknem modalnym */
 }
       
+      .insurance-expired {
+       background-color: #f8d7da;
+        
+    }
+    .insurance-warning {
+        background-color: #fff3cd;
+        
+    }
+    .insurance-valid {
+        background-color: #d4edda;
       
+    }
        
     </style>
 </head>
 <body>
   
-  <a href="user.php">User panel</a>
+ 
   <div id="overlay"></div>
   
     <div id="menu-add">
