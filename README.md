@@ -49,5 +49,7 @@ and tells you when the next replacement is due (e.g. oil, brakes)
 ### v0.5
 - statistics of kilometers traveled
 - fuel cost analysis
+
+### v0.6
 - log table
 - insurance and technical inspection reminder by email
