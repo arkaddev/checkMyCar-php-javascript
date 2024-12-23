@@ -45,6 +45,7 @@ and tells you when the next replacement is due (e.g. oil, brakes)
 - creating new users
 - creating new cars, info about cars
 - insurance and technical inspection reminder by colors
+- notes
 
 ### v0.5
 - statistics of kilometers traveled
