@@ -142,7 +142,7 @@ if (!isset($_SESSION["username"])) {
                 <i class="fas fa-car"></i>
                 Lista pojazdów
             </a>
-            <a href="#" class="menu-item menu-item-2">
+            <a href="notes.php" class="menu-item menu-item-2">
                 <i class="fas fa-book"></i>
                 Notatnik
             </a>
