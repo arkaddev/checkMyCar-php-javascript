@@ -54,3 +54,6 @@ and tells you when the next replacement is due (e.g. oil, brakes)
 ### v0.6
 - log table
 - insurance and technical inspection reminder by email
+
+### v0.7
+- adding a graphic design
