@@ -34,7 +34,7 @@ $sql = "
         c.insurance, 
         c.technical_inspection, 
         c.mileage,
-        IFNULL(ROUND(SUM(f.distance) / SUM(f.liters), 2), 'Brak danych') AS average_fuel_consumption
+        IFNULL(ROUND(SUM(f.liters)*100 / SUM(f.distance), 2), 'Brak danych') AS average_fuel_consumption
         
     FROM 
         cars c
@@ -76,10 +76,14 @@ if (mysqli_num_rows($result) > 0) {
     echo '<th>Spalanie</th>';
     echo '<th>Opcje</th>';
     echo '</tr>';
-   //include 'helpers/functions.php';
+   require 'helpers/functions.php';
     while ($row = mysqli_fetch_assoc($result)) {
     
- 
+      
+      
+      $insuranceClass = getInsuranceClass($row['insurance']);
+      $inspectionClass = getInsuranceClass($row['technical_inspection']);
+ /*
       $insuranceDate = $row['insurance'];
     $currentDate = date('Y-m-d'); // Pobieramy aktualną datę w formacie Y-m-d
     
@@ -95,7 +99,7 @@ if (mysqli_num_rows($result) > 0) {
         $insuranceClass = 'insurance-valid'; // Zielony dla ważnego ubezpieczenia
     }
     
-      
+      */
      
    
       
@@ -107,7 +111,7 @@ if (mysqli_num_rows($result) > 0) {
         echo '<td>' . htmlspecialchars($row['year']) . '</td>';
         echo '<td>' . htmlspecialchars($row['user_id']) . '</td>';
         echo '<td class="' . $insuranceClass . '">' . htmlspecialchars($row['insurance']) . '</td>';
-        echo '<td>' . htmlspecialchars($row['technical_inspection']) . '</td>';
+        echo '<td class="' . $inspectionClass . '">' . htmlspecialchars($row['technical_inspection']) . '</td>';
         echo '<td>' . htmlspecialchars($row['mileage']) . '</td>';
        echo '<td>' . (isset($row['average_fuel_consumption']) ? htmlspecialchars($row['average_fuel_consumption']) : 'Brak danych') . '</td>';
       
