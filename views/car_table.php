@@ -53,7 +53,7 @@ $sql = "
 
  //Jeśli użytkownik nie jest administratorem, dodajemy warunek, by pokazać tylko samochody przypisane do tego użytkownika
 if ($user_role !== 'admin') {
-    $sql .= " WHERE user_id = '" . mysqli_real_escape_string($conn, $_SESSION['id']) . "'";
+    $sql .= " HAVING user_id = '" . mysqli_real_escape_string($conn, $_SESSION['id']) . "'";
   
 
 
@@ -134,4 +134,4 @@ if (mysqli_num_rows($result) > 0) {
 
 // Zamykamy połączenie
 mysqli_close($conn);
-?> 
+?>
