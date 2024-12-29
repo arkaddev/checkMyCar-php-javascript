@@ -53,8 +53,20 @@ if (!isset($_SESSION["username"])) {
    background-color: silver;
       border-radius: 5px;
       
+       display: flex;
+            justify-content: space-between;
+            align-items: center;
       
 }
+      
+      
+      
+       .title {
+            font-size: 22px;
+            font-weight: bold;
+            color: #333;
+        }
+      
       
       .username {
     font-weight: bold;
@@ -134,6 +146,8 @@ if (!isset($_SESSION["username"])) {
       
     <div class="menu-container">
         <div class="user-container">
+          
+          <span class="title">Menu</span>
             <p>Zalogowany użytkownik: <span class="username"><?php echo htmlspecialchars($_SESSION['username']); ?></span></p>
       </div>
         
