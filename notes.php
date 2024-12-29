@@ -80,8 +80,19 @@ mysqli_close($conn);
    background-color: silver;
       border-radius: 5px;
       
+     
+         
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
       
 }
+   
+       .title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+        }
       
       .username {
     font-weight: bold;
@@ -106,11 +117,11 @@ mysqli_close($conn);
 <body>
    <div class="menu-container">
         <div class="user-container">
+          <span class="title">Twoje notatki</span>
             <p>Zalogowany użytkownik: <span class="username"><?php echo htmlspecialchars($_SESSION['username']); ?></span></p>
      </div>
  
   
-    <h2>Twoje notatki:</h2>
   
    <?php if (!empty($notes)): ?>
         <ul>
