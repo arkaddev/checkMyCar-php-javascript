@@ -68,6 +68,8 @@ mysqli_close($conn);
      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
     
     background-color: #fff; /* Białe tło dla lepszego efektu */
+      min-height: 400px;
+   
 }
 
       
@@ -89,7 +91,7 @@ mysqli_close($conn);
 }
    
        .title {
-            font-size: 24px;
+            font-size: 22px;
             font-weight: bold;
             color: #333;
         }
