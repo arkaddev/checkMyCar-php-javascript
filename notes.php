@@ -108,6 +108,48 @@ mysqli_close($conn);
       
     
 
+
+
+
+/* glowne menu dodawania */
+       #new-note {
+            display: none;
+            position: fixed;
+            top: 20%;
+            left: 50%;
+            transform: translate(-50%, -20%);
+            width: 300px;
+            background: white;
+            padding: 20px;
+            border: 1px solid #ccc;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+        }
+
+#new-note button{
+            display: block;
+            width: 100%;
+            margin: 5px 0;
+        }
+    
+        #new-note input {
+            width: 90%;
+            padding: 10px;
+            margin: 10px 0;
+        }
+
+      
+      
+      #overlay {
+    display: none; /* Domyślnie ukryta */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* Czarny kolor z 50% przezroczystością */
+    z-index: 999; /* Nakładka nad innymi elementami, ale pod oknem modalnym */
+}
       
       
     </style>
@@ -120,6 +162,7 @@ mysqli_close($conn);
    <div class="menu-container">
         <div class="user-container">
           <span class="title">Twoje notatki</span>
+         <button onclick="menuNewNote()">Nowa notatka</button>
             <p>Zalogowany użytkownik: <span class="username"><?php echo htmlspecialchars($_SESSION['username']); ?></span></p>
      </div>
  
@@ -139,8 +182,42 @@ mysqli_close($conn);
     <?php endif; ?>
   
   
+      
+  <div id="overlay"></div>
+      
+    
+      <form id="new-note">
+        <h2>Nowa notatka:</h2>
+    
+        <label for="add-note">Tytuł:</label>
+        <input type="text" id="add-note-title-input" name="" required><br>
+
+        <label for="add-note">Treść:</label>
+          <textarea id="add-note-content-input" name="message" rows="4" cols="40" placeholder="Wpisz swoją wiadomość tutaj..."></textarea><br>
+    
+      
+        <button type="submit" onclick="addNewNote()">Zatwierdź</button>
+        <button type="button" onclick="closeMenuNewNote()">Anuluj</button>
+    </form>
+  
+      
+      
   
   
   </div>
 </body>
 </html>
+
+<script>
+function menuNewNote() {
+        document.getElementById('new-note').style.display = 'block';
+      document.getElementById('overlay').style.display = 'block';
+    }
+
+   
+    function closeMenuNewNote() {
+        document.getElementById('new-note').style.display = 'none';
+   document.getElementById('overlay').style.display = 'none';
+    }
+
+</script>
