@@ -21,7 +21,7 @@ if (!$conn) {
 $userId = $_SESSION['id'];
 
 // Zapytanie do bazy
-$query = "SELECT * FROM notes WHERE user_id = $userId";
+$query = "SELECT * FROM notes WHERE user_id = $userId ORDER BY id DESC";
 $result = $conn->query($query);
 
 $notes = []; // Tablica do przechowywania notatek
@@ -29,6 +29,44 @@ $notes = []; // Tablica do przechowywania notatek
 if ($result->num_rows > 0) {
     $notes = $result->fetch_all(MYSQLI_ASSOC);  // Pobranie wszystkich notatek
 }
+
+
+
+
+
+
+
+
+
+
+
+
+// dodawanie nowej notatki
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['user_id'], $_POST['noteTitle'])) {
+    $user_id = intval($_POST['user_id']);
+    $note_title = $conn->real_escape_string($_POST['noteTitle']);
+    $note_contnet = $conn->real_escape_string($_POST['noteContent']);
+   
+    $update_query = "INSERT INTO notes (id, title, content, user_id) 
+                     VALUES (NULL, '$note_title', '$note_contnet', '$user_id')";
+  
+    if ($conn->query($update_query) === TRUE) {
+        echo json_encode(['status' => 'success', 'message' => 'Notatka została dodana']);
+    } else {
+        echo json_encode(['status' => 'error', 'message' => 'Błąd podczas dodawania notatki']);
+    }
+    exit();
+}
+
+
+
+
+
+
+
+
+
+
 
 mysqli_close($conn);
 ?>
@@ -150,7 +188,8 @@ mysqli_close($conn);
     background: rgba(0, 0, 0, 0.5); /* Czarny kolor z 50% przezroczystością */
     z-index: 999; /* Nakładka nad innymi elementami, ale pod oknem modalnym */
 }
-      
+ 
+
       
     </style>
   
@@ -196,7 +235,7 @@ mysqli_close($conn);
           <textarea id="add-note-content-input" name="message" rows="4" cols="40" placeholder="Wpisz swoją wiadomość tutaj..."></textarea><br>
     
       
-        <button type="submit" onclick="addNewNote()">Zatwierdź</button>
+        <button type="submit" onclick="addNewNote(<?php echo $userId; ?>)">Zatwierdź</button>
         <button type="button" onclick="closeMenuNewNote()">Anuluj</button>
     </form>
   
@@ -220,4 +259,38 @@ function menuNewNote() {
    document.getElementById('overlay').style.display = 'none';
     }
 
+  
+  
+  // Funkcja dodająca nową notatkę do bazy danych
+    function addNewNote(userId) {
+  
+        event.preventDefault(); // Zapobiega domyślnemu działaniu formularza
+
+        const noteTitle = document.getElementById('add-note-title-input').value;
+        const noteContent = document.getElementById('add-note-content-input').value;
+
+        // Wysłanie zapytania POST do serwera
+        fetch("", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded"
+            },
+            body: `user_id=${userId}&noteTitle=${noteTitle}&noteContent=${noteContent}`
+        })
+        .then(response => response.json()) // Parsowanie odpowiedzi jako JSON
+        .then(data => {
+            if (data.status === "success") {
+                alert(data.message); // Wyświetlenie komunikatu sukcesu
+                location.reload(); // Odświeżenie strony
+            } else {
+                alert(data.message); // Wyświetlenie komunikatu błędu
+            }
+        })
+        .catch(error => {
+            console.error("Wystąpił błąd:", error);
+            alert("Wystąpił błąd podczas dodawania notatki.");
+        });
+    }
+  
+  
 </script>
