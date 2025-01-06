@@ -188,8 +188,65 @@ mysqli_close($conn);
     background: rgba(0, 0, 0, 0.5); /* Czarny kolor z 50% przezroczystością */
     z-index: 999; /* Nakładka nad innymi elementami, ale pod oknem modalnym */
 }
- 
+      
+ .user-container button {
+            font-size: 22px;
+            font-weight: bold;
+            color: #333;
+      
+    
+        }
 
+      
+      /* Stylizacja dla listy notatek */
+ul {
+    list-style-type: none;
+    padding: 2px;
+      font-family: 'Courier New', Courier, monospace;
+}
+
+ul li {
+    background-color: #f9f9f9;
+    margin: 5px 0;
+    padding: 5px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Stylizacja dla tytułu notatki */
+ul li strong {
+    font-size: 1.2em;
+    color: #333;
+    padding: 0 15px 0 0;
+}
+      ul li p {
+    font-size: 1.1em;
+    color: #5e4e3b; /* Ciemniejszy brąz */
+    line-height: 1.5;
+    margin-bottom: 10px;
+    font-style: italic; /* Kursywa nadająca retro charakter */
+}
+      
+
+/* Stylizacja dla przycisku usuwania */
+.delete-button {
+    background-color: #e74c3c;
+    color: #fff;
+    border: none;
+    border-radius: 3px;
+    padding: 5px 10px;
+    font-size: 0.9em;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.delete-button:hover {
+    background-color: #c0392b;
+}
       
     </style>
   
@@ -201,7 +258,9 @@ mysqli_close($conn);
    <div class="menu-container">
         <div class="user-container">
           <span class="title">Twoje notatki</span>
-         <button onclick="menuNewNote()">Nowa notatka</button>
+         <button onclick="menuNewNote()" >
+           <i class="fas fa-plus"></i>
+           Nowa notatka</button>
             <p>Zalogowany użytkownik: <span class="username"><?php echo htmlspecialchars($_SESSION['username']); ?></span></p>
      </div>
  
@@ -211,8 +270,16 @@ mysqli_close($conn);
         <ul>
             <?php foreach ($notes as $note): ?>
                 <li>
-                    <strong><?php echo htmlspecialchars($note['title']); ?>:</strong> 
-                    <?php echo htmlspecialchars($note['content']); ?>
+                    <strong><?php echo htmlspecialchars($note['title']); ?>:</strong>
+                  <p><?php echo htmlspecialchars($note['content']); ?></p>
+                 
+                 <?php  echo '<button class="delete-button" onclick="deleteNote(' . htmlspecialchars($note['id']) . ')">Usuń</button>'; ?>
+                  
+                
+                  
+                  
+                  
+                  
                 </li>
             <?php endforeach; ?>
         </ul>
@@ -291,6 +358,17 @@ function menuNewNote() {
             alert("Wystąpił błąd podczas dodawania notatki.");
         });
     }
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
   
   
 </script>
