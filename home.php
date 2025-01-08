@@ -1,288 +1,18 @@
 <?php
-session_start();
-// Sprawdź, czy użytkownik jest zalogowany
-if (!isset($_SESSION["username"])) {
-    header("Location: login.php");
-    exit();
-}
+require 'config/session.php';
+require 'config/db_connection.php';
+require 'requests/update_car.php';
+require 'requests/add_part.php';
+require 'requests/add_fuel.php';
+require 'requests/car_info.php';
+require 'views/car_table.php';
+//require 'helpers/functions.php';
+
+
+
+
+
 ?>
-
-<?php
-// Baza danych
-$config = include('config/db_config.php');
-$conn = mysqli_connect($config['servername'], $config['username'], $config['password'], $config['dbname']);
-
-if (!$conn) {
-    die("Połączenie nie powiodło się: " . mysqli_connect_error());
-}
-
-// Obsługa zapisu przebiegu w bazie danych
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['car_id'], $_POST['mileage'])) {
-    $car_id = intval($_POST['car_id']);
-    $mileage = intval($_POST['mileage']);
-
-    $update_query = "UPDATE cars SET mileage = $mileage WHERE id = $car_id";
-    if ($conn->query($update_query) === TRUE) {
-        echo json_encode(['status' => 'success', 'message' => 'Przebieg został zaktualizowany']);
-    } else {
-        echo json_encode(['status' => 'error', 'message' => 'Błąd podczas aktualizacji przebiegu']);
-    }
-    exit();
-}
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['car_id'], $_POST['insurance'])) {
-    $car_id = intval($_POST['car_id']);
-    $insurance = $conn->real_escape_string($_POST['insurance']);
-    
-    $update_query = "UPDATE cars SET insurance = '$insurance' WHERE id = $car_id";
-    if ($conn->query($update_query) === TRUE) {
-        echo json_encode(['status' => 'success', 'message' => 'Ubezpieczenie zostało zaktualizowane']);
-    } else {
-        echo json_encode(['status' => 'error', 'message' => 'Błąd podczas aktualizacji ubezpieczenia']);
-    }
-    exit();
-}
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['car_id'], $_POST['inspection'])) {
-    $car_id = intval($_POST['car_id']);
-    $inspection = $conn->real_escape_string($_POST['inspection']);
-    
-    $update_query = "UPDATE cars SET technical_inspection = '$inspection' WHERE id = $car_id";
-    if ($conn->query($update_query) === TRUE) {
-        echo json_encode(['status' => 'success', 'message' => 'Przegląd został zaktualizowany']);
-    } else {
-        echo json_encode(['status' => 'error', 'message' => 'Błąd podczas aktualizacji przeglądu']);
-    }
-    exit();
-}
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['car_id'], $_POST['partName'])) {
-    $car_id = intval($_POST['car_id']);
-    $part_name = $conn->real_escape_string($_POST['partName']);
-    $part_number = $conn->real_escape_string($_POST['partNumber']);
-    $part_price = intval($_POST['partPrice']);
-    $part_date = $conn->real_escape_string($_POST['partDate']);
-    $part_mileage = intval($_POST['partMileage']);
-    $part_next = intval($_POST['partNext']);
-    
-    $update_query = "INSERT INTO parts (id, name, number, price, exchange_date, kilometers_status, next_exchange_km, car_id, is_replaced) 
-                     VALUES (NULL, '$part_name', '$part_number', '$part_price', '$part_date', '$part_mileage', '$part_next', '$car_id', '0')";
-  
-    if ($conn->query($update_query) === TRUE) {
-        echo json_encode(['status' => 'success', 'message' => 'Część została dodana']);
-    } else {
-        echo json_encode(['status' => 'error', 'message' => 'Błąd podczas dodawania części']);
-    }
-    exit();
-}
-
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['car_id'], $_POST['fuelLiters'])) {
-    $car_id = intval($_POST['car_id']);
-    $fuel_liters = $conn->real_escape_string($_POST['fuelLiters']);
-    $fuel_price = intval($_POST['fuelPrice']);
-    $fuel_type = $conn->real_escape_string($_POST['fuelType']);
-    $fuel_date = $conn->real_escape_string($_POST['fuelDate']);
-    $fuel_distance = intval($_POST['fuelDistance']);
-   
-    
-    $update_query = "INSERT INTO fuel (id, liters, price, fuel_type, refueling_date, distance, car_id) 
-                     VALUES (NULL, '$fuel_liters', '$fuel_price', '$fuel_type', '$fuel_date', '$fuel_distance', '$car_id')";
-  
-    if ($conn->query($update_query) === TRUE) {
-        echo json_encode(['status' => 'success', 'message' => 'Część została dodana']);
-    } else {
-        echo json_encode(['status' => 'error', 'message' => 'Błąd podczas dodawania części']);
-    }
-    exit();
-}
-
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['car_id_info']))  {
-    $car_id = intval($_POST['car_id_info']);
-    
-    $query = "SELECT * FROM cars_info WHERE car_id = $car_id";
-    $result = $conn->query($query);
-    
-    if ($result->num_rows > 0) {
-        $data = $result->fetch_all(MYSQLI_ASSOC);
-        echo json_encode(['status' => 'success', 'data' => $data]);
-    } else {
-        echo json_encode(['status' => 'error', 'message' => 'Brak danych o samochodzie']);
-    }
-    exit();
-}
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['car_id_history']))  {
-    $car_id = intval($_POST['car_id_history']);
-    
-    $query = "SELECT * FROM parts WHERE car_id = $car_id ORDER BY kilometers_status ASC";
-    $result = $conn->query($query);
-    
-    if ($result->num_rows > 0) {
-        $data = $result->fetch_all(MYSQLI_ASSOC);
-        echo json_encode(['status' => 'success', 'data' => $data]);
-    } else {
-        echo json_encode(['status' => 'error', 'message' => 'Brak danych o samochodzie']);
-    }
-    exit();
-}
-  
-  if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['car_id_service']))  {
-    $car_id = intval($_POST['car_id_service']);
-    
-    //$query = "SELECT * FROM parts WHERE car_id = $car_id";
-    
-    $query = "
-        SELECT
-            parts.id,
-            parts.car_id, 
-            parts.name, 
-            parts.number, 
-            parts.price, 
-            parts.exchange_date, 
-            parts.kilometers_status, 
-            parts.next_exchange_km,
-            (parts.next_exchange_km + parts.kilometers_status  - cars.mileage) AS when_exchange
-        FROM parts 
-        JOIN cars ON parts.car_id = cars.id
-        WHERE parts.car_id = $car_id AND parts.is_replaced = 0
-        ORDER BY when_exchange ASC
-    ";
-    
-    
-    $result = $conn->query($query);
-    
-    if ($result->num_rows > 0) {
-        $data = $result->fetch_all(MYSQLI_ASSOC);
-        echo json_encode(['status' => 'success', 'data' => $data]);
-    } else {
-        echo json_encode(['status' => 'error', 'message' => 'Brak danych o samochodzie']);
-    }
-    exit();
-}
-  
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['part_id_service']))  {
-    $part_id = intval($_POST['part_id_service']);
-    
-    $query = "UPDATE parts SET is_replaced = 1 WHERE parts.id = $part_id; ";
-   if ($conn->query($query) === TRUE) {
-        echo json_encode(['status' => 'success', 'message' => 'Dane zostały zaktualizowane']);
-    } else {
-        echo json_encode(['status' => 'error', 'message' => 'Błąd podczas aktualizacji danych']);
-    }
-    exit();
-}
-
-    
- 
-   
-       
-
-  
-
-
-// Sprawdzamy rolę użytkownika
-$user_role = isset($_SESSION['role']) ? $_SESSION['role'] : '';  
-// Przygotowanie zapytania SQL, aby pobrać dane samochodów
-
-$sql = "SELECT id, model, year, user_id, insurance, technical_inspection, mileage FROM cars";
-/*$sql = "
-    SELECT 
-        c.id, 
-        c.model, 
-        c.year, 
-        c.user_id, 
-        c.insurance, 
-        c.technical_inspection, 
-        c.mileage,
-        (f.distance / f.liters) AS fuel_consumption
-    FROM 
-        cars c
-    LEFT JOIN 
-        fuel f 
-    ON 
-        c.id = f.car_id
-";
-*/
-//bez zaokraglania do 2 miejsc po przecinku
-//IFNULL(SUM(f.distance) / SUM(f.liters), 'Brak danych') AS average_fuel_consumption
-$sql = "
-    SELECT 
-        c.id, 
-        c.model, 
-        c.year, 
-        c.user_id, 
-        c.insurance, 
-        c.technical_inspection, 
-        c.mileage,
-        IFNULL(ROUND(SUM(f.distance) / SUM(f.liters), 2), 'Brak danych') AS average_fuel_consumption
-        
-    FROM 
-        cars c
-    LEFT JOIN 
-        fuel f 
-    ON 
-        c.id = f.car_id
-    GROUP BY 
-        c.id, c.model, c.year, c.user_id, c.insurance, c.technical_inspection, c.mileage
-";
-
-
-
-// Jeśli użytkownik nie jest administratorem, dodajemy warunek, by pokazać tylko samochody przypisane do tego użytkownika
-if ($user_role !== 'admin') {
-    $sql .= " WHERE user_id = '" . mysqli_real_escape_string($conn, $_SESSION['id']) . "'";
-}
-
-$result = mysqli_query($conn, $sql);
-if (mysqli_num_rows($result) > 0) {
-    echo '<table border="1" cellpadding="5" cellspacing="0">';
-    echo '<tr>';
-    echo '<th>ID</th>';
-    echo '<th>Marka i model</th>';
-    echo '<th>Rok</th>';
-    echo '<th>Użytkownik</th>';
-    echo '<th>Ubezpieczenie</th>';
-    echo '<th>Przeglad</th>';
-    echo '<th>Przebieg</th>';
-    echo '<th>Spalanie</th>';
-    echo '<th>Opcje</th>';
-    echo '</tr>';
-    
-    while ($row = mysqli_fetch_assoc($result)) {
-        echo '<tr>';
-        echo '<td>' . htmlspecialchars($row['id']) . '</td>';
-        echo '<td>' . htmlspecialchars($row['model']) . '</td>';
-        echo '<td>' . htmlspecialchars($row['year']) . '</td>';
-        echo '<td>' . htmlspecialchars($row['user_id']) . '</td>';
-        echo '<td>' . htmlspecialchars($row['insurance']) . '</td>';
-        echo '<td>' . htmlspecialchars($row['technical_inspection']) . '</td>';
-        echo '<td>' . htmlspecialchars($row['mileage']) . '</td>';
-       echo '<td>' . (isset($row['average_fuel_consumption']) ? htmlspecialchars($row['average_fuel_consumption']) : 'Brak danych') . '</td>';
-      
-      
-        
-        
-        echo '<td>';
-        echo '<button onclick="openMenuAdd(' . htmlspecialchars($row['id']) . ')">Dodaj</button>';
-        echo '<button onclick="openInfo(' . htmlspecialchars($row['id']) . ')">Info</button>';
-        echo '<button onclick="openHistory(' . htmlspecialchars($row['id']) . ')">Historia</button>';
-        echo '<button onclick="openService(' . htmlspecialchars($row['id']) . ')">Serwis</button>';
-        echo '</td>';
-        
-        echo '</tr>';
-    }
-    echo '</table>';
-} else {
-    echo "Brak danych.";
-}
-
-// Zamykamy połączenie
-mysqli_close($conn);
-?> 
-
 <!DOCTYPE html>
 <html lang="pl">
 <head>
@@ -296,8 +26,24 @@ mysqli_close($conn);
   <script src="js/infoActions.js"></script>
   <script src="js/historyActions.js"></script>
   <script src="js/serviceActions.js"></script>
- 
+  
+ <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+   
     <style>
+        /* Podstawowe style strony */
+        body {
+            font-family: 'Poppins', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            abackground-color: #f4f4f4;
+            background: linear-gradient(to bottom right, #e3f2fd, #bbdefb); /* Tło gradientowe */
+           
+        }
+        
+      
+      
         /* glowne menu dodawania, okno z edycja przebiegu */
         #menu-add, #edit-mileage, #edit-insurance, #edit-inspection, #new-part, #new-fuel, #menu-info {
             display: none;
@@ -352,13 +98,220 @@ mysqli_close($conn);
     z-index: 999; /* Nakładka nad innymi elementami, ale pod oknem modalnym */
 }
       
+      .insurance-expired {
+       background-color: #f8d7da;
+        
+    }
+    .insurance-warning {
+        background-color: #fff3cd;
+        
+    }
+    .insurance-valid {
+        background-color: #d4edda;
       
+    }
        
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      /* Ogólny wygląd dla kontenerów i przycisków */
+#menu-add, #edit-mileage, #edit-insurance, #edit-inspection, #new-part, #new-fuel, #menu-info, #menu-history, #menu-service {
+    display: none; /* Domyślnie ukryte */
+    position: fixed;
+    top: 20%;
+    left: 50%;
+    transform: translate(-50%, -20%);
+    width: 80%;
+    max-width: 900px;
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0px 4px 16px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    z-index: 1000;
+    transition: transform 0.3s ease-in-out;
+}
+
+/* Okno z dodawaniem nowych danych */
+#menu-add {
+    width: 350px;
+}
+
+/* Modal z historią wymiany części */
+#menu-history, #menu-service {
+    width: 1000px;
+    height: 70%;
+    overflow-y: auto;
+}
+
+/* Przycisk w formularzach */
+#menu-add button, #edit-mileage button, #edit-insurance button, #edit-inspection button, #new-part button, #new-fuel button, #menu-info button, #menu-history button, #menu-service button {
+    display: block;
+    width: 100%;
+    margin: 10px 0;
+    padding: 12px 20px;
+    background-color: #0056b3;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+#menu-add button:hover, #edit-mileage button:hover, #edit-insurance button:hover, #edit-inspection button:hover, #new-part button:hover, #new-fuel button:hover, #menu-info button:hover, #menu-history button:hover, #menu-service button:hover {
+    background-color: #004085;
+    transform: translateY(-2px);
+}
+
+/* Styl dla okien modalnych - pola formularzy */
+form input[type="number"], form input[type="date"], form input[type="text"], form select {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 16px;
+    box-sizing: border-box;
+    transition: border-color 0.3s ease;
+}
+
+form input[type="number"]:focus, form input[type="date"]:focus, form input[type="text"]:focus, form select:focus {
+    border-color: #0056b3;
+    outline: none;
+}
+
+/* Przyciski anulowania */
+form button[type="button"] {
+    background-color: #e74c3c;
+}
+
+form button[type="button"]:hover {
+    background-color: #c0392b;
+}
+
+/* Nakładka tła */
+#overlay {
+    display: none; /* Domyślnie ukryta */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* Czarny z przezroczystością */
+    z-index: 999; /* Pod modalami */
+    transition: background 0.3s ease;
+}
+
+      
+      
+      
+      
+/* Tabela z samochodami */
+table {
+    width: 90%;
+    border-collapse: collapse;
+    
+    box-shadow: 0px 4px 16px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    overflow: hidden;
+    margin: auto;
+    margin-top: 30px;
+   
+      
+}
+
+table th, table td {
+    padding: 5px;
+    border: 1px solid #f0f0f0;
+    text-align: center;
+    font-size: 16px;
+}
+
+table th {
+    background-color: #f5f5f5;
+    font-weight: bold;
+    color: #333;
+}
+
+table td {
+    background-color: #ffffff;
+}
+
+table td button {
+    background-color: #007BFF;
+    color: white;
+    padding: 8px 15px;
+    margin: 3px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+table td button:hover {
+    background-color: #0056b3;
+    transform: translateY(-2px);
+}
+
+/* Okno modalne z informacjami o samochodzie */
+#menu-info, #menu-history, #menu-service {
+    overflow-y: auto;
+    max-height: 600px;
+    padding: 25px;
+}
+
+#menu-info h2, #menu-history h2, #menu-service h2 {
+    margin-top: 0;
+    font-size: 24px;
+    color: #333;
+    font-weight: bold;
+}
+
+/* Modal dla szczegółowych informacji */
+#menu-info #info-content, #menu-history #history-content, #menu-service #service-content {
+    margin-top: 20px;
+    font-size: 16px;
+    color: #555;
+}
+
+/* Przykład dla bardziej responsywnego layoutu */
+@media (max-width: 768px) {
+    #menu-add, #edit-mileage, #edit-insurance, #edit-inspection, #new-part, #new-fuel, #menu-info, #menu-history, #menu-service {
+        width: 90%;
+        padding: 15px;
+    }
+
+    table th, table td {
+        padding: 8px;
+    }
+
+    #menu-add button, #edit-mileage button, #edit-insurance button, #edit-inspection button, #new-part button, #new-fuel button, #menu-info button, #menu-history button, #menu-service button {
+        font-size: 14px;
+    }
+}
+      
+      
+      
+      
     </style>
 </head>
 <body>
   
-  <a href="user.php">User panel</a>
+  
+  
+  
+  
+ 
   <div id="overlay"></div>
   
     <div id="menu-add">

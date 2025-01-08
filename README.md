@@ -42,11 +42,19 @@ and tells you when the next replacement is due (e.g. oil, brakes)
 - password hashing
   
 ### v0.4
-- creating new users
-- creating new cars
-- insurance and technical inspection reminder
-- statistics of kilometers traveled
-- fuel cost analysis
-- creating new users
+- insurance and technical inspection reminder by colors
+- adding deleting notes
+- adding a graphic design
 
-  
+### v0.5
+- creating new users
+- creating new cars, info about cars
+- fuel cost analysis
+
+### v0.6
+- notes pagination
+- statistics of kilometers traveled
+
+### v0.7
+- log table
+- insurance and technical inspection reminder by email
