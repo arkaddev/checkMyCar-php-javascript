@@ -160,7 +160,7 @@ if (!isset($_SESSION["username"])) {
                 <i class="fas fa-book"></i>
                 Notatnik
             </a>
-            <a href="#" class="menu-item menu-item-3">
+            <a href="fuel.php" class="menu-item menu-item-3">
                 <i class="fas fa-gas-pump"></i>
                 Spalanie
             </a>
