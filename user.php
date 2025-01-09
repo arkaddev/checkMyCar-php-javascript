@@ -15,11 +15,20 @@ $config = include('config/db_config.php');
 $conn = mysqli_connect($config['servername'], $config['username'], $config['password'], $config['dbname']);
 
 // Sprawdzamy, czy połączenie się powiodło
+/*
 if (!$conn) {
     die("Połączenie nie powiodło się: " . mysqli_connect_error());
 } else {
     echo "Połączenie z bazą danych powiodło się!";
 }
+*/
+if (!$conn) {
+    $db_message = "Brak połączenia: " . mysqli_connect_error();
+} else {
+    $db_message = "Połączono.";
+}
+
+
 
 
 // Sprawdzamy rolę użytkownika
@@ -143,8 +152,29 @@ mysqli_close($conn);
      
      
      
-     
+     <h3>Dane użytkownika:</h3>
+       
+   <?php if (isset($_SESSION['id'])): ?>
+        <p>Id: <?= htmlspecialchars($_SESSION['id']) ?></p>
+    <?php else: ?>
+        <p>Nie przypisano id.</p>
+    <?php endif; ?>
   
+    <?php if (isset($_SESSION['role'])): ?>
+    <p>Rola: <?= htmlspecialchars($_SESSION['role']) ?></p>
+    <?php else: ?>
+        <p>Nie przypisano roli.</p>
+    <?php endif; ?>
+     
+     
+     <p>Połączenie z bązą danych: <?php echo htmlspecialchars($db_message); ?></p>
+     
+     
+     
+     <h3>Hasło:</h3>
+     
+     
+     
   <label for="new_password">Nowe hasło:</label>
   <input type="password" id="new_password" name="new_password" required>
    <button onclick="newPassword()">Zmien hasło</button>
@@ -152,17 +182,7 @@ mysqli_close($conn);
  
   
   
-  <?php if (isset($_SESSION['id'])): ?>
-        <h1>Twoje id to: <?= htmlspecialchars($_SESSION['id']) ?>!</h1>
-    <?php else: ?>
-        <p>Nie przypisano id.</p>
-    <?php endif; ?>
-  
-  <?php if (isset($_SESSION['role'])): ?>
-  <h1>Twoja rola to: <?= htmlspecialchars($_SESSION['role']) ?>!</h1>
-    <?php else: ?>
-        <p>Nie przypisano roli.</p>
-    <?php endif; ?>
+ 
   
   
     
@@ -203,6 +223,4 @@ mysqli_close($conn);
     })
     alert("Hasło zostało zmienione.");
 }
-  
-  
-    </script>
+</script>
