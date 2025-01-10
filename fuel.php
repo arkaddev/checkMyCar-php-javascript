@@ -22,6 +22,7 @@ $query = "
     SELECT 
         c.model, 
         c.year, 
+        c.user_id,
         IFNULL(ROUND(SUM(f.liters)*100 / SUM(f.distance), 2), 'Brak danych') AS average_fuel_consumption
         
     FROM 
@@ -36,7 +37,10 @@ $query = "
 ";
 
         
-        
+        //Jeśli użytkownik nie jest administratorem, dodajemy warunek, by pokazać tylko samochody przypisane do tego użytkownika
+if ($user_role !== 'admin') {
+    $query .= " HAVING user_id = '" . mysqli_real_escape_string($conn, $_SESSION['id']) . "'";
+}
     
 
 $result = mysqli_query($conn, $query);
