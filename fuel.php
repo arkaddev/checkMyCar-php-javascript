@@ -24,7 +24,7 @@ $query = "
         c.year, 
         c.user_id,
         IFNULL(ROUND(SUM(f.liters)*100 / SUM(f.distance), 2), 'Brak danych') AS average_fuel_consumption
-        
+       
     FROM 
         cars c
     LEFT JOIN 
@@ -44,6 +44,17 @@ if ($user_role !== 'admin') {
     
 
 $result = mysqli_query($conn, $query);
+
+
+
+
+
+
+
+
+
+
+
 
 
 // Zamykamy połączenie
@@ -163,6 +174,7 @@ mysqli_close($conn);
                     <th>Model</th>
                     <th>Rok</th>
                     <th>Średnie spalanie</th>
+                    <th>Akcja</th>
                 </tr>
             </thead>
             <tbody>
@@ -174,6 +186,8 @@ mysqli_close($conn);
                         echo "<td>" . htmlspecialchars($row['model']) . "</td>";
                         echo "<td>" . htmlspecialchars($row['year']) . "</td>";
                         echo '<td>' . (isset($row['average_fuel_consumption']) ? htmlspecialchars($row['average_fuel_consumption']) : 'Brak danych') . '</td>';
+                      echo '<td><button class="a" onclick="addFuel(' . htmlspecialchars($row['id']) . ')">Dodaj</button></td>';
+
                         echo "</tr>";
                     }
                 } else {
