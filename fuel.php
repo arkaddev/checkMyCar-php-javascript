@@ -147,8 +147,7 @@ mysqli_close($conn);
     font-size: 18px;
    
 }
- 
-      
+     
        /* Stylowanie tabeli */
         table {
             width: 100%;
@@ -163,7 +162,7 @@ mysqli_close($conn);
         }
 
         th {
-            background-color: #4caf50;
+            background-color: #0056b3;
             color: white;
         }
 
@@ -171,6 +170,26 @@ mysqli_close($conn);
             background-color: #f2f2f2;
         }
      
+      
+      
+      
+      
+      
+      /* Stylizacja dla przycisku dodawania */
+.new-fuel-button {
+    background-color: #2196F3;
+    color: #fff;
+    border: none;
+    border-radius: 3px;
+    padding: 5px 10px;
+    font-size: 0.9em;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.new-fuel-button:hover {
+    background-color: #3F51B5;
+}
       
        /* Dodawanie tankowania, wyglad okna */
       
@@ -209,7 +228,7 @@ mysqli_close($conn);
       
       
       /* Przycisk w formularzach */
-#new-fuel button{
+#new-fuel button {
     display: block;
     width: 100%;
     margin: 10px 0;
@@ -288,7 +307,7 @@ form button[type="button"]:hover {
                         echo "<td>" . htmlspecialchars($row['model']) . "</td>";
                         echo "<td>" . htmlspecialchars($row['year']) . "</td>";
                         echo '<td>' . (isset($row['average_fuel_consumption']) ? htmlspecialchars($row['average_fuel_consumption']) : 'Brak danych') . '</td>';
-                      echo '<td><button class="a" onclick="menuNewFuel(' . htmlspecialchars($row['id']) . ')">Dodaj</button></td>';
+                      echo '<td><button class="new-fuel-button" onclick="menuNewFuel(' . htmlspecialchars($row['id']) . ')">Dodaj</button></td>';
 
                         echo "</tr>";
                     }
