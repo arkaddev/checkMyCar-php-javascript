@@ -46,6 +46,9 @@ $query = "
         
     GROUP BY 
        c.model
+       
+    ORDER BY 
+       c.model ASC;
 ";
 
         
