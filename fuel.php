@@ -24,7 +24,18 @@ $query = "
         c.model, 
         c.year, 
         c.user_id,
-        IFNULL(ROUND(SUM(f.liters)*100 / SUM(f.distance), 2), 'Brak danych') AS average_fuel_consumption
+        IFNULL(ROUND(SUM(f.liters)*100 / SUM(f.distance), 2), 'Brak danych') AS average_fuel_consumption,
+        (
+        SELECT 
+            ROUND((f1.liters/f1.distance)*100,2)
+        FROM 
+            fuel f1
+        WHERE 
+            f1.car_id = c.id
+        ORDER BY 
+            f1.refueling_date DESC
+        LIMIT 1
+    ) AS last_fuel_consumption
        
     FROM 
         cars c
@@ -295,6 +306,7 @@ form button[type="button"]:hover {
                     <th>Model</th>
                     <th>Rok</th>
                     <th>Średnie spalanie</th>
+                  <th>Ostatnie spalanie</th>
                     <th>Akcja</th>
                 </tr>
             </thead>
@@ -306,7 +318,11 @@ form button[type="button"]:hover {
                         echo "<tr>";
                         echo "<td>" . htmlspecialchars($row['model']) . "</td>";
                         echo "<td>" . htmlspecialchars($row['year']) . "</td>";
-                        echo '<td>' . (isset($row['average_fuel_consumption']) ? htmlspecialchars($row['average_fuel_consumption']) : 'Brak danych') . '</td>';
+                        
+                      echo '<td>' . (isset($row['average_fuel_consumption']) ? htmlspecialchars($row['average_fuel_consumption']) : 'Brak danych') . '</td>';
+                        
+                      echo '<td>' . (isset($row['last_fuel_consumption']) ? htmlspecialchars($row['last_fuel_consumption']) : 'Brak danych') . '</td>';
+                      
                       echo '<td><button class="new-fuel-button" onclick="menuNewFuel(' . htmlspecialchars($row['id']) . ')">Dodaj</button></td>';
 
                         echo "</tr>";
