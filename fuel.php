@@ -47,8 +47,6 @@ $query = "
     GROUP BY 
        c.model
        
-    ORDER BY 
-       c.model ASC;
 ";
 
         
@@ -57,6 +55,7 @@ if ($user_role !== 'admin') {
     $query .= " HAVING user_id = '" . mysqli_real_escape_string($conn, $_SESSION['id']) . "'";
 }
     
+$query .= " ORDER BY c.model ASC";
 
 $result = mysqli_query($conn, $query);
 

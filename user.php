@@ -47,16 +47,16 @@ $query = "
     FROM 
         cars c
   
-    ORDER BY 
-       c.model ASC;
+    
 ";
 
         
         //Jeśli użytkownik nie jest administratorem, dodajemy warunek, by pokazać tylko samochody przypisane do tego użytkownika
 if ($user_role !== 'admin') {
-    $query .= " HAVING user_id = '" . mysqli_real_escape_string($conn, $_SESSION['id']) . "'";
+    $query .= " WHERE user_id = '" . mysqli_real_escape_string($conn, $_SESSION['id']) . "'";
+ 
 }
-    
+    $query .= " ORDER BY c.model ASC";
 
 $result = mysqli_query($conn, $query);
 
