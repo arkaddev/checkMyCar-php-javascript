@@ -35,6 +35,45 @@ if (!$conn) {
 $user_role = isset($_SESSION['role']) ? $_SESSION['role'] : '';  
 
 
+
+
+// Zapytanie SQL, aby pobrać dane z tabeli 'cars'
+$query = "
+    SELECT 
+        c.id,
+        c.model, 
+        c.year, 
+        c.user_id
+    FROM 
+        cars c
+  
+    ORDER BY 
+       c.model ASC;
+";
+
+        
+        //Jeśli użytkownik nie jest administratorem, dodajemy warunek, by pokazać tylko samochody przypisane do tego użytkownika
+if ($user_role !== 'admin') {
+    $query .= " HAVING user_id = '" . mysqli_real_escape_string($conn, $_SESSION['id']) . "'";
+}
+    
+
+$result = mysqli_query($conn, $query);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
          
 
 // Zmienna przechowująca dane sesji
@@ -137,7 +176,50 @@ mysqli_close($conn);
    
 }
         
-       
+ 
+      
+            /* Stylowanie tabeli */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #0056b3;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+     
+      
+      
+      
+      
+      
+      /* Stylizacja dla przycisku usuwania samochodu */
+.delete-car-button {
+    background-color: #2196F3;
+    color: #fff;
+    border: none;
+    border-radius: 3px;
+    padding: 5px 10px;
+    font-size: 0.9em;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.delete-car-button:hover {
+    background-color: #3F51B5;
+}
     </style>
   
 </head>
@@ -179,9 +261,39 @@ mysqli_close($conn);
   <input type="password" id="new_password" name="new_password" required>
    <button onclick="newPassword()">Zmien hasło</button>
   
- 
+ <h3>Samochody:</h3>
+     
   
-  
+   <!-- Tabela z danymi z bazy -->
+        <table>
+            <thead>
+                <tr>
+                    <th>Model</th>
+                    <th>Rok</th>
+                  
+                    <th>Akcja</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                // Wyświetlanie danych z tabeli 'cars'
+                if ($result) {
+                    while ($row = mysqli_fetch_assoc($result)) {
+                        echo "<tr>";
+                        echo "<td>" . htmlspecialchars($row['model']) . "</td>";
+                        echo "<td>" . htmlspecialchars($row['year']) . "</td>";
+                        
+                      
+                      echo '<td><button class="delete-car-button" onclick="deleteCar(' . htmlspecialchars($row['id']) . ')">Usuń</button></td>';
+
+                        echo "</tr>";
+                    }
+                } else {
+                    echo "<tr><td colspan='2'>Brak danych w tabeli 'cars'.</td></tr>";
+                }
+                ?>
+            </tbody>
+        </table>
  
   
   
