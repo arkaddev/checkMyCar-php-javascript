@@ -220,6 +220,93 @@ mysqli_close($conn);
 .delete-car-button:hover {
     background-color: #3F51B5;
 }
+      
+      
+      
+            /* KOPIA Z FUEL PHP   Dodawanie tankowania, wyglad okna */
+      
+    
+       /* Nakładka tła */
+#overlay {
+    display: none; /* Domyślnie ukryta */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* Czarny z przezroczystością */
+    z-index: 999; /* Pod modalami */
+    transition: background 0.3s ease;
+}
+
+       /* glowne menu dodawania*/
+        #add-car{
+           display: none; /* Domyślnie ukryte */
+    position: fixed;
+    top: 20%;
+    left: 50%;
+    transform: translate(-50%, -20%);
+    width: 40%;
+    max-width: 900px;
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0px 4px 16px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+    z-index: 1000;
+    transition: transform 0.3s ease-in-out;
+        }
+      
+     
+      
+      
+      /* Przycisk w formularzach */
+#add-car button {
+    display: block;
+    width: 100%;
+    margin: 10px 0;
+    padding: 12px 20px;
+    background-color: #0056b3;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+     #add-car button:hover{
+    background-color: #004085;
+    transform: translateY(-2px);
+}
+      
+      
+/* Styl dla okien modalnych - pola formularzy */
+form input[type="number"], form input[type="date"], form input[type="text"], form select {
+    width: 100%;
+    padding: 8px;
+    margin: 8px 0;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 16px;
+    box-sizing: border-box;
+    transition: border-color 0.3s ease;
+}
+
+form input[type="number"]:focus, form input[type="date"]:focus, form input[type="text"]:focus, form select:focus {
+    border-color: #0056b3;
+    outline: none;
+}
+
+/* Przyciski anulowania */
+form button[type="button"] {
+    background-color: #e74c3c;
+}
+
+form button[type="button"]:hover {
+    background-color: #c0392b;
+}
+      
+      
+      
     </style>
   
 </head>
@@ -263,7 +350,8 @@ mysqli_close($conn);
   
  <h3>Samochody:</h3>
      
-  
+<button class="add-car-button" onclick="menuAddNewCar()">Nowy samochód</button>
+     
    <!-- Tabela z danymi z bazy -->
         <table>
             <thead>
@@ -301,6 +389,42 @@ mysqli_close($conn);
    
   </div>
   
+  
+  
+  
+  
+  
+  <form id="add-car">
+        <h2>Dodaj nowy samochód:</h2>
+    
+        <label for="add-car">Nazwa samochodu:</label>
+        <input type="text" id="add-car-model-input" name="" required><br>
+
+        <label for="add-car">Rok produkcji:</label>
+        <input type="text" id="add-car-year-input" name="" required><br>
+      
+        <label for="add-car">Silnik:</label>
+        <input type="text" id="add-car-engine-input" name="" step="0.01" required><br>
+
+        <label for="add-car">Moc:</label><br>
+        <input type="text" id="add-car-kw-input" name="" required><br>
+
+        <label for="add-car">Olej:</label><br>
+        <input type="text" id="add-car-oil-input" name="" required><br>
+      
+        <label for="add-car">Filtr oleju:</label>
+        <input type="text" id="add-car-olifilter-input" name="" required><br>
+    
+        <label for="add-car">Filtr powietrza:</label>
+        <input type="text" id="add-car-airfilter-input" name="" required><br>
+      
+        <button type="submit" onclick="addNewCar()">Zatwierdź</button>
+        <button type="button" onclick="closeMenuNewCar()">Anuluj</button>
+    </form>
+  
+  
+  
+  
 </body>
 </html>
 
@@ -335,4 +459,29 @@ mysqli_close($conn);
     })
     alert("Hasło zostało zmienione.");
 }
+  
+  function deleteCar(carId) {
+   
+    alert("Opcja dostępna tylko dla administratora.");
+}
+  
+  
+  
+  
+  
+  
+  // Funkcja otwierająca okno z dodwaniem samochodu
+    function menuAddNewCar() {
+        document.getElementById('add-car').style.display = 'block';
+      document.getElementById('overlay').style.display = 'block';
+    }
+
+    // Funkcja zamykająca okno z dodawaniem samochodu
+    function closeMenuNewCar() {
+  
+        document.getElementById('add-car').style.display = 'none';
+  document.getElementById('overlay').style.display = 'none';
+    }
+  
+  
 </script>
