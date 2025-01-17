@@ -94,122 +94,16 @@ mysqli_close($conn);
   
    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-
+  
+<link rel="stylesheet" href="css/style.css">
    
     <style>
-        /* Podstawowe style strony */
-        body {
-            font-family: 'Poppins', Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            abackground-color: #f4f4f4;
-            background: linear-gradient(to bottom right, #e3f2fd, #bbdefb); /* Tło gradientowe */
-           
-        }
-        
-      
-        .menu-container {
-   
-        border-radius: 5px;
-    padding: 0px 0px 10px 0px;
-    width: 90vw; /* Kontener zajmuje 90% szerokości ekranu */
-    max-width: 700px; /* Ograniczenie maksymalnej szerokości */
-    margin: 50px auto; /* Wyśrodkowanie */
-    box-sizing: border-box; /* Uwzględnienie paddingu w szerokości */
-      
-     box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
-    
-    background-color: #fff; /* Białe tło dla lepszego efektu */
-      min-height: 400px;
-   
-}
-
-      
-      
-.user-container {
-    width: 100%; /* Szerokość taka sama jak menu-container */
-    padding: 5px 30px; /* Wewnętrzny padding */
-    text-align: right; /* Wyśrodkowanie tekstu */
-    box-sizing: border-box; /* Uwzględnienie paddingu w szerokości */
-   background-color: silver;
-      border-radius: 5px;
-      
      
-         
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-      
-}
-   
-       .title {
-            font-size: 22px;
-            font-weight: bold;
-            color: #333;
-        }
-      
-      .username {
-    font-weight: bold;
-    color: #4caf50;
-    font-size: 18px;
-   
-}
-        
-       
-     
+
+  
       
     
-
-
-
-
-/* glowne menu dodawania */
-       #new-note {
-            display: none;
-            position: fixed;
-            top: 20%;
-            left: 50%;
-            transform: translate(-50%, -20%);
-            width: 300px;
-            background: white;
-            padding: 20px;
-            border: 1px solid #ccc;
-            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-            z-index: 1000;
-        }
-
-#new-note button{
-            display: block;
-            width: 100%;
-            margin: 5px 0;
-        }
-    
-        #new-note input {
-            width: 90%;
-            padding: 10px;
-            margin: 10px 0;
-        }
-
       
-      
-      #overlay {
-    display: none; /* Domyślnie ukryta */
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5); /* Czarny kolor z 50% przezroczystością */
-    z-index: 999; /* Nakładka nad innymi elementami, ale pod oknem modalnym */
-}
-      
- .user-container button {
-            font-size: 22px;
-            font-weight: bold;
-            color: #333;
-      
-    
-        }
 
       
       /* Stylizacja dla listy notatek */
@@ -246,21 +140,7 @@ ul li strong {
 }
       
 
-/* Stylizacja dla przycisku usuwania */
-.delete-button {
-    background-color: #e74c3c;
-    color: #fff;
-    border: none;
-    border-radius: 3px;
-    padding: 5px 10px;
-    font-size: 0.9em;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
 
-.delete-button:hover {
-    background-color: #c0392b;
-}
       
     </style>
   
@@ -269,16 +149,15 @@ ul li strong {
   
 </head>
 <body>
-   <div class="menu-container">
+   <div class="main-container">
         <div class="user-container">
           <span class="title">Twoje notatki</span>
-         <button onclick="menuNewNote()" >
-           <i class="fas fa-plus"></i>
-           Nowa notatka</button>
+         
             <p>Zalogowany użytkownik: <span class="username"><?php echo htmlspecialchars($_SESSION['username']); ?></span></p>
      </div>
  
   
+     <button class="add-note-button" onclick="menuAddNote()">Nowa notatka</button>
   
    <?php if (!empty($notes)): ?>
         <ul>
@@ -287,7 +166,7 @@ ul li strong {
                     <strong><?php echo htmlspecialchars($note['title']); ?>:</strong>
                   <p><?php echo htmlspecialchars($note['content']); ?></p>
                  
-                 <?php  echo '<button class="delete-button" onclick="deleteNote(' . htmlspecialchars($note['id']) . ')">Usuń</button>'; ?>
+                 <?php  echo '<button class="delete-note-button" onclick="deleteNote(' . htmlspecialchars($note['id']) . ')">Usuń</button>'; ?>
                   
                 
                   
@@ -306,18 +185,18 @@ ul li strong {
   <div id="overlay"></div>
       
     
-      <form id="new-note">
+      <form id="add-note">
         <h2>Nowa notatka:</h2>
     
         <label for="add-note">Tytuł:</label>
         <input type="text" id="add-note-title-input" name="" required><br>
 
         <label for="add-note">Treść:</label>
-          <textarea id="add-note-content-input" name="message" rows="4" cols="40" placeholder="Wpisz swoją wiadomość tutaj..."></textarea><br>
+          <textarea id="add-note-content-input" name="message" rows="4" cols="80" placeholder="Wpisz swoją wiadomość tutaj..."></textarea><br>
     
       
-        <button type="submit" onclick="addNewNote(<?php echo $userId; ?>)">Zatwierdź</button>
-        <button type="button" onclick="closeMenuNewNote()">Anuluj</button>
+        <button type="submit" onclick="addNote(<?php echo $userId; ?>)">Zatwierdź</button>
+        <button type="button" onclick="closeMenuAddNote()">Anuluj</button>
     </form>
   
       
@@ -329,21 +208,21 @@ ul li strong {
 </html>
 
 <script>
-function menuNewNote() {
-        document.getElementById('new-note').style.display = 'block';
+function menuAddNote() {
+        document.getElementById('add-note').style.display = 'block';
       document.getElementById('overlay').style.display = 'block';
     }
 
    
-    function closeMenuNewNote() {
-        document.getElementById('new-note').style.display = 'none';
+    function closeMenuAddNote() {
+        document.getElementById('add-note').style.display = 'none';
    document.getElementById('overlay').style.display = 'none';
     }
 
   
   
   // Funkcja dodająca nową notatkę do bazy danych
-    function addNewNote(userId) {
+    function addNote(userId) {
   
         event.preventDefault(); // Zapobiega domyślnemu działaniu formularza
 

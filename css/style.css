@@ -46,7 +46,7 @@
 }
 
        /* glowne menu */
-        #add-car, #add-fuel{
+        #add-car, #add-fuel, #add-note{
     display: none;
     position: fixed;
     top: 20%;
@@ -66,7 +66,7 @@
       
       
       /* Przycisk w formularzach */
-#add-car button, #add-fuel button {
+#add-car button, #add-fuel button, #add-note button {
     display: block;
     width: 100%;
     margin: 10px 0;
@@ -79,7 +79,7 @@
     cursor: pointer;
     transition: background-color 0.3s ease, transform 0.2s ease;
 }
-     #add-car button:hover, #add-fuel button:hover{
+     #add-car button:hover, #add-fuel button:hover, #add-note button:hover{
     background-color: #004085;
     transform: translateY(-2px);
 }
@@ -114,7 +114,7 @@ form button[type="button"]:hover {
 
 /* PRZYCISKI */
 
-.delete-car-button, .add-car-button, .add-fuel-button {
+.delete-car-button, .add-car-button, .add-fuel-button, .add-note-button {
     background-color: #2196F3;
     color: #fff;
     border: none;
@@ -125,8 +125,25 @@ form button[type="button"]:hover {
     transition: background-color 0.3s ease;
 }
 
-.delete-car-button:hover, .add-car-button:hover, .add-fuel-button:hover {
+.delete-car-button:hover, .add-car-button:hover, .add-fuel-button:hover, .add-note-button:hover {
     background-color: #3F51B5;
+}
+
+
+/* Stylizacja dla przycisku usuwania - przycisk czerwony */
+.delete-note-button {
+    background-color: #e74c3c;
+    color: #fff;
+    border: none;
+    border-radius: 3px;
+    padding: 5px 10px;
+    font-size: 0.9em;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.delete-note-button:hover {
+    background-color: #c0392b;
 }
 
 /* KONTENERY */
