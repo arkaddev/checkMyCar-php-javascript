@@ -103,196 +103,16 @@ mysqli_close($conn);
    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
-   
+   <link rel="stylesheet" href="css/style.css">
     <style>
-        /* Podstawowe style strony */
-        body {
-            font-family: 'Poppins', Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            abackground-color: #f4f4f4;
-            background: linear-gradient(to bottom right, #e3f2fd, #bbdefb); /* Tło gradientowe */
-           
-        }
-        
-      
-        .menu-container {
-   
-        border-radius: 5px;
-    padding: 0px 0px 10px 0px;
-    width: 90vw; /* Kontener zajmuje 90% szerokości ekranu */
-    max-width: 700px; /* Ograniczenie maksymalnej szerokości */
-    margin: 50px auto; /* Wyśrodkowanie */
-    box-sizing: border-box; /* Uwzględnienie paddingu w szerokości */
-      
-     box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
-    
-    background-color: #fff; /* Białe tło dla lepszego efektu */
-}
-
-      
-      
-.user-container {
-    width: 100%; /* Szerokość taka sama jak menu-container */
-    padding: 5px 30px; /* Wewnętrzny padding */
-    text-align: right; /* Wyśrodkowanie tekstu */
-    box-sizing: border-box; /* Uwzględnienie paddingu w szerokości */
-   background-color: silver;
-      border-radius: 5px;
-      
-     
-         
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-      
-}
-   
-       .title {
-            font-size: 22px;
-            font-weight: bold;
-            color: #333;
-        }
-      
-      .username {
-    font-weight: bold;
-    color: #4caf50;
-    font-size: 18px;
-   
-}
-     
-       /* Stylowanie tabeli */
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-
-        th, td {
-            padding: 10px;
-            text-align: left;
-            border: 1px solid #ddd;
-        }
-
-        th {
-            background-color: #0056b3;
-            color: white;
-        }
-
-        tr:nth-child(even) {
-            background-color: #f2f2f2;
-        }
-     
-      
-      
-      
-      
-      
-      /* Stylizacja dla przycisku dodawania */
-.new-fuel-button {
-    background-color: #2196F3;
-    color: #fff;
-    border: none;
-    border-radius: 3px;
-    padding: 5px 10px;
-    font-size: 0.9em;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-.new-fuel-button:hover {
-    background-color: #3F51B5;
-}
-      
-       /* Dodawanie tankowania, wyglad okna */
-      
-    
-       /* Nakładka tła */
-#overlay {
-    display: none; /* Domyślnie ukryta */
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5); /* Czarny z przezroczystością */
-    z-index: 999; /* Pod modalami */
-    transition: background 0.3s ease;
-}
-
-       /* glowne menu dodawania*/
-        #new-fuel{
-           display: none; /* Domyślnie ukryte */
-    position: fixed;
-    top: 20%;
-    left: 50%;
-    transform: translate(-50%, -20%);
-    width: 40%;
-    max-width: 900px;
-    background: #ffffff;
-    border-radius: 12px;
-    box-shadow: 0px 4px 16px rgba(0, 0, 0, 0.1);
-    padding: 30px;
-    z-index: 1000;
-    transition: transform 0.3s ease-in-out;
-        }
-      
-     
-      
-      
-      /* Przycisk w formularzach */
-#new-fuel button {
-    display: block;
-    width: 100%;
-    margin: 10px 0;
-    padding: 12px 20px;
-    background-color: #0056b3;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-}
-     #new-fuel button:hover{
-    background-color: #004085;
-    transform: translateY(-2px);
-}
-      
-      
-/* Styl dla okien modalnych - pola formularzy */
-form input[type="number"], form input[type="date"], form input[type="text"], form select {
-    width: 100%;
-    padding: 12px;
-    margin: 10px 0;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    font-size: 16px;
-    box-sizing: border-box;
-    transition: border-color 0.3s ease;
-}
-
-form input[type="number"]:focus, form input[type="date"]:focus, form input[type="text"]:focus, form select:focus {
-    border-color: #0056b3;
-    outline: none;
-}
-
-/* Przyciski anulowania */
-form button[type="button"] {
-    background-color: #e74c3c;
-}
-
-form button[type="button"]:hover {
-    background-color: #c0392b;
-}
-      
+       
     </style>
   
 </head>
 <body>
   <div id="overlay"></div>
   
-   <div class="menu-container">
+   <div class="main-container">
         <div class="user-container">
           <span class="title">Spalanie</span>
             <p>Zalogowany użytkownik: <span class="username"><?php echo htmlspecialchars($_SESSION['username']); ?></span></p>
@@ -325,7 +145,7 @@ form button[type="button"]:hover {
                         
                       echo '<td>' . (isset($row['last_fuel_consumption']) ? htmlspecialchars($row['last_fuel_consumption']) : 'Brak danych') . '</td>';
                       
-                      echo '<td><button class="new-fuel-button" onclick="menuNewFuel(' . htmlspecialchars($row['id']) . ')">Dodaj</button></td>';
+                      echo '<td><button class="add-fuel-button" onclick="menuAddFuel(' . htmlspecialchars($row['id']) . ')">Dodaj</button></td>';
 
                         echo "</tr>";
                     }
@@ -344,7 +164,7 @@ form button[type="button"]:hover {
   
   
   
-  <form id="new-fuel">
+  <form id="add-fuel">
         <h2>Nowe tankowanie:</h2>
         
         <label for="add-fuel">Litry:</label>
@@ -366,8 +186,8 @@ form button[type="button"]:hover {
         <label for="add-fuel">Dystans w km:</label><br>
         <input type="number" id="add-fuel-distance-input" name="" required><br>
       
-        <button type="submit" onclick="addNewFuel()">Zatwierdź</button>
-        <button type="button" onclick="closeMenuNewFuel()">Anuluj</button>
+        <button type="submit" onclick="addFuel()">Zatwierdź</button>
+        <button type="button" onclick="closeMenuAddFuel()">Anuluj</button>
     </form>
   
 </body>
@@ -375,22 +195,22 @@ form button[type="button"]:hover {
 
 <script>
   // Funkcja otwierająca okno z tankowaniem
-    function menuNewFuel(carId) {
+    function menuAddFuel(carId) {
   selectedCarId = carId;
-        document.getElementById('new-fuel').style.display = 'block';
+        document.getElementById('add-fuel').style.display = 'block';
       document.getElementById('overlay').style.display = 'block';
     }
 
     // Funkcja zamykająca okno z tankowaniem
-    function closeMenuNewFuel() {
+    function closeMenuAddFuel() {
   selectedCarId = null;
-        document.getElementById('new-fuel').style.display = 'none';
+        document.getElementById('add-fuel').style.display = 'none';
   document.getElementById('overlay').style.display = 'none';
     }
   
   
   
-  function addNewFuel() {
+  function addFuel() {
         event.preventDefault(); // Zapobiega domyślnemu działaniu formularza
 alert(selectedCarId);
         const fuelLiters = document.getElementById('add-fuel-liters-input').value;
