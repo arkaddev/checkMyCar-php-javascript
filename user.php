@@ -119,8 +119,48 @@ mysqli_close($conn);
     <style>
         
         
+     /* Styl zakładek */
+        .tabs {
+            display: flex;
+        }
+
+        .tabs a {
+            padding: 10px 20px;
+            text-decoration: none;
+            color: #333;
+            border: 1px solid #ccc;
+            border-bottom: none;
+            background: #f9f9f9;
+            margin-right: 5px;
+        }
+
+        .tabs a:hover {
+            background: #eee;
+        }
+
+        .tabs a:target {
+            background: #fff;
+            font-weight: bold;
+        }
+      
       
 
+      
+       /* Styl treści */
+        .tab-content {
+            display: none;
+            border: 1px solid #ccc;
+            background: #fff;
+        }
+
+        .tab-content:target {
+            display: block;
+        }
+
+        /* Domyślnie otwarta pierwsza zakładka */
+        .tab-content:first-of-type {
+            display: block;
+        }
        
     </style>
   
@@ -135,7 +175,14 @@ mysqli_close($conn);
      </div>
      
      
+     <div class="tabs">
+        <a href="#tab-cars">Samochody</a>
+        <a href="#tab-data">Dane użytkownika</a>
+        <a href="#tab-password">Hasło</a>
+    </div>
      
+     
+     <div id="tab-data" class="tab-content">  
      <h3>Dane użytkownika:</h3>
        
    <?php if (isset($_SESSION['id'])): ?>
@@ -152,9 +199,17 @@ mysqli_close($conn);
      
      
      <p>Połączenie z bązą danych: <?php echo htmlspecialchars($db_message); ?></p>
-     
-     
-     
+     </div>
+       
+       
+       
+       
+     <div id="tab-password" class="tab-content">  
+       
+       
+       
+       
+       
      <h3>Hasło:</h3>
      
      
@@ -162,10 +217,15 @@ mysqli_close($conn);
   <label for="new_password">Nowe hasło:</label>
   <input type="password" id="new_password" name="new_password" required>
    <button onclick="newPassword()">Zmien hasło</button>
-  
+     </div>
+     
+     
+     
+     
+ <div id="tab-cars" class="tab-content">    
  <h3>Samochody:</h3>
      
-<button class="add-car-button" onclick="menuAddNewCar()">Nowy samochód</button>
+<button class="add-car-button" onclick="menuAddCar()">Nowy samochód</button>
      
    <!-- Tabela z danymi z bazy -->
         <table>
@@ -233,10 +293,10 @@ mysqli_close($conn);
         <label for="add-car">Filtr powietrza:</label>
         <input type="text" id="add-car-airfilter-input" name="" required><br>
       
-        <button type="submit" onclick="addNewCar()">Zatwierdź</button>
-        <button type="button" onclick="closeMenuNewCar()">Anuluj</button>
+        <button type="submit" onclick="addCar()">Zatwierdź</button>
+        <button type="button" onclick="closeMenuAddCar()">Anuluj</button>
     </form>
-  
+  </div>
   
   
   
@@ -286,13 +346,13 @@ mysqli_close($conn);
   
   
   // Funkcja otwierająca okno z dodwaniem samochodu
-    function menuAddNewCar() {
+    function menuAddCar() {
         document.getElementById('add-car').style.display = 'block';
       document.getElementById('overlay').style.display = 'block';
     }
 
     // Funkcja zamykająca okno z dodawaniem samochodu
-    function closeMenuNewCar() {
+    function closeMenuAddCar() {
   
         document.getElementById('add-car').style.display = 'none';
   document.getElementById('overlay').style.display = 'none';
