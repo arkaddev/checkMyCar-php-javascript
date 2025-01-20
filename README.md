@@ -49,6 +49,7 @@ and tells you when the next replacement is due (e.g. oil, brakes)
 ### v0.5
 - creating new users
 - creating new cars, info about cars
+- deleting cars by admin
 - fuel cost analysis
 
 ### v0.6
