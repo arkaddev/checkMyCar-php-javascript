@@ -146,6 +146,8 @@ mysqli_close($conn);
                       echo '<td>' . (isset($row['last_fuel_consumption']) ? htmlspecialchars($row['last_fuel_consumption']) : 'Brak danych') . '</td>';
                       
                       echo '<td><button class="add-fuel-button" onclick="menuAddFuel(' . htmlspecialchars($row['id']) . ')">Dodaj</button></td>';
+                      
+                      echo '<td><button class="history-fuel-button" onclick="openFuelHistory(' . htmlspecialchars($row['id']) . ')">Historia</button></td>';
 
                         echo "</tr>";
                     }
@@ -241,4 +243,6 @@ alert(selectedCarId);
             alert("Wystąpił błąd podczas dodawania tankowania.");
         });
     }
+
+
 </script>
