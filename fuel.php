@@ -105,7 +105,19 @@ mysqli_close($conn);
 
    <link rel="stylesheet" href="css/style.css">
     <style>
-       
+       #menu-fuel-history {
+            display: none;
+            position: fixed;
+            top: 20%;
+            left: 50%;
+            transform: translate(-50%, -20%);
+            width: 1000px;
+            background: white;
+            padding: 20px;
+            aborder: 1px solid #ccc;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+        }
     </style>
   
 </head>
@@ -147,7 +159,7 @@ mysqli_close($conn);
                       
                       echo '<td><button class="add-fuel-button" onclick="menuAddFuel(' . htmlspecialchars($row['id']) . ')">Dodaj</button></td>';
                       
-                      echo '<td><button class="history-fuel-button" onclick="openFuelHistory(' . htmlspecialchars($row['id']) . ')">Historia</button></td>';
+                      echo '<td><button class="history-fuel-button" onclick="openMenuFuelHistory(' . htmlspecialchars($row['id']) . ')">Historia</button></td>';
 
                         echo "</tr>";
                     }
@@ -192,6 +204,14 @@ mysqli_close($conn);
         <button type="button" onclick="closeMenuAddFuel()">Anuluj</button>
     </form>
   
+  
+  <div id="menu-fuel-history">
+    <h2>Informacje o wymianach części:</h2>
+    <div id="fuel-history-content">
+        <!-- dane z tabeli cars_info -->
+    </div>
+    <button onclick="closeMenuFuelHistory()">Zamknij</button>
+</div>
 </body>
 </html>
 
@@ -243,6 +263,80 @@ alert(selectedCarId);
             alert("Wystąpił błąd podczas dodawania tankowania.");
         });
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+function openMenuFuelHistory(carId) {
+    selectedCarId = carId;
+
+    const fuelHistoryContent = document.getElementById('fuel-history-content');
+    fuelHistoryContent.innerHTML = "<p>Ładowanie danych...</p>"; // Wiadomość oczekiwania
+    document.getElementById('menu-fuel-history').style.display = 'block';
+    document.getElementById('overlay').style.display = 'block';
+
+    // Wysłanie zapytania POST do serwera
+    fetch("", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+        },
+        body: `car_id_history=${selectedCarId}`
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === "success") {
+            let tableHTML = `
+                <table border="1" style="width: 100%; border-collapse: collapse;">
+                    <thead>
+                        <tr>
+                            <th>Id samochodu</th>
+                            
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+
+            data.data.forEach(history => {
+                tableHTML += `
+                    <tr>
+                        <td>${history.car_id}</td>
+                        <
+                    </tr>
+                `;
+            });
+
+            tableHTML += `
+                    </tbody>
+                </table>
+            `;
+
+            historyContent.innerHTML = tableHTML; // Wstawienie tabeli do kontenera
+        } else {
+            historyContent.innerHTML = `<p>${data.message}</p>`;
+        }
+    })
+    .catch(error => {
+        console.error("Wystąpił błąd:", error);
+        historyContent.innerHTML = "<p>Wystąpił błąd podczas pobierania danych.</p>";
+    });
+}
+
+
+function closeMenuFuelHistory() {
+    selectedCarId = null;
+    document.getElementById('menu-fuel-history').style.display = 'none';
+  document.getElementById('overlay').style.display = 'none';
+}
 
 
 </script>
