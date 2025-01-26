@@ -55,6 +55,7 @@ and tells you when the next replacement is due (e.g. oil, brakes)
 ### v0.6
 - notes pagination
 - statistics of kilometers traveled
+- overall expenses analysis
 
 ### v0.7
 - log table
