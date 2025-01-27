@@ -12,10 +12,10 @@ It archives the work that has been done on a given car,
 and tells you when the next replacement is due (e.g. oil, brakes)
 
 ## Technologies
-- HTML (version )
-- PHP (version )
-- CSS (version )
-- JavaScript (version )
+- HTML (version 5)
+- PHP (version 8.4)
+- CSS
+- JavaScript
 
 ## Tools
 - MySQL database
