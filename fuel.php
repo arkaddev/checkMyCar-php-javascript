@@ -85,7 +85,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['car_id'], $_POST['fue
 
 
 
-
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['car_id_history']))  {
+    $car_id = intval($_POST['car_id_history']);
+    
+    $query = "SELECT * FROM parts WHERE car_id = $car_id ORDER BY kilometers_status ASC";
+    $result = $conn->query($query);
+    
+    if ($result->num_rows > 0) {
+        $data = $result->fetch_all(MYSQLI_ASSOC);
+        echo json_encode(['status' => 'success', 'data' => $data]);
+    } else {
+        echo json_encode(['status' => 'error', 'message' => 'Brak danych o samochodzie']);
+    }
+    exit();
+}
 
 
 
@@ -206,7 +219,7 @@ mysqli_close($conn);
   
   
   <div id="menu-fuel-history">
-    <h2>Informacje o wymianach części:</h2>
+    <h2>Informacje o tankowaniach:</h2>
     <div id="fuel-history-content">
         <!-- dane z tabeli cars_info -->
     </div>
@@ -278,12 +291,12 @@ alert(selectedCarId);
 
 function openMenuFuelHistory(carId) {
     selectedCarId = carId;
-
     const fuelHistoryContent = document.getElementById('fuel-history-content');
     fuelHistoryContent.innerHTML = "<p>Ładowanie danych...</p>"; // Wiadomość oczekiwania
     document.getElementById('menu-fuel-history').style.display = 'block';
     document.getElementById('overlay').style.display = 'block';
 
+  
     // Wysłanie zapytania POST do serwera
     fetch("", {
         method: "POST",
@@ -300,7 +313,11 @@ function openMenuFuelHistory(carId) {
                     <thead>
                         <tr>
                             <th>Id samochodu</th>
-                            
+                            <th>Litry</th>
+                            <th>Rodzaj paliwa</th>
+                            <th>Koszt za litr</th>
+                            <th>Data tankowania</th>
+                            <th>Dystans w km</th>       
                         </tr>
                     </thead>
                     <tbody>
@@ -310,6 +327,11 @@ function openMenuFuelHistory(carId) {
                 tableHTML += `
                     <tr>
                         <td>${history.car_id}</td>
+                        <td>${history.liters}</td>  
+                        <td>${history.price}</td>
+                        <td>${history.fuel_type}</td>
+                        <td>${history.refueling_date}</td>
+                        <td>${history.distance}</td>  
                         <
                     </tr>
                 `;
@@ -337,6 +359,10 @@ function closeMenuFuelHistory() {
     document.getElementById('menu-fuel-history').style.display = 'none';
   document.getElementById('overlay').style.display = 'none';
 }
+
+
+
+
 
 
 </script>
