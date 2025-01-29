@@ -84,11 +84,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['car_id'], $_POST['fue
 }
 
 
-
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['car_id_history']))  {
     $car_id = intval($_POST['car_id_history']);
     
-    $query = "SELECT * FROM parts WHERE car_id = $car_id ORDER BY kilometers_status ASC";
+    $query = "SELECT * FROM fuel WHERE car_id = $car_id ORDER BY refueling_date ASC";
     $result = $conn->query($query);
     
     if ($result->num_rows > 0) {
@@ -99,6 +98,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['car_id_history']))  {
     }
     exit();
 }
+  
+
+
 
 
 
@@ -131,6 +133,15 @@ mysqli_close($conn);
             box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
             z-index: 1000;
         }
+
+
+      
+      
+      
+      
+      
+      
+      
     </style>
   
 </head>
@@ -173,7 +184,7 @@ mysqli_close($conn);
                       echo '<td><button class="add-fuel-button" onclick="menuAddFuel(' . htmlspecialchars($row['id']) . ')">Dodaj</button></td>';
                       
                       echo '<td><button class="history-fuel-button" onclick="openMenuFuelHistory(' . htmlspecialchars($row['id']) . ')">Historia</button></td>';
-
+                      
                         echo "</tr>";
                     }
                 } else {
@@ -224,7 +235,16 @@ mysqli_close($conn);
         <!-- dane z tabeli cars_info -->
     </div>
     <button onclick="closeMenuFuelHistory()">Zamknij</button>
+   
 </div>
+  
+  
+   
+   <div id="menu-history">
+    <h2>Informacje o tankowaniach:</h2>
+    <div id="history-content">
+        <!-- dane z tabeli cars_info -->
+    </div>
 </body>
 </html>
 
@@ -289,7 +309,7 @@ alert(selectedCarId);
 
 
 
-function openMenuFuelHistory(carId) {
+function aopenMenuFuelHistory(carId) {
     selectedCarId = carId;
     const fuelHistoryContent = document.getElementById('fuel-history-content');
     fuelHistoryContent.innerHTML = "<p>Ładowanie danych...</p>"; // Wiadomość oczekiwania
@@ -332,7 +352,7 @@ function openMenuFuelHistory(carId) {
                         <td>${history.fuel_type}</td>
                         <td>${history.refueling_date}</td>
                         <td>${history.distance}</td>  
-                        <
+                        
                     </tr>
                 `;
             });
@@ -359,6 +379,88 @@ function closeMenuFuelHistory() {
     document.getElementById('menu-fuel-history').style.display = 'none';
   document.getElementById('overlay').style.display = 'none';
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function openMenuFuelHistory(carId) {
+    selectedCarId = carId;
+
+    const fuelHistoryContent = document.getElementById('fuel-history-content');
+    fuelHistoryContent.innerHTML = "<p>Ładowanie danych...</p>"; // Wiadomość oczekiwania
+    document.getElementById('menu-fuel-history').style.display = 'block';
+  document.getElementById('overlay').style.display = 'block';
+
+    // Wysłanie zapytania POST do serwera
+    fetch("", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+        },
+        body: `car_id_history=${selectedCarId}`
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === "success") {
+            let tableHTML = `
+                <table border="1" style="width: 100%; border-collapse: collapse;">
+                    <thead>
+                        <tr>
+                          <th>Id samochodu</th>
+                            <th>Litry</th>
+                            <th>Rodzaj paliwa</th>
+                            <th>Koszt za litr</th>
+                            <th>Data tankowania</th>
+                            <th>Dystans w km</th>   
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+
+            data.data.forEach(history => {
+                tableHTML += `
+                    <tr>
+                        <td>${history.car_id}</td>
+                        <td>${history.liters}</td>  
+                        <td>${history.price}</td>
+                        <td>${history.fuel_type}</td>
+                        <td>${history.refueling_date}</td>
+                        <td>${history.distance}</td>  
+                    </tr>
+                `;
+            });
+
+            tableHTML += `
+                    </tbody>
+                </table>
+            `;
+
+            fuelHistoryContent.innerHTML = tableHTML; // Wstawienie tabeli do kontenera
+        } else {
+            fuelHistoryContent.innerHTML = `<p>${data.message}</p>`;
+        }
+    })
+    .catch(error => {
+        console.error("Wystąpił błąd:", error);
+        historyContent.innerHTML = "<p>Wystąpił błąd podczas pobierania danych.</p>";
+    });
+}
+
+
+
+
+
 
 
 
