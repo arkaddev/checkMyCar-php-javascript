@@ -94,7 +94,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['car_id_history']))  {
     fuel_type, 
     refueling_date, 
     distance,
-    info,
+    details,
     ROUND((liters/distance)*100,2) AS average_fuel_consumption
     FROM fuel WHERE car_id = $car_id ORDER BY refueling_date ASC";
     $result = $conn->query($query);
@@ -365,7 +365,7 @@ function openMenuFuelHistory(carId) {
                         <td>${history.fuel_type}</td>
                         <td>${history.refueling_date}</td>
                         <td>${history.distance}</td>
-                      <td>${history.info}</td>
+                      <td>${history.details}</td>
                        <td>${history.average_fuel_consumption}</td>
                       
                     </tr>
