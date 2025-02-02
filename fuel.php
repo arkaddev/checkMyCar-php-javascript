@@ -70,10 +70,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['car_id'], $_POST['fue
     $fuel_type = $conn->real_escape_string($_POST['fuelType']);
     $fuel_date = $conn->real_escape_string($_POST['fuelDate']);
     $fuel_distance = intval($_POST['fuelDistance']);
-   
+    $fuel_details = $conn->real_escape_string($_POST['fuelDetails']);
     
-    $update_query = "INSERT INTO fuel (id, liters, price, fuel_type, refueling_date, distance, car_id) 
-                     VALUES (NULL, '$fuel_liters', '$fuel_price', '$fuel_type', '$fuel_date', '$fuel_distance', '$car_id')";
+    $update_query = "INSERT INTO fuel (id, liters, price, fuel_type, refueling_date, distance, details, car_id) 
+                     VALUES (NULL, '$fuel_liters', '$fuel_price', '$fuel_type', '$fuel_date', '$fuel_distance', '$fuel_details', '$car_id')";
   
     if ($conn->query($update_query) === TRUE) {
         echo json_encode(['status' => 'success', 'message' => 'Tankowanie zostało dodane']);
@@ -232,6 +232,9 @@ mysqli_close($conn);
 
         <label for="add-fuel">Dystans w km:</label><br>
         <input type="number" id="add-fuel-distance-input" name="" required><br>
+    
+        <label for="add-fuel">Szczegóły:</label>
+        <input type="text" id="add-fuel-details-input" name="" required><br>
       
         <button type="submit" onclick="addFuel()">Zatwierdź</button>
         <button type="button" onclick="closeMenuAddFuel()">Anuluj</button>
@@ -282,14 +285,15 @@ alert(selectedCarId);
         const fuelPrice = document.getElementById('add-fuel-price-input').value;
         const fuelDate = document.getElementById('add-fuel-date-input').value;
         const fuelDistance = document.getElementById('add-fuel-distance-input').value;
-       
+        const fuelDetails = document.getElementById('add-fuel-details-input').value;
+  
         // Wysłanie zapytania POST do serwera
         fetch("", {
             method: "POST",
             headers: {
                 "Content-Type": "application/x-www-form-urlencoded"
             },
-            body: `car_id=${selectedCarId}&fuelLiters=${fuelLiters}&fuelType=${fuelType}&fuelPrice=${fuelPrice}&fuelDate=${fuelDate}&fuelDistance=${fuelDistance}`
+            body: `car_id=${selectedCarId}&fuelLiters=${fuelLiters}&fuelType=${fuelType}&fuelPrice=${fuelPrice}&fuelDate=${fuelDate}&fuelDistance=${fuelDistance}&fuelDetails=${fuelDetails}`
         })
         .then(response => response.json()) // Parsowanie odpowiedzi jako JSON
         .then(data => {
@@ -390,18 +394,11 @@ function openMenuFuelHistory(carId) {
 
 
 
-
-
-
 function closeMenuFuelHistory() {
     selectedCarId = null;
     document.getElementById('menu-fuel-history').style.display = 'none';
   document.getElementById('overlay').style.display = 'none';
 }
-
-
-
-
 
 
 
