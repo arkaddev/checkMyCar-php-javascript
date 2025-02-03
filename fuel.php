@@ -129,19 +129,7 @@ mysqli_close($conn);
 
    <link rel="stylesheet" href="css/style.css">
     <style>
-       #menu-fuel-history {
-            display: none;
-            position: fixed;
-            top: 20%;
-            left: 50%;
-            transform: translate(-50%, -20%);
-            width: 1000px;
-            background: white;
-            padding: 20px;
-            aborder: 1px solid #ccc;
-            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-            z-index: 1000;
-        }
+       
 
 
       
@@ -394,11 +382,18 @@ function openMenuFuelHistory(carId) {
 
 
 
+
+
+
 function closeMenuFuelHistory() {
     selectedCarId = null;
     document.getElementById('menu-fuel-history').style.display = 'none';
   document.getElementById('overlay').style.display = 'none';
 }
+
+
+
+
 
 
 
