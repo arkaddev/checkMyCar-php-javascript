@@ -129,7 +129,7 @@ form button[type="button"]:hover {
 
 /* PRZYCISKI */
 
-.add-car-button, .add-fuel-button, .add-note-button {
+.add-car-button, .add-fuel-button, .add-note-button, .history-fuel-button {
     background-color: #2196F3;
     color: #fff;
     border: none;
