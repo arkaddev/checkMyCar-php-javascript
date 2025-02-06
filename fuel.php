@@ -88,6 +88,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['car_id_history']))  {
     $car_id = intval($_POST['car_id_history']);
     
     $query = "SELECT
+    id,
     car_id,
     liters, 
     price, 
@@ -110,6 +111,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['car_id_history']))  {
   
 
 
+// usuwanie tankowania
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['fuel_id_history']))  {
+    $fuel_id = intval($_POST['fuel_id_history']);
+    
+    $query = "DELETE FROM fuel WHERE id = $fuel_id";
+  
+   if ($conn->query($query) === TRUE) {
+        echo json_encode(['status' => 'success', 'message' => 'Dane zostały zaktualizowane']);
+    } else {
+        echo json_encode(['status' => 'error', 'message' => 'Błąd podczas aktualizacji danych']);
+    }
+    exit();
+}
 
 
 
@@ -239,12 +253,7 @@ mysqli_close($conn);
 </div>
   
   
-   
-   <div id="menu-history">
-    <h2>Informacje o tankowaniach:</h2>
-    <div id="history-content">
-        <!-- dane z tabeli cars_info -->
-    </div>
+ 
 </body>
 </html>
 
@@ -343,6 +352,7 @@ function openMenuFuelHistory(carId) {
                             <th>Dystans w km</th> 
                           <th>Szczegóły</th>  
                           <th>Spalanie na 100 km</th>
+                          <th>Usuń</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -359,7 +369,7 @@ function openMenuFuelHistory(carId) {
                         <td>${history.distance}</td>
                       <td>${history.details}</td>
                        <td>${history.average_fuel_consumption}</td>
-                      
+                      <td><button onclick="deleteFuel('${history.id}')">Usuń</button></td>
                     </tr>
                 `;
             });
@@ -394,7 +404,32 @@ function closeMenuFuelHistory() {
 
 
 
-
+function deleteFuel(fuelId) {
+   selectedFuelId = fuelId;
+   event.preventDefault(); // Zapobiega domyślnemu działaniu formularza
+alert(fuelId);
+        // Wysłanie zapytania POST do serwera
+        fetch("", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded"
+            },
+            body: `fuel_id_history=${selectedFuelId}`
+        })
+        .then(response => response.json()) // Parsowanie odpowiedzi jako JSON
+        .then(data => {
+            if (data.status === "success") {
+                alert(data.message); // Wyświetlenie komunikatu sukcesu
+                location.reload(); // Odświeżenie strony
+            } else {
+                alert(data.message); // Wyświetlenie komunikatu błędu
+            }
+        })
+        .catch(error => {
+            console.error("Wystąpił błąd:", error);
+            alert("Wystąpił błąd podczas usuwania tankowania.");
+        });
+}
 
 
 
