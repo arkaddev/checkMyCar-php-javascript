@@ -407,7 +407,7 @@ function closeMenuFuelHistory() {
 function deleteFuel(fuelId) {
    selectedFuelId = fuelId;
    event.preventDefault(); // Zapobiega domyślnemu działaniu formularza
-alert(fuelId);
+  
         // Wysłanie zapytania POST do serwera
         fetch("", {
             method: "POST",
