@@ -51,6 +51,7 @@ and tells you when the next replacement is due (e.g. oil, brakes)
 - creating new cars, info about cars
 - deleting cars by admin
 - fuel cost analysis
+- fuel consumption charts
 
 ### v0.6
 - notes pagination
