@@ -176,8 +176,8 @@ mysqli_close($conn);
                     <th>Rok</th>
                     <th>Średnie spalanie</th>
                   <th>Ostatnie spalanie</th>
-                    <th>Nowe taknowanie</th>
-                  <th>Historia tankowań</th>
+                    <th>Opcje</th>
+                 
                 </tr>
             </thead>
             <tbody>
@@ -193,11 +193,13 @@ mysqli_close($conn);
                         
                       echo '<td>' . (isset($row['last_fuel_consumption']) ? htmlspecialchars($row['last_fuel_consumption']) : 'Brak danych') . '</td>';
                       
-                      echo '<td><button class="add-fuel-button" onclick="menuAddFuel(' . htmlspecialchars($row['id']) . ')">Dodaj</button></td>';
+                      echo '<td>
                       
-                      echo '<td><button class="history-fuel-button" onclick="openMenuFuelHistory(' . htmlspecialchars($row['id']) . ')">Historia</button>
+                      <button class="add-fuel-button" onclick="menuAddFuel(' . htmlspecialchars($row['id']) . ')"><i class="fas fa-plus"></i></button>
                       
-                      <button class="history-fuel-chart-button" onclick="openFuelHistoryChart(' . htmlspecialchars($row['id']) . ')">Wykres</button>
+                      <button class="history-fuel-button" onclick="openMenuFuelHistory(' . htmlspecialchars($row['id']) . ')"><i class="fas fa-history"></i></button>
+                      
+                      <button class="history-fuel-button" onclick="openFuelHistoryChart(' . htmlspecialchars($row['id']) . ')"><i class="fas fa-chart-line"></i></button>
                       
                       
                       </td>';
