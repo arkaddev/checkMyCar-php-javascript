@@ -195,11 +195,11 @@ mysqli_close($conn);
                       
                       echo '<td>
                       
-                      <button class="add-fuel-button" onclick="menuAddFuel(' . htmlspecialchars($row['id']) . ')"><i class="fas fa-plus"></i></button>
+                      <button class="add-fuel-button" onclick="menuAddFuel(' . htmlspecialchars($row['id']) . ')" title="Dodaj tankowanie"><i class="fas fa-plus"></i></button>
                       
-                      <button class="history-fuel-button" onclick="openMenuFuelHistory(' . htmlspecialchars($row['id']) . ')"><i class="fas fa-history"></i></button>
+                      <button class="history-fuel-button" onclick="openMenuFuelHistory(' . htmlspecialchars($row['id']) . ')" title="Historia"><i class="fas fa-history"></i></button>
                       
-                      <button class="history-fuel-button" onclick="openFuelHistoryChart(' . htmlspecialchars($row['id']) . ')"><i class="fas fa-chart-line"></i></button>
+                      <button class="history-fuel-button" onclick="openFuelHistoryChart(' . htmlspecialchars($row['id']) . ') "title="Wykres"><i class="fas fa-chart-line"></i></button>
                       
                       
                       </td>';
