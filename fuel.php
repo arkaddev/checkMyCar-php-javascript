@@ -176,7 +176,8 @@ mysqli_close($conn);
                     <th>Rok</th>
                     <th>Średnie spalanie</th>
                   <th>Ostatnie spalanie</th>
-                    <th>Akcja</th>
+                    <th>Nowe taknowanie</th>
+                  <th>Historia tankowań</th>
                 </tr>
             </thead>
             <tbody>
@@ -194,7 +195,14 @@ mysqli_close($conn);
                       
                       echo '<td><button class="add-fuel-button" onclick="menuAddFuel(' . htmlspecialchars($row['id']) . ')">Dodaj</button></td>';
                       
-                      echo '<td><button class="history-fuel-button" onclick="openMenuFuelHistory(' . htmlspecialchars($row['id']) . ')">Historia</button></td>';
+                      echo '<td><button class="history-fuel-button" onclick="openMenuFuelHistory(' . htmlspecialchars($row['id']) . ')">Historia</button>
+                      
+                      <button class="history-fuel-chart-button" onclick="openFuelHistoryChart(' . htmlspecialchars($row['id']) . ')">Wykres</button>
+                      
+                      
+                      </td>';
+                      
+                     
                       
                         echo "</tr>";
                     }
