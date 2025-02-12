@@ -63,7 +63,7 @@
         }
      
        /* menu dla szerszych okien, np historia*/
-     #menu-fuel-history {    
+     #menu-fuel-history, #chart-fuel-history {    
     display: none;
     position: fixed;
     top: 20%;
@@ -81,7 +81,7 @@
       
       
       /* Przycisk w formularzach */
-#add-car button, #add-fuel button, #add-note button {
+#add-car button, #add-fuel button, #add-note button, #chart-fuel-history button {
     display: block;
     width: 100%;
     margin: 10px 0;
