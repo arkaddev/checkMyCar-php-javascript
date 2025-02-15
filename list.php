@@ -127,7 +127,11 @@ mysqli_close($conn);
       
         echo '<tr>';
         echo '<td>' . htmlspecialchars($row['id']) . '</td>';
-        echo '<td>' . htmlspecialchars($row['model']) . '</td>';
+        echo '<td>' . htmlspecialchars($row['model']) .' 
+        
+        <button class="list-info-button" onclick="openInfo(' . htmlspecialchars($row['id']) . ')" title="Informacje"><i class="fas fa-info"></i></button>
+          
+          </td>';
         echo '<td>' . htmlspecialchars($row['year']) . '</td>';
         echo '<td>' . htmlspecialchars($row['user_id']) . '</td>';
         echo '<td class="' . $insuranceClass . '">' . htmlspecialchars($row['insurance']) . '</td>';
@@ -141,7 +145,6 @@ mysqli_close($conn);
       
       <button class="list-menu-button" onclick="openMenuAdd(' . htmlspecialchars($row['id']) . ')" title="Dodaj"><i class="fas fa-plus"></i></button>
           
-      <button class="list-menu-button" onclick="openInfo(' . htmlspecialchars($row['id']) . ')"><i class="fas fa-info"></i></button>
         
       <button class="list-menu-button" onclick="openHistory(' . htmlspecialchars($row['id']) . ')"><i class="fas fa-history"></i></button>
       
