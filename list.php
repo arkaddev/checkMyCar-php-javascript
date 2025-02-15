@@ -1,129 +1,184 @@
 <?php
-session_start();
+require 'config/session.php';
+require 'config/db_connection.php';
+
+require 'helpers/functions.php';
+?>
+
+
+<?php
+
+$query = "
+    SELECT 
+        c.id, 
+        c.model, 
+        c.year, 
+        c.user_id, 
+        c.insurance, 
+        c.technical_inspection, 
+        c.mileage,
+        IFNULL(ROUND(SUM(f.liters)*100 / SUM(f.distance), 2), 'Brak danych') AS average_fuel_consumption
+        
+    FROM 
+        cars c
+    LEFT JOIN 
+        fuel f 
+    ON 
+        c.id = f.car_id
+      
+        
+    GROUP BY 
+        c.id, c.model, c.year, c.user_id, c.insurance, c.technical_inspection, c.mileage
+
+";
 
 
 
-// Parametry połączenia
-$config = include('config/db_config.php');
-// Tworzymy połączenie
-$conn = mysqli_connect($config['servername'], $config['username'], $config['password'], $config['dbname']);
+ //Jeśli użytkownik nie jest administratorem, dodajemy warunek, by pokazać tylko samochody przypisane do tego użytkownika
+//if ($user_role !== 'admin') {
+//    $sql .= " HAVING user_id = '" . mysqli_real_escape_string($conn, $_SESSION['id']) . "'";
 
+//}
 
-// Sprawdzamy, czy połączenie się powiodło
-if (!$conn) {
-    // Jeśli połączenie nie uda się, wyświetli się błąd
-    //die("Połączenie nie powiodło się: " . mysqli_connect_error());
-} else {
-    // Jeśli połączenie jest udane, wyświetlamy komunikat
-    //echo "Połączenie z bazą danych powiodło się!";
-}
+ 
 
+$result = mysqli_query($conn, $query);
 
-// Jeśli formularz został wysłany
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Pobierz dane z formularza
-    $user_username = $_POST["username"];
-    $user_password = $_POST["password"];
     
-  // Przygotowanie zapytania
-    $sql = "SELECT * FROM users WHERE username = ?";
-    $stmt = $conn->prepare($sql);
-
-    // Sprawdzamy, czy zapytanie zostało przygotowane poprawnie
-    if ($stmt === false) {
-        die("Błąd w przygotowaniu zapytania: " . $conn->error);
-    }
-
-    // Zwiąż parametr z zapytaniem (parametr typu string)
-    $stmt->bind_param("s", $user_username);  // "s" oznacza typ string
-    $stmt->execute();
-
-    // Pobierz wynik
-    $result = $stmt->get_result();
-    $user = $result->fetch_assoc();
-
-    // Sprawdź, czy użytkownik istnieje i czy hasło jest poprawne
-    if ($user && password_verify($user_password, $user['password'])) {
-        // Hasło jest poprawne, ustaw zmienne sesji
-        $_SESSION["username"] = $user['username'];
-        $_SESSION["role"] = $user['role'];
-        $_SESSION["id"] = $user['id'];
-
-        // Przekierowanie na stronę powitalną
-        header("Location: menu.php");
-        exit();
-    } else {
-        // Jeśli dane logowania są niepoprawne
-        $error = "Błędna nazwa użytkownika lub hasło.";
-    }
-}
-
 
 // Zamykamy połączenie
 mysqli_close($conn);
-
-?>
+?> 
 
 <!DOCTYPE html>
 <html lang="pl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Logowanie</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f3f3f3;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-        }
-        .container {
-            background: white;
-            padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            text-align: center;
-      width: 100%;
-        }
-        input[type="text"], input[type="password"] {
-            width: 100%;
-            padding: 10px;
-            margin: 10px 0;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-        button {
-            padding: 10px 20px;
-            background-color: #0078D7;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-        button:hover {
-            background-color: #005A9E;
-        }
-        .error {
-            color: red;
-            margin-top: 10px;
-        }
-    </style>
+    <title>Witaj</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+ <link rel="stylesheet" href="css/style.css">
+  
+  
+  <style>
+  /* kontener glowny */
+.main-container {
+    max-width: 1100px; /* Ograniczenie maksymalnej szerokości */
+}
+
+     .insurance-expired {
+       background-color: #f8d7da;
+        
+    }
+    .insurance-warning {
+        background-color: #fff3cd;
+        
+    }
+    .insurance-valid {
+        background-color: #d4edda;
+      
+    }
+    
+ 
+  </style>
+  
+  
+  <div class="main-container">
+        <div class="user-container">
+          <span class="title">Lista pojazdów</span>
+            <p>Zalogowany użytkownik: <span class="username"><?php echo htmlspecialchars($_SESSION['username']); ?></span></p>
+     </div>
+  
+   
+      <!-- Tabela z danymi z bazy -->
+        <table>
+            <thead>
+                <tr>
+                  
+                   <th>ID</th>
+                   <th>Marka i model</th>
+                   <th>Rok</th>
+                   <th>Użytkownik</th>
+                   <th>Ubezpieczenie</th>
+                   <th>Przeglad</th>
+                   <th>Przebieg</th>
+                   <th>Spalanie</th>
+                   <th>Opcje</th>
+        
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                // Wyświetlanie danych z tabeli 'cars'
+                if ($result) {
+                    while ($row = mysqli_fetch_assoc($result)) {
+                        
+                      
+                      
+                      
+                      
+                      
+      $insuranceClass = getInsuranceClass($row['insurance']);
+      $inspectionClass = getInsuranceClass($row['technical_inspection']);
+ 
+      
+      
+      
+        echo '<tr>';
+        echo '<td>' . htmlspecialchars($row['id']) . '</td>';
+        echo '<td>' . htmlspecialchars($row['model']) . '</td>';
+        echo '<td>' . htmlspecialchars($row['year']) . '</td>';
+        echo '<td>' . htmlspecialchars($row['user_id']) . '</td>';
+        echo '<td class="' . $insuranceClass . '">' . htmlspecialchars($row['insurance']) . '</td>';
+        echo '<td class="' . $inspectionClass . '">' . htmlspecialchars($row['technical_inspection']) . '</td>';
+        echo '<td>' . htmlspecialchars($row['mileage']) . '</td>';
+       echo '<td>' . (isset($row['average_fuel_consumption']) ? htmlspecialchars($row['average_fuel_consumption']) : 'Brak danych') . '</td>';
+      
+      
+        
+        echo '<td>
+      
+      <button class="list-menu-button" onclick="openMenuAdd(' . htmlspecialchars($row['id']) . ')" title="Dodaj"><i class="fas fa-plus"></i></button>
+          
+      <button class="list-menu-button" onclick="openInfo(' . htmlspecialchars($row['id']) . ')"><i class="fas fa-info"></i></button>
+        
+      <button class="list-menu-button" onclick="openHistory(' . htmlspecialchars($row['id']) . ')"><i class="fas fa-history"></i></button>
+      
+      <button class="list-menu-button" onclick="openService(' . htmlspecialchars($row['id']) . ')"><i class="fas fa-tools"></i></button>
+      
+      </td>';
+        
+        echo '</tr>';
+                      
+                      
+                      
+                      
+                      
+                      
+                      
+                    }
+                } else {
+                    echo "<tr><td colspan='2'>Brak danych w tabeli 'cars'.</td></tr>";
+                }
+                ?>
+            </tbody>
+        </table>
+  
+  
+  
+  
+  
+  
+  </div>
+  
+  
 </head>
 <body>
-    <div class="container">
-        <h1>Logowanie</h1>
-        <form method="POST" action="login.php">
-            <input type="text" name="username" placeholder="Nazwa użytkownika" required>
-            <input type="password" name="password" placeholder="Hasło" required>
-            <button type="submit">Zaloguj</button>
-        </form>
-        <?php if (!empty($error)): ?>
-            <p class="error"><?= htmlspecialchars($error) ?></p>
-        <?php endif; ?>
-    </div>
+  
+  
+  
+  
+
 </body>
 </html>
