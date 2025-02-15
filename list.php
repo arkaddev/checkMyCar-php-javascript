@@ -54,14 +54,15 @@ mysqli_close($conn);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Witaj</title>
-
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
  <link rel="stylesheet" href="css/style.css">
   
   
   <style>
   /* kontener glowny */
 .main-container {
-    max-width: 1000px; /* Ograniczenie maksymalnej szerokości */
+    max-width: 1100px; /* Ograniczenie maksymalnej szerokości */
 }
 
  
@@ -70,7 +71,7 @@ mysqli_close($conn);
   
   <div class="main-container">
         <div class="user-container">
-          <span class="title">Spalanie</span>
+          <span class="title">Lista pojazdów</span>
             <p>Zalogowany użytkownik: <span class="username"><?php echo htmlspecialchars($_SESSION['username']); ?></span></p>
      </div>
   
@@ -121,13 +122,17 @@ mysqli_close($conn);
       
       
         
+        echo '<td>
+      
+      <button class="list-menu-button" onclick="openMenuAdd(' . htmlspecialchars($row['id']) . ')" title="Dodaj"><i class="fas fa-plus"></i></button>
+          
+      <button class="list-menu-button" onclick="openInfo(' . htmlspecialchars($row['id']) . ')"><i class="fas fa-info"></i></button>
         
-        echo '<td>';
-        echo '<button onclick="openMenuAdd(' . htmlspecialchars($row['id']) . ')">Dodaj</button>';
-        echo '<button onclick="openInfo(' . htmlspecialchars($row['id']) . ')">Info</button>';
-        echo '<button onclick="openHistory(' . htmlspecialchars($row['id']) . ')">Historia</button>';
-        echo '<button onclick="openService(' . htmlspecialchars($row['id']) . ')">Serwis</button>';
-        echo '</td>';
+      <button class="list-menu-button" onclick="openHistory(' . htmlspecialchars($row['id']) . ')"><i class="fas fa-history"></i></button>
+      
+      <button class="list-menu-button" onclick="openService(' . htmlspecialchars($row['id']) . ')"><i class="fas fa-tools"></i></button>
+      
+      </td>';
         
         echo '</tr>';
                       

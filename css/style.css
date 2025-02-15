@@ -78,10 +78,10 @@
     transition: transform 0.3s ease-in-out;
         }
 
-      
+
       
       /* Przycisk w formularzach */
-#add-car button, #add-fuel button, #add-note button, #chart-fuel-history button {
+#add-car button, #add-fuel button, #add-note button,#menu-fuel-history button, #chart-fuel-history button{
     display: block;
     width: 100%;
     margin: 10px 0;
@@ -94,7 +94,7 @@
     cursor: pointer;
     transition: background-color 0.3s ease, transform 0.2s ease;
 }
-     #add-car button:hover, #add-fuel button:hover, #add-note button:hover{
+     #add-car button:hover, #add-fuel button:hover, #add-note button:hover, #chart-fuel-history button:hover, #menu-fuel-history button:hover{
     background-color: #004085;
     transform: translateY(-2px);
 }
@@ -129,7 +129,7 @@ form button[type="button"]:hover {
 
 /* PRZYCISKI */
 
-.add-car-button, .add-fuel-button, .add-note-button, .history-fuel-button, #menu-fuel-history button {
+.add-car-button, .add-fuel-button, .add-note-button, .history-fuel-button, .list-menu-button {
     background-color: #2196F3;
     color: #fff;
     border: none;
@@ -140,7 +140,7 @@ form button[type="button"]:hover {
     transition: background-color 0.3s ease;
 }
 
-.add-car-button:hover, .add-fuel-button:hover, .add-note-button:hover, .history-fuel-button:hover, #menu-fuel-history button:hover {
+.add-car-button:hover, .add-fuel-button:hover, .add-note-button:hover, .history-fuel-button:hover {
     background-color: #3F51B5;
 }
 
