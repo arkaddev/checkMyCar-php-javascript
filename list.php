@@ -55,16 +55,24 @@ mysqli_close($conn);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Witaj</title>
 
+ <link rel="stylesheet" href="css/style.css">
+  
+  
+  <style>
+  /* kontener glowny */
+.main-container {
+    max-width: 1000px; /* Ograniczenie maksymalnej szerokości */
+}
+
  
+  </style>
   
   
- 
-  
-  
-  
-  
-  
-  
+  <div class="main-container">
+        <div class="user-container">
+          <span class="title">Spalanie</span>
+            <p>Zalogowany użytkownik: <span class="username"><?php echo htmlspecialchars($_SESSION['username']); ?></span></p>
+     </div>
   
    
       <!-- Tabela z danymi z bazy -->
@@ -142,7 +150,7 @@ mysqli_close($conn);
   
   
   
-  
+  </div>
   
   
 </head>
