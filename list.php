@@ -34,11 +34,10 @@ $query = "
 
 
 
- //Jeśli użytkownik nie jest administratorem, dodajemy warunek, by pokazać tylko samochody przypisane do tego użytkownika
-//if ($user_role !== 'admin') {
-//    $sql .= " HAVING user_id = '" . mysqli_real_escape_string($conn, $_SESSION['id']) . "'";
 
-//}
+if ($user_role !== 'admin') {
+    $query .= " HAVING user_id = '" . mysqli_real_escape_string($conn, $_SESSION['id']) . "'";
+}
 
  
 
