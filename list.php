@@ -55,6 +55,9 @@ mysqli_close($conn);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Witaj</title>
+
+<script src="js/listMenuActions.js"></script>
+
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
  <link rel="stylesheet" href="css/style.css">
@@ -81,7 +84,9 @@ mysqli_close($conn);
     
  
   </style>
-  
+   
+</head>
+<body>
   
   <div class="main-container">
         <div class="user-container">
@@ -142,9 +147,8 @@ mysqli_close($conn);
         
         echo '<td>
       
-      <button class="list-menu-button" onclick="openMenuAdd(' . htmlspecialchars($row['id']) . ')" title="Dodaj"><i class="fas fa-plus"></i></button>
+      <button class="list-menu-button" onclick="openListMenu(' . htmlspecialchars($row['id']) . ')" title="Dodaj"><i class="fas fa-plus"></i></button>
           
-        
       <button class="list-menu-button" onclick="openHistory(' . htmlspecialchars($row['id']) . ')"><i class="fas fa-history"></i></button>
       
       <button class="list-menu-button" onclick="openService(' . htmlspecialchars($row['id']) . ')"><i class="fas fa-tools"></i></button>
@@ -167,19 +171,57 @@ mysqli_close($conn);
             </tbody>
         </table>
   
-  
-  
-  
-  
-  
   </div>
   
-  
-</head>
-<body>
+ 
   
   
+  <div id="overlay"></div>
   
+    <div id="list-menu">
+        <h2>Dodaj wymianę</h2>
+        <p>Wybierz opcję:</p>
+        <button onclick="listMenuEditMileage()">Aktualizacja przebiegu</button>
+        <button onclick="listMenuPartReplacement()">Wymiana części</button>
+        <button onclick="listMenuEditInsurance()">Nowe ubezpieczenie</button>
+        <button onclick="listMenuEditInspection()">Nowy przegląd</button>
+        <button onclick="listMenuTireReplacement()">Wymiana opon</button>
+        <button onclick="listMenuNewFuel()">Tankowanie</button>
+        <button onclick="closeListMenu()">Anuluj</button>
+    </div>
+  
+  <form id="list-edit-mileage">
+        <h2>Aktualizacja przebiegu:</h2>
+        <label>Podaj nowy przebieg w km (6 cyfr):</label>
+        <input type="number" id="mileage-input" name="mileage" min="100000" max="999999" required>
+        <button type="submit" onclick="editMileage()">Zatwierdź</button>
+        <button type="button" onclick="closeListMenuEditMileage()">Anuluj</button>
+    </form>
+  
+  <form id="list-part-replacement">
+        <h2>Wymiana części:</h2>
+    
+        <label>Nazwa części:</label>
+        <input type="text" id="add-part-name-input" name="" required><br>
+
+        <label>Numer seryjny:</label>
+        <input type="text" id="add-part-number-input" name="" required><br>
+      
+        <label>Koszt części:</label>
+        <input type="number" id="add-part-price-input" name="" step="0.01" required><br>
+
+        <label>Data instalacji:</label><br>
+        <input type="date" id="add-part-date-input" name="" required><br>
+
+        <label>Przebieg:</label><br>
+        <input type="number" id="add-part-mileage-input" name="" required><br>
+      
+        <label>Następna wymiana (km):</label>
+        <input type="number" id="add-part-next-input" name="" required><br>
+      
+        <button type="submit" onclick="addNewPart()">Zatwierdź</button>
+        <button type="button" onclick="closeListMenuPartReplacement()">Anuluj</button>
+    </form>
   
 
 </body>

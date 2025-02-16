@@ -46,7 +46,7 @@
 }
 
        /* glowne menu */
-        #add-car, #add-fuel, #add-note{
+        #list-menu, #list-edit-mileage, #list-part-replacement, #add-car, #add-fuel, #add-note{
     display: none;
     position: fixed;
     top: 20%;
@@ -81,7 +81,7 @@
 
       
       /* Przycisk w formularzach */
-#add-car button, #add-fuel button, #add-note button,#menu-fuel-history button, #chart-fuel-history button{
+#list-menu button, #add-car button, #add-fuel button, #add-note button,#menu-fuel-history button, #chart-fuel-history button{
     display: block;
     width: 100%;
     margin: 10px 0;
@@ -94,7 +94,7 @@
     cursor: pointer;
     transition: background-color 0.3s ease, transform 0.2s ease;
 }
-     #add-car button:hover, #add-fuel button:hover, #add-note button:hover, #chart-fuel-history button:hover, #menu-fuel-history button:hover{
+    #list-menu button:hover, #add-car button:hover, #add-fuel button:hover, #add-note button:hover, #chart-fuel-history button:hover, #menu-fuel-history button:hover{
     background-color: #004085;
     transform: translateY(-2px);
 }
@@ -126,10 +126,28 @@ form button[type="button"]:hover {
     background-color: #c0392b;
 }
 
+form button {
+    display: block;
+    width: 100%;
+    margin: 10px 0;
+    padding: 12px 20px;
+    background-color: #0056b3;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+form button:hover {
+    background-color: #004085;
+    transform: translateY(-2px);
+}
 
 /* PRZYCISKI */
 
-.add-car-button, .add-fuel-button, .add-note-button, .history-fuel-button, .list-menu-button {
+.list-menu-button, .add-car-button, .add-fuel-button, .add-note-button, .history-fuel-button {
     background-color: #2196F3;
     color: #fff;
     border: none;
@@ -140,7 +158,7 @@ form button[type="button"]:hover {
     transition: background-color 0.3s ease;
 }
 
-.add-car-button:hover, .add-fuel-button:hover, .add-note-button:hover, .history-fuel-button:hover {
+.list-menu-button:hover, .add-car-button:hover, .add-fuel-button:hover, .add-note-button:hover, .history-fuel-button:hover {
     background-color: #3F51B5;
 }
 
