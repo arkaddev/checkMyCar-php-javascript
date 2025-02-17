@@ -33,6 +33,26 @@ let selectedCarId = null;
         document.getElementById('list-part-replacement').style.display = 'none';
     }
 
+   // nowe ubezpieczenie
+    function listMenuEditInsurance() {
+        document.getElementById('list-edit-insurance').style.display = 'block';
+      document.getElementById('overlay').style.display = 'block';
+    }
 
+   
+    function closeListMenuEditInsurance() {
+        document.getElementById('list-edit-insurance').style.display = 'none';
+    }
+
+    // nowy przeglad
+    function listMenuEditInspection() {
+        document.getElementById('list-edit-inspection').style.display = 'block';
+      document.getElementById('overlay').style.display = 'block';
+    }
+
+    
+    function closeListMenuEditInspection() {
+        document.getElementById('list-edit-inspection').style.display = 'none';
+    }
 
 

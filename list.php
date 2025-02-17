@@ -155,13 +155,7 @@ mysqli_close($conn);
       
       </td>';
         
-        echo '</tr>';
-                      
-                      
-                      
-                      
-                      
-                      
+        echo '</tr>';   
                       
                     }
                 } else {
@@ -223,6 +217,20 @@ mysqli_close($conn);
         <button type="button" onclick="closeListMenuPartReplacement()">Anuluj</button>
     </form>
   
-
+<form id="list-edit-insurance">
+        <h2>Nowe ubezpieczenie:</h2>
+        <label>Podaj termin ważności:</label>
+        <input type="date" id="insurance-input" name="insurance" required>
+        <button type="submit" onclick="editInsurance()">Zatwierdź</button>
+        <button type="button" onclick="closeListMenuEditInsurance()">Anuluj</button>
+    </form>
+  
+    <form id="list-edit-inspection">
+        <h2>Nowy przegląd:</h2>
+        <label>Podaj termin ważności:</label>
+        <input type="date" id="inspection-input" name="inspection" required>
+        <button type="submit" onclick="editInspection()">Zatwierdź</button>
+        <button type="button" onclick="closeListMenuEditInspection()">Anuluj</button>
+    </form>
 </body>
 </html>
