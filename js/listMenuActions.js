@@ -55,4 +55,12 @@ let selectedCarId = null;
         document.getElementById('list-edit-inspection').style.display = 'none';
     }
 
+    // nowe tankowanie
+    function listMenuNewFuel() {
+        document.getElementById('list-new-fuel').style.display = 'block';
+      document.getElementById('overlay').style.display = 'block';
+    }
 
+    function closeListMenuNewFuel() {
+        document.getElementById('list-new-fuel').style.display = 'none';
+    }

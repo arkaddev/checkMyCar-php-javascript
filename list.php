@@ -232,5 +232,32 @@ mysqli_close($conn);
         <button type="submit" onclick="editInspection()">Zatwierdź</button>
         <button type="button" onclick="closeListMenuEditInspection()">Anuluj</button>
     </form>
+  
+   <form id="list-new-fuel">
+        <h2>Nowe tankowanie:</h2>
+        
+        <label for="add-fuel">Litry:</label>
+        <input type="number" id="add-fuel-liters-input" name="" required><br>
+
+        <label for="add-fuel-type-input">Rodzaj paliwa:</label>
+    <select id="add-fuel-type-input" name="fuel_type" required>
+        <option value="petrol">Benzyna</option>
+        <option value="diesel">Diesel</option>
+        <option value="lpg">LPG</option>
+    </select><br>
+      
+        <label for="add-fuel">Koszt za litr:</label>
+        <input type="number" id="add-fuel-price-input" name="" step="0.01" required><br>
+
+        <label for="add-fuel">Data tankowania:</label><br>
+        <input type="date" id="add-fuel-date-input" name="" required><br>
+
+        <label for="add-fuel">Dystans w km:</label><br>
+        <input type="number" id="add-fuel-distance-input" name="" required><br>
+      
+        <button type="submit" onclick="addNewFuel()">Zatwierdź</button>
+        <button type="button" onclick="closeListMenuNewFuel()">Anuluj</button>
+    </form>
+  
 </body>
 </html>
