@@ -3,6 +3,7 @@ require 'config/session.php';
 require 'config/db_connection.php';
 
 require 'helpers/functions.php';
+
 ?>
 
 
@@ -57,6 +58,7 @@ mysqli_close($conn);
     <title>Witaj</title>
 
 <script src="js/listMenuActions.js"></script>
+  <script src="js/infoCarActions.js"></script>
 
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
@@ -133,7 +135,7 @@ mysqli_close($conn);
         echo '<td>' . htmlspecialchars($row['id']) . '</td>';
         echo '<td>' . htmlspecialchars($row['model']) .' 
         
-        <button class="list-info-button" onclick="openInfo(' . htmlspecialchars($row['id']) . ')" title="Informacje"><i class="fas fa-info"></i></button>
+        <button class="list-info-button" onclick="openInfoCar(' . htmlspecialchars($row['id']) . ')" title="Informacje"><i class="fas fa-info"></i></button>
           
           </td>';
         echo '<td>' . htmlspecialchars($row['year']) . '</td>';
@@ -236,7 +238,7 @@ mysqli_close($conn);
    <form id="list-new-fuel">
         <h2>Nowe tankowanie:</h2>
         
-        <label for="add-fuel">Litry:</label>
+       <label for="add-fuel">Litry:</label>
         <input type="number" id="add-fuel-liters-input" name="" required><br>
 
         <label for="add-fuel-type-input">Rodzaj paliwa:</label>
@@ -254,10 +256,21 @@ mysqli_close($conn);
 
         <label for="add-fuel">Dystans w km:</label><br>
         <input type="number" id="add-fuel-distance-input" name="" required><br>
+    
+        <label for="add-fuel">Szczegóły:</label>
+        <input type="text" id="add-fuel-details-input" name="" required><br>
       
         <button type="submit" onclick="addNewFuel()">Zatwierdź</button>
         <button type="button" onclick="closeListMenuNewFuel()">Anuluj</button>
     </form>
+  
+  <div id="list-info-car">
+    <h2>Informacje o samochodzie:</h2>
+    <div id="list-info-car-content">
+        <!-- dane z tabeli cars_info -->
+    </div>
+    <button onclick="closeListInfoCar()">Zamknij</button>
+</div>
   
 </body>
 </html>
