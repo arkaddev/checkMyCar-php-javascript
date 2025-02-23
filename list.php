@@ -4,6 +4,8 @@ require 'config/db_connection.php';
 
 require 'helpers/functions.php';
 
+require 'requests/update_data_car.php';
+
 ?>
 
 
@@ -58,6 +60,7 @@ mysqli_close($conn);
     <title>Witaj</title>
 
 <script src="js/listMenuActions.js"></script>
+<script src="js/carDataActions.js"></script>
   <script src="js/infoCarActions.js"></script>
 
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
