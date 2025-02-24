@@ -4,7 +4,10 @@ require 'config/db_connection.php';
 
 require 'helpers/functions.php';
 
-require 'requests/update_data_car.php';
+require 'requests/update_car_data.php';
+require 'requests/car_info.php';
+require 'requests/add_part.php';
+
 
 ?>
 
@@ -62,6 +65,8 @@ mysqli_close($conn);
 <script src="js/listMenuActions.js"></script>
 <script src="js/carDataActions.js"></script>
   <script src="js/infoCarActions.js"></script>
+<script src="js/partActions.js"></script>
+
 
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
@@ -267,13 +272,13 @@ mysqli_close($conn);
         <button type="button" onclick="closeListMenuNewFuel()">Anuluj</button>
     </form>
   
-  <div id="list-info-car">
+  <form id="list-info-car">
     <h2>Informacje o samochodzie:</h2>
     <div id="list-info-car-content">
         <!-- dane z tabeli cars_info -->
     </div>
     <button onclick="closeListInfoCar()">Zamknij</button>
-</div>
+</form>
   
 </body>
 </html>
