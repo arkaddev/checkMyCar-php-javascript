@@ -7,6 +7,7 @@ require 'helpers/functions.php';
 require 'requests/update_car_data.php';
 require 'requests/car_info.php';
 require 'requests/add_part.php';
+require 'requests/add_fuel.php';
 
 
 ?>
@@ -60,12 +61,13 @@ mysqli_close($conn);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lista samochodów</title>
+    <title>Witaj</title>
 
 <script src="js/listMenuActions.js"></script>
 <script src="js/carDataActions.js"></script>
-  <script src="js/infoCarActions.js"></script>
+<script src="js/infoCarActions.js"></script>
 <script src="js/partActions.js"></script>
+<script src="js/fuelActions.js"></script>
 
 
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
@@ -191,7 +193,7 @@ mysqli_close($conn);
         <button onclick="listMenuEditInspection()">Nowy przegląd</button>
         <button onclick="listMenuTireReplacement()">Wymiana opon</button>
         <button onclick="listMenuNewFuel()">Tankowanie</button>
-        <button onclick="closeListMenu()">Anuluj</button>
+        <button type="button" onclick="closeListMenu()">Anuluj</button>
     </div>
   
   <form id="list-edit-mileage">
@@ -279,6 +281,9 @@ mysqli_close($conn);
     </div>
     <button onclick="closeListInfoCar()">Zamknij</button>
 </form>
+  
+  
+  
   
 </body>
 </html>
