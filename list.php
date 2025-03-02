@@ -61,7 +61,7 @@ mysqli_close($conn);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Witaj</title>
+    <title>Lista samochodów</title>
 
 <script src="js/listMenuActions.js"></script>
 <script src="js/carDataActions.js"></script>
@@ -282,6 +282,13 @@ mysqli_close($conn);
     <button onclick="closeListInfoCar()">Zamknij</button>
 </form>
   
+  <form id="list-history">
+    <h2>Informacje o wymianach części:</h2>
+    <div id="list-history-content">
+        <!-- dane z tabeli cars_info -->
+    </div>
+    <button type="button" onclick="closeListHistory()">Zamknij</button>
+</form>
   
   
   
