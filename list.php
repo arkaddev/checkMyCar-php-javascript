@@ -279,7 +279,7 @@ mysqli_close($conn);
     <div id="list-info-car-content">
         <!-- dane z tabeli cars_info -->
     </div>
-    <button onclick="closeListInfoCar()">Zamknij</button>
+    <button type="button" onclick="closeListInfoCar()">Zamknij</button>
 </form>
   
   <form id="list-history">
