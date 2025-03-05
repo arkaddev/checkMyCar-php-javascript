@@ -1,9 +1,9 @@
 function openHistory(carId) {
     selectedCarId = carId;
 
-    const historyContent = document.getElementById('history-content');
+    const historyContent = document.getElementById('list-history-content');
     historyContent.innerHTML = "<p>Ładowanie danych...</p>"; // Wiadomość oczekiwania
-    document.getElementById('menu-history').style.display = 'block';
+    document.getElementById('list-history').style.display = 'block';
   document.getElementById('overlay').style.display = 'block';
 
     // Wysłanie zapytania POST do serwera
@@ -64,8 +64,8 @@ function openHistory(carId) {
 }
 
 
-function closeMenuHistory() {
+function closeListHistory() {
     selectedCarId = null;
-    document.getElementById('menu-history').style.display = 'none';
+    document.getElementById('list-history').style.display = 'none';
   document.getElementById('overlay').style.display = 'none';
 }
