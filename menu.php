@@ -12,7 +12,7 @@ if (!isset($_SESSION["username"])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Menu</title>
+    <title>Menu z przyciskami w ramce</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
@@ -152,7 +152,7 @@ if (!isset($_SESSION["username"])) {
       </div>
         
         <div class="top-menu">
-            <a href="home.php" class="menu-item menu-item-1">
+            <a href="list.php" class="menu-item menu-item-1">
                 <i class="fas fa-car"></i>
                 Lista pojazdów
             </a>
@@ -180,6 +180,8 @@ if (!isset($_SESSION["username"])) {
                 Wyloguj
             </a>
         </div>
-    </div>
+    
+     
+  </div>
 </body>
 </html>
