@@ -69,6 +69,7 @@ mysqli_close($conn);
 <script src="js/partActions.js"></script>
 <script src="js/fuelActions.js"></script>
 <script src="js/historyActions.js"></script>
+<script src="js/serviceActions.js"></script>
 
 
 
@@ -290,6 +291,14 @@ mysqli_close($conn);
         <!-- dane z tabeli cars_info -->
     </div>
     <button type="button" onclick="closeListHistory()">Zamknij</button>
+</form>
+  
+  <form id="list-service">
+    <h2>Informacje o serwisie:</h2>
+    <div id="list-service-content">
+        <!-- dane z tabeli cars_info -->
+    </div>
+    <button type="button" onclick="closeListService()">Zamknij</button>
 </form>
   
   

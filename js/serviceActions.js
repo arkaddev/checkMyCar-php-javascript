@@ -1,9 +1,9 @@
 function openService(carId) {
     selectedCarId = carId;
 
-    const serviceContent = document.getElementById('service-content');
+    const serviceContent = document.getElementById('list-service-content');
     serviceContent.innerHTML = "<p>Ładowanie danych...</p>"; // Wiadomość oczekiwania
-    document.getElementById('menu-service').style.display = 'block';
+    document.getElementById('list-service').style.display = 'block';
   document.getElementById('overlay').style.display = 'block';
 
     // Wysłanie zapytania POST do serwera
@@ -73,16 +73,14 @@ function openService(carId) {
         serviceContent.innerHTML = "<p>Wystąpił błąd podczas pobierania danych.</p>";
     });
 }
-function closeMenuService() {
+
+function closeListService() {
     selectedCarId = null;
-    document.getElementById('menu-service').style.display = 'none';
+    document.getElementById('list-service').style.display = 'none';
   document.getElementById('overlay').style.display = 'none';
 }
   
-  
-   
-   
-   
+     
    
    
    function makeReplaced(partId) {
