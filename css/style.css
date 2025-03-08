@@ -62,6 +62,9 @@
     z-index: 1000;
     transition: transform 0.3s ease-in-out;
         }
+
+
+
      
        /* menu dla szerszych okien, np historia*/
      #menu-fuel-history, #chart-fuel-history {    
@@ -80,9 +83,10 @@
         }
 
 
+
       
       /* Przycisk w formularzach */
-#list-menu button, #add-car button, #add-fuel button, #add-note button,#menu-fuel-history button, #chart-fuel-history button{
+#add-car button, #add-fuel button, #add-note button,#menu-fuel-history button, #chart-fuel-history button{
     display: block;
     width: 100%;
     margin: 10px 0;
@@ -95,7 +99,7 @@
     cursor: pointer;
     transition: background-color 0.3s ease, transform 0.2s ease;
 }
-    #list-menu button:hover, #add-car button:hover, #add-fuel button:hover, #add-note button:hover, #chart-fuel-history button:hover, #menu-fuel-history button:hover{
+    #add-car button:hover, #add-fuel button:hover, #add-note button:hover, #chart-fuel-history button:hover, #menu-fuel-history button:hover{
     background-color: #004085;
     transform: translateY(-2px);
 }
@@ -146,7 +150,42 @@ form button:hover {
     transform: translateY(-2px);
 }
 
-/* PRZYCISKI */
+
+/* PRZYCISKI różnych menu */
+
+/* niebieski przycisk menu*/
+#list-menu button { 
+    display: block;
+    width: 100%;
+    margin: 10px 0;
+    padding: 12px 20px;
+    background-color: #0056b3;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+ #list-menu button:hover {
+    background-color: #004085;
+    transform: translateY(-2px);
+}
+
+/* szary przycisk menu - cofnij, anuluj, usun*/
+#list-menu .exit-button { 
+    background-color: #7f8c8d;
+}
+
+ #list-menu .exit-button:hover {
+    background-color: #636e72;
+    transform: translateY(-2px);
+}
+
+
+
+/* inne */
 
 .list-menu-button, .add-car-button, .add-fuel-button, .add-note-button, .history-fuel-button {
     background-color: #2196F3;

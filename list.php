@@ -71,8 +71,6 @@ mysqli_close($conn);
 <script src="js/historyActions.js"></script>
 <script src="js/serviceActions.js"></script>
 
-
-
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
  <link rel="stylesheet" href="css/style.css">
@@ -80,30 +78,25 @@ mysqli_close($conn);
   
   <style>
   /* kontener glowny */
-.main-container, #list-service {
+.main-container, #list-history, #list-service {
     max-width: 1100px; /* Ograniczenie maksymalnej szerokości */
 }
 
-
-
-
-     .insurance-expired {
+ .insurance-expired {
        background-color: #f8d7da;
-        
-    }
-    .insurance-warning {
-        background-color: #fff3cd;
-        
-    }
-    .insurance-valid {
-        background-color: #d4edda;
-      
     }
     
- 
-  </style>
-   
+.insurance-warning {
+        background-color: #fff3cd;
+    }
+    
+.insurance-valid {
+        background-color: #d4edda;   
+    }
+    
+</style> 
 </head>
+
 <body>
   
   <div class="main-container">
@@ -199,7 +192,7 @@ mysqli_close($conn);
         <button onclick="listMenuEditInspection()">Nowy przegląd</button>
         <button onclick="listMenuTireReplacement()">Wymiana opon</button>
         <button onclick="listMenuNewFuel()">Tankowanie</button>
-        <button type="button" onclick="closeListMenu()">Anuluj</button>
+        <button class="exit-button" onclick="closeListMenu()">Anuluj</button>
     </div>
   
   <form id="list-edit-mileage">
