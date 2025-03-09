@@ -78,9 +78,17 @@ mysqli_close($conn);
   
   <style>
   /* kontener glowny */
-.main-container, #list-history, #list-service {
+.main-container {
     max-width: 1100px; /* Ograniczenie maksymalnej szerokości */
 }
+    #list-history, #list-service{
+   width: 1100px;
+    font-size: 14px;
+}
+    
+    
+    
+    
 
  .insurance-expired {
        background-color: #f8d7da;
