@@ -46,7 +46,7 @@
 }
 
        /* glowne menu */
-        #list-menu, #list-edit-mileage, #list-part-replacement, #list-edit-insurance, #list-edit-inspection, #list-new-fuel, #list-info-car, #list-history, #list-service, #add-car, #add-fuel, #add-note{
+        #list-menu, #list-edit-mileage, #list-part-replacement, #list-edit-insurance, #list-edit-inspection, #list-new-fuel, #list-info-car, #list-service, #list-history, #note-add-note, #add-car, #add-fuel{
     display: none;
     position: fixed;
     top: 20%;
@@ -82,28 +82,8 @@
     transition: transform 0.3s ease-in-out;
         }
 
-
-
       
-      /* Przycisk w formularzach */
-#add-car button, #add-fuel button, #add-note button,#menu-fuel-history button, #chart-fuel-history button{
-    display: block;
-    width: 100%;
-    margin: 10px 0;
-    padding: 12px 20px;
-    background-color: #0056b3;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-}
-    #add-car button:hover, #add-fuel button:hover, #add-note button:hover, #chart-fuel-history button:hover, #menu-fuel-history button:hover{
-    background-color: #004085;
-    transform: translateY(-2px);
-}
-      
+      /* FORMULARZE */
       
 /* pola formularzy */
 form input[type="number"], form input[type="date"], form input[type="text"], form select {
