@@ -1,25 +1,8 @@
 <?php
 
+require 'config/session.php';
+require 'config/db_connection.php';
 
-
-
-session_start();
-
-// Sprawdź, czy użytkownik jest zalogowany
-if (!isset($_SESSION["username"])) {
-    header("Location: login.php");
-    exit();
-}
-
-$config = include('config/db_config.php');
-
-// Tworzymy połączenie
-$conn = mysqli_connect($config['servername'], $config['username'], $config['password'], $config['dbname']);
-
-// Sprawdzamy, czy połączenie się powiodło
-if (!$conn) {
-    die("Połączenie nie powiodło się: " . mysqli_connect_error());
-}
 
 // Zmienna przechowująca dane sesji
 $userId = $_SESSION['id'];
