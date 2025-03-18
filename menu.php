@@ -11,17 +11,10 @@ require 'config/session.php';
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
+   <link rel="stylesheet" href="css/style.css">
    
-    <style>
-        /* Podstawowe style strony */
-        body {
-            font-family: 'Poppins', Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            abackground-color: #f4f4f4;
-            background: linear-gradient(to bottom right, #e3f2fd, #bbdefb); /* Tło gradientowe */
-           
-        }
+  <style>
+       
         
       
         .menu-container {
@@ -33,42 +26,13 @@ require 'config/session.php';
     margin: 50px auto; /* Wyśrodkowanie */
     box-sizing: border-box; /* Uwzględnienie paddingu w szerokości */
       
-     box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
     
     background-color: #fff; /* Białe tło dla lepszego efektu */
 }
 
       
       
-.user-container {
-    width: 100%; /* Szerokość taka sama jak menu-container */
-    padding: 5px 30px; /* Wewnętrzny padding */
-    text-align: right; /* Wyśrodkowanie tekstu */
-    box-sizing: border-box; /* Uwzględnienie paddingu w szerokości */
-   background-color: silver;
-      border-radius: 5px;
-      
-       display: flex;
-            justify-content: space-between;
-            align-items: center;
-      
-}
-      
-      
-      
-       .title {
-            font-size: 22px;
-            font-weight: bold;
-            color: #333;
-        }
-      
-      
-      .username {
-    font-weight: bold;
-    color: #4caf50;
-    font-size: 18px;
-   
-}
         
         .top-menu, .bottom-menu {
             display: flex;
