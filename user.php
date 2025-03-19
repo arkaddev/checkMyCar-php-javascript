@@ -359,4 +359,42 @@ mysqli_close($conn);
     }
   
   
+  
+  
+  // Funkcja dodająca nowy pojazd do bazy danych
+    
+  function addNewCar() {
+        event.preventDefault(); // Zapobiega domyślnemu działaniu formularza
+
+        const carModel = document.getElementById('add-car-model-input').value;
+        const carYear = document.getElementById('add-car-year-input').value;
+        const carEngine = document.getElementById('add-car-engine-input').value;
+        const carKw = document.getElementById('add-car-kw-input').value;
+        const carOil = document.getElementById('add-car-oil-input').value;
+        const carOilFilter = document.getElementById('add-car-oilfilter-input').value;
+        const carAirFilter = document.getElementById('add-car-airfilter-input').value;
+
+        // Wysłanie zapytania POST do serwera
+        fetch("", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded"
+            },
+            body: `user_id=${selectedUserId}&carModel=${carModel}&carYear=${carYear}&carEngine=${carEngine}&carKw=${carKw}&carOil=${carOil}&carOilFilter=${carOilFilter}&carAirFilter=${carAirFilter}`
+        })
+        .then(response => response.json()) // Parsowanie odpowiedzi jako JSON
+        .then(data => {
+            if (data.status === "success") {
+                alert(data.message); // Wyświetlenie komunikatu sukcesu
+                location.reload(); // Odświeżenie strony
+            } else {
+                alert(data.message); // Wyświetlenie komunikatu błędu
+            }
+        })
+        .catch(error => {
+            console.error("Wystąpił błąd:", error);
+            alert("Wystąpił błąd podczas dodawania pojadu.");
+        });
+    }
+  
 </script>
