@@ -6,7 +6,7 @@ if (!isset($_SESSION["username"])) {
     exit();
 }
 
-
+$userId = $_SESSION['id'];
 
 
 
@@ -293,7 +293,7 @@ mysqli_close($conn);
         <label for="add-car">Filtr powietrza:</label>
         <input type="text" id="add-car-airfilter-input" name="" required><br>
       
-        <button type="submit" onclick="addCar()">Zatwierdź</button>
+        <button type="submit" onclick="addCar(<?php echo $userId; ?>)">Zatwierdź</button>
         <button type="button" onclick="closeMenuAddCar()">Anuluj</button>
     </form>
   </div>
@@ -363,7 +363,8 @@ mysqli_close($conn);
   
   // Funkcja dodająca nowy pojazd do bazy danych
     
-  function addNewCar() {
+  function addCar(userId) {
+ alert(userId);
         event.preventDefault(); // Zapobiega domyślnemu działaniu formularza
 
         const carModel = document.getElementById('add-car-model-input').value;
@@ -380,7 +381,7 @@ mysqli_close($conn);
             headers: {
                 "Content-Type": "application/x-www-form-urlencoded"
             },
-            body: `user_id=${selectedUserId}&carModel=${carModel}&carYear=${carYear}&carEngine=${carEngine}&carKw=${carKw}&carOil=${carOil}&carOilFilter=${carOilFilter}&carAirFilter=${carAirFilter}`
+            body: `user_id=${userId}&carModel=${carModel}&carYear=${carYear}&carEngine=${carEngine}&carKw=${carKw}&carOil=${carOil}&carOilFilter=${carOilFilter}&carAirFilter=${carAirFilter}`
         })
         .then(response => response.json()) // Parsowanie odpowiedzi jako JSON
         .then(data => {
