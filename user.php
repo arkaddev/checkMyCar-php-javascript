@@ -102,6 +102,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['new_password'])) {
 }
 
 
+
+// dodawanie nowego pojazdu
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['user_id'], $_POST['carModel'])) {
+    $car_id = intval($_POST['user_id']);
+    $car_model = $conn->real_escape_string($_POST['carModel']);
+    $car_year = intval($_POST['carYear']);
+    $car_engine = $conn->real_escape_string($_POST['carEngine']);
+    $car_kw = $conn->real_escape_string($_POST['carKw']);
+    $car_oil = $conn->real_escape_string($_POST['carOil']);
+    $car_oil_filter = $conn->real_escape_string($_POST['carOilFilter']);
+    $car_air_filter = $conn->real_escape_string($_POST['carAirFilter']);
+    
+    $update_query = "INSERT INTO cars_info (id, engine_number, production_date, km_kw, oil_number, oil_filter_number, air_filter_number, car_id) 
+                     VALUES (NULL, '$car_engine', '$car_year', '$car_kw', '$car_oil', '$car_oil_filter', '$car_air_filter', '$car_id')";
+  
+    if ($conn->query($update_query) === TRUE) {
+        echo json_encode(['status' => 'success', 'message' => 'Pojazd został dodany']);
+    } else {
+        echo json_encode(['status' => 'error', 'message' => 'Błąd podczas dodawania pojazdu']);
+    }
+    exit();
+}
 // Zamykamy połączenie
 mysqli_close($conn);
 ?> 
@@ -394,7 +416,7 @@ mysqli_close($conn);
         })
         .catch(error => {
             console.error("Wystąpił błąd:", error);
-            alert("Wystąpił błąd podczas dodawania pojadu.");
+            alert("Wystąpił błąd podczas dodawania pojazdu.");
         });
     }
   
