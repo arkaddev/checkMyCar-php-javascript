@@ -105,7 +105,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['new_password'])) {
 
 // dodawanie nowego pojazdu
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['user_id'], $_POST['carModel'])) {
-    $car_id = intval($_POST['user_id']);
+  
+    $user_id = intval($_POST['user_id']);
     $car_model = $conn->real_escape_string($_POST['carModel']);
     $car_year = intval($_POST['carYear']);
     $car_engine = $conn->real_escape_string($_POST['carEngine']);
@@ -114,14 +115,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['user_id'], $_POST['ca
     $car_oil_filter = $conn->real_escape_string($_POST['carOilFilter']);
     $car_air_filter = $conn->real_escape_string($_POST['carAirFilter']);
     
-    $update_query = "INSERT INTO cars_info (id, engine_number, production_date, km_kw, oil_number, oil_filter_number, air_filter_number, car_id) 
-                     VALUES (NULL, '$car_engine', '$car_year', '$car_kw', '$car_oil', '$car_oil_filter', '$car_air_filter', '$car_id')";
+    //$update_query = "INSERT INTO cars_info (id, engine_number, production_date, km_kw, oil_number, oil_filter_number, air_filter_number, car_id) 
+    //                 VALUES (NULL, '$car_engine', '$car_year', '$car_kw', '$car_oil', '$car_oil_filter', '$car_air_filter', '$car_id')";
+  
+  $update_query = "INSERT INTO cars (id, model, year, mileage, insurance, technical_inspection, user_id) VALUES (NULL, '$car_model', '$car_year', 0, 0, 0, '$user_id')";
   
     if ($conn->query($update_query) === TRUE) {
         echo json_encode(['status' => 'success', 'message' => 'Pojazd został dodany']);
     } else {
-        echo json_encode(['status' => 'error', 'message' => 'Błąd podczas dodawania pojazdu']);
+        echo json_encode(['status' => 'error', 'message' => 'Błąd podczas dodawania pojazdu: ' . $conn->error]);
     }
+    
+  
+  
+
+  
+  
     exit();
 }
 // Zamykamy połączenie
@@ -310,7 +319,7 @@ mysqli_close($conn);
         <input type="text" id="add-car-oil-input" name="" required><br>
       
         <label for="add-car">Filtr oleju:</label>
-        <input type="text" id="add-car-olifilter-input" name="" required><br>
+        <input type="text" id="add-car-oilfilter-input" name="" required><br>
     
         <label for="add-car">Filtr powietrza:</label>
         <input type="text" id="add-car-airfilter-input" name="" required><br>
@@ -387,6 +396,7 @@ mysqli_close($conn);
     
   function addCar(userId) {
  alert(userId);
+        
         event.preventDefault(); // Zapobiega domyślnemu działaniu formularza
 
         const carModel = document.getElementById('add-car-model-input').value;
@@ -397,6 +407,7 @@ mysqli_close($conn);
         const carOilFilter = document.getElementById('add-car-oilfilter-input').value;
         const carAirFilter = document.getElementById('add-car-airfilter-input').value;
 
+  
         // Wysłanie zapytania POST do serwera
         fetch("", {
             method: "POST",
