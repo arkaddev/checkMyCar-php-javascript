@@ -115,12 +115,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['user_id'], $_POST['ca
     $car_oil_filter = $conn->real_escape_string($_POST['carOilFilter']);
     $car_air_filter = $conn->real_escape_string($_POST['carAirFilter']);
     
-    //$update_query = "INSERT INTO cars_info (id, engine_number, production_date, km_kw, oil_number, oil_filter_number, air_filter_number, car_id) 
-    //                 VALUES (NULL, '$car_engine', '$car_year', '$car_kw', '$car_oil', '$car_oil_filter', '$car_air_filter', '$car_id')";
+    
   
-  $update_query = "INSERT INTO cars (id, model, year, mileage, insurance, technical_inspection, user_id) VALUES (NULL, '$car_model', '$car_year', 0, 0, 0, '$user_id')";
+  $update_query = "INSERT INTO cars (id, model, year, mileage, insurance, technical_inspection, user_id) VALUES (NULL, '$car_model', '$car_year', 0, 0, 0, '$user_id');
   
-    if ($conn->query($update_query) === TRUE) {
+ 
+ INSERT INTO cars_info (id, engine_number, production_date, km_kw, oil_number, oil_filter_number, air_filter_number, car_id) VALUES (NULL, '$car_engine', '$car_year', '$car_kw', '$car_oil', '$car_oil_filter', '$car_air_filter', LAST_INSERT_ID());
+
+ ";
+  
+    if ($conn->multi_query($update_query) === TRUE) {
         echo json_encode(['status' => 'success', 'message' => 'Pojazd został dodany']);
     } else {
         echo json_encode(['status' => 'error', 'message' => 'Błąd podczas dodawania pojazdu: ' . $conn->error]);
