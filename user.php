@@ -120,7 +120,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['user_id'], $_POST['ca
   $update_query = "INSERT INTO cars (id, model, year, mileage, insurance, technical_inspection, user_id) VALUES (NULL, '$car_model', '$car_year', 0, 0, 0, '$user_id');
   
  
- INSERT INTO cars_info (id, engine_number, production_date, km_kw, oil_number, oil_filter_number, air_filter_number, car_id) VALUES (NULL, '$car_engine', '$car_year', '$car_kw', '$car_oil', '$car_oil_filter', '$car_air_filter', LAST_INSERT_ID());
+ INSERT INTO cars_info (id, engine_number, km_kw, oil_number, oil_filter_number, air_filter_number, car_id) VALUES (NULL, '$car_engine', '$car_kw', '$car_oil', '$car_oil_filter', '$car_air_filter', LAST_INSERT_ID());
 
  ";
   

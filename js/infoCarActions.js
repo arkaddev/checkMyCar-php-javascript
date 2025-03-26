@@ -22,7 +22,6 @@
                 infoDiv.innerHTML = `
                     <p><strong>Id samochodu:</strong> ${info.car_id}</p>
                     <p><strong>Silnik:</strong> ${info.engine_number}</p>
-                    <p><strong>Data produkcji:</strong> ${info.production_date}</p>
                     <p><strong>Moc km/kw:</strong> ${info.km_kw}</p>
                     <p><strong>Olej:</strong> ${info.oil_number}</p>
                     <p><strong>Filtr oleju:</strong> ${info.oil_filter_number}</p>
