@@ -106,6 +106,7 @@ require 'config/session.php';
     <div class="menu-container">
         <div class="user-container">
           
+          <a href="menu.php" class=""><i class="fas fa-home"></i></a>
           <span class="title">Menu</span>
             <p>Zalogowany użytkownik: <span class="username"><?php echo htmlspecialchars($_SESSION['username']); ?></span></p>
       </div>
