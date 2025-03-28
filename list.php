@@ -109,7 +109,9 @@ mysqli_close($conn);
   
   <div class="main-container">
         <div class="user-container">
-          <span class="title">Lista pojazdów</span>
+          <span class="title">
+            <a href="menu.php" class=""><i class="fas fa-home"></i></a>
+            &nbsp; Lista pojazdów</span>
             <p>Zalogowany użytkownik: <span class="username"><?php echo htmlspecialchars($_SESSION['username']); ?></span></p>
      </div>
   
