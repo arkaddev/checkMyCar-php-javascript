@@ -4,6 +4,8 @@ require 'config/session.php';
 require 'config/db_connection.php';
 
 
+
+
 // Zmienna przechowująca dane sesji
 $userId = $_SESSION['id'];
 
@@ -78,10 +80,7 @@ ul li strong {
     margin-bottom: 10px;
     font-style: italic; /* Kursywa nadająca retro charakter */
 }
-      
-
-
-      
+            
     </style>
   
   
@@ -91,15 +90,15 @@ ul li strong {
 <body>
    <div class="main-container">
         <div class="user-container">
-          <span class="title">Twoje notatki</span>
-         
+          <span class="title">
+            <a href="menu.php" class=""><i class="fas fa-home"></i></a>
+            &nbsp; Notatki</span>
             <p>Zalogowany użytkownik: <span class="username"><?php echo htmlspecialchars($_SESSION['username']); ?></span></p>
      </div>
- 
   
-     <form>
-      <button type="button" onclick="menuAddNote()">Nowa notatka</button>
-     </form>
+     <div>
+      <button onclick="menuAddNote()">Nowa notatka</button>
+     </div>
      
      
   

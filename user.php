@@ -196,7 +196,8 @@ mysqli_close($conn);
         .tab-content:first-of-type {
             display: block;
         }
-       
+
+
     </style>
   
 </head>
@@ -205,7 +206,9 @@ mysqli_close($conn);
   
    <div class="main-container">
         <div class="user-container">
-          <span class="title">Panel użytkownika</span>
+          <span class="title">
+            <a href="menu.php" class=""><i class="fas fa-home"></i></a>
+            &nbsp; Panel użytkownika</span>
             <p>Zalogowany użytkownik: <span class="username"><?php echo htmlspecialchars($_SESSION['username']); ?></span></p>
      </div>
      
