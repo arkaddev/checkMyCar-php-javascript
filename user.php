@@ -319,7 +319,7 @@ mysqli_close($conn);
         <label for="add-car">Silnik:</label>
         <input type="text" id="add-car-engine-input" name="" step="0.01" required><br>
 
-        <label for="add-car">Moc:</label><br>
+        <label for="add-car">Moc (kw/km):</label><br>
         <input type="text" id="add-car-kw-input" name="" required><br>
 
         <label for="add-car">Olej:</label><br>
@@ -375,7 +375,30 @@ mysqli_close($conn);
   
   function deleteCar(carId) {
    
-    alert("Opcja dostępna tylko dla administratora.");
+  alert(carId);
+    event.preventDefault(); // Zapobiega domyślnemu działaniu formularza
+
+        // Wysłanie zapytania POST do serwera
+        fetch("", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded"
+            },
+            body: `car_id=${carId}`
+        })
+        .then(response => response.json()) // Parsowanie odpowiedzi jako JSON
+        .then(data => {
+            if (data.status === "success") {
+                alert(data.message); // Wyświetlenie komunikatu sukcesu
+                location.reload(); // Odświeżenie strony
+            } else {
+                alert(data.message); // Wyświetlenie komunikatu błędu
+            }
+        })
+        .catch(error => {
+            console.error("Wystąpił błąd:", error);
+            alert("Wystąpił błąd podczas usuwania pojazdu.");
+        });
 }
   
   
