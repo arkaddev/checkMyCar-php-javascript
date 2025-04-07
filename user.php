@@ -130,13 +130,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['user_id'], $_POST['ca
         echo json_encode(['status' => 'error', 'message' => 'Błąd podczas dodawania pojazdu: ' . $conn->error]);
     }
     
-  
-  
-
-  
-  
+   
     exit();
 }
+
+
+// usuwanie pojazdu
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['car_id'])) {
+    $car_id = intval($_POST['car_id']); // Zabezpieczenie przed SQL Injection
+
+    // Zapytanie SQL do usunięcia notatki
+    $delete_query = "DELETE FROM cars_info WHERE car_id = $car_id;
+    
+    DELETE FROM cars WHERE id = $car_id";
+
+    // Wykonanie zapytania
+    if ($conn->multi_query($delete_query) === TRUE) {
+        echo json_encode(['status' => 'success', 'message' => 'Pojazd został usunięty']);
+    } else {
+      echo json_encode(['status' => 'error', 'message' => 'Błąd podczas usuwania pojazdu: ' . $conn->error]);
+    }
+    exit();
+}
+
+
 // Zamykamy połączenie
 mysqli_close($conn);
 ?> 
