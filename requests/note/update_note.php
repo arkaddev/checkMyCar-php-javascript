@@ -2,6 +2,7 @@
 
 // dodawanie nowej notatki
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['user_id'], $_POST['noteTitle'])) {
+  
     $user_id = intval($_POST['user_id']);
     $note_title = $conn->real_escape_string($_POST['noteTitle']);
     $note_contnet = $conn->real_escape_string($_POST['noteContent']);

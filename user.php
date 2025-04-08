@@ -1,4 +1,6 @@
 <?php
+
+
 session_start();
 // Sprawdź, czy użytkownik jest zalogowany
 if (!isset($_SESSION["username"])) {
@@ -79,80 +81,14 @@ $result = mysqli_query($conn, $query);
 // Zmienna przechowująca dane sesji
 $username = $_SESSION['username'];
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['new_password'])) {
-    // Sprawdzenie, czy nowe hasło jest ustawione
-    if (empty($_POST['new_password'])) {
-        echo json_encode(['status' => 'error', 'message' => 'Proszę wprowadzić nowe hasło']);
-        exit();
-    }
-
-    // Hasło wprowadzone przez użytkownika
-    $new_password = mysqli_real_escape_string($conn, $_POST['new_password']);
-    $hashed_password = password_hash($new_password, PASSWORD_BCRYPT);
-
-    // Zapytanie SQL do aktualizacji hasła
-    $update_query = "UPDATE users SET password = '$hashed_password' WHERE username = '$username'";
-    
-    if ($conn->query($update_query) === TRUE) {
-        echo json_encode(['status' => 'success', 'message' => 'Hasło zostało zaktualizowane']);
-    } else {
-        echo json_encode(['status' => 'error', 'message' => 'Błąd podczas aktualizacji hasła: ' . $conn->error]);
-    }
-    exit();
-}
 
 
 
-// dodawanie nowego pojazdu
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['user_id'], $_POST['carModel'])) {
-  
-    $user_id = intval($_POST['user_id']);
-    $car_model = $conn->real_escape_string($_POST['carModel']);
-    $car_year = intval($_POST['carYear']);
-    $car_engine = $conn->real_escape_string($_POST['carEngine']);
-    $car_kw = $conn->real_escape_string($_POST['carKw']);
-    $car_oil = $conn->real_escape_string($_POST['carOil']);
-    $car_oil_filter = $conn->real_escape_string($_POST['carOilFilter']);
-    $car_air_filter = $conn->real_escape_string($_POST['carAirFilter']);
-    
-    
-  
-  $update_query = "INSERT INTO cars (id, model, year, mileage, insurance, technical_inspection, user_id) VALUES (NULL, '$car_model', '$car_year', 0, 0, 0, '$user_id');
-  
- 
- INSERT INTO cars_info (id, engine_number, km_kw, oil_number, oil_filter_number, air_filter_number, car_id) VALUES (NULL, '$car_engine', '$car_kw', '$car_oil', '$car_oil_filter', '$car_air_filter', LAST_INSERT_ID());
-
- ";
-  
-    if ($conn->multi_query($update_query) === TRUE) {
-        echo json_encode(['status' => 'success', 'message' => 'Pojazd został dodany']);
-    } else {
-        echo json_encode(['status' => 'error', 'message' => 'Błąd podczas dodawania pojazdu: ' . $conn->error]);
-    }
-    
-   
-    exit();
-}
 
 
-// usuwanie pojazdu
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['car_id'])) {
-    $car_id = intval($_POST['car_id']); // Zabezpieczenie przed SQL Injection
 
-    // Zapytanie SQL do usunięcia notatki
-    $delete_query = "DELETE FROM cars_info WHERE car_id = $car_id;
-    
-    DELETE FROM cars WHERE id = $car_id";
 
-    // Wykonanie zapytania
-    if ($conn->multi_query($delete_query) === TRUE) {
-        echo json_encode(['status' => 'success', 'message' => 'Pojazd został usunięty']);
-    } else {
-      echo json_encode(['status' => 'error', 'message' => 'Błąd podczas usuwania pojazdu: ' . $conn->error]);
-    }
-    exit();
-}
-
+require 'requests/user/update_user.php';
 
 // Zamykamy połączenie
 mysqli_close($conn);
@@ -168,6 +104,7 @@ mysqli_close($conn);
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 <link rel="stylesheet" href="css/style.css">
    
+  <script src="js/user/userActions.js"></script>
     <style>
         
         
@@ -357,125 +294,3 @@ mysqli_close($conn);
   
 </body>
 </html>
-
-<script>
-  
-  
-  
-   function newPassword() {
-    var newPassword = document.getElementById('new_password').value;
-
-    if (!newPassword) {
-        alert("Proszę wprowadzić nowe hasło");
-        return;
-    }
-
-    fetch("", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/x-www-form-urlencoded"
-        },
-        body: `new_password=${encodeURIComponent(newPassword)}`
-    })
-    .then(response => response.json()) // Parsowanie odpowiedzi jako JSON
-    .then(data => {
-        if (data.status === "success") {
-            alert(data.message); // Wyświetlenie komunikatu sukcesu
-            location.reload(); // Odświeżenie strony
-  
-        } else {
-            alert(data.message); // Wyświetlenie komunikatu błędu
-        }
-    })
-    alert("Hasło zostało zmienione.");
-}
-  
-  function deleteCar(carId) {
-   
-  alert(carId);
-    event.preventDefault(); // Zapobiega domyślnemu działaniu formularza
-
-        // Wysłanie zapytania POST do serwera
-        fetch("", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/x-www-form-urlencoded"
-            },
-            body: `car_id=${carId}`
-        })
-        .then(response => response.json()) // Parsowanie odpowiedzi jako JSON
-        .then(data => {
-            if (data.status === "success") {
-                alert(data.message); // Wyświetlenie komunikatu sukcesu
-                location.reload(); // Odświeżenie strony
-            } else {
-                alert(data.message); // Wyświetlenie komunikatu błędu
-            }
-        })
-        .catch(error => {
-            console.error("Wystąpił błąd:", error);
-            alert("Wystąpił błąd podczas usuwania pojazdu.");
-        });
-}
-  
-  
-  
-  
-  
-  
-  // Funkcja otwierająca okno z dodwaniem samochodu
-    function menuAddCar() {
-        document.getElementById('add-car').style.display = 'block';
-      document.getElementById('overlay').style.display = 'block';
-    }
-
-    // Funkcja zamykająca okno z dodawaniem samochodu
-    function closeMenuAddCar() {
-  
-        document.getElementById('add-car').style.display = 'none';
-  document.getElementById('overlay').style.display = 'none';
-    }
-  
-  
-  
-  
-  // Funkcja dodająca nowy pojazd do bazy danych
-    
-  function addCar(userId) {
- alert(userId);
-        
-        event.preventDefault(); // Zapobiega domyślnemu działaniu formularza
-
-        const carModel = document.getElementById('add-car-model-input').value;
-        const carYear = document.getElementById('add-car-year-input').value;
-        const carEngine = document.getElementById('add-car-engine-input').value;
-        const carKw = document.getElementById('add-car-kw-input').value;
-        const carOil = document.getElementById('add-car-oil-input').value;
-        const carOilFilter = document.getElementById('add-car-oilfilter-input').value;
-        const carAirFilter = document.getElementById('add-car-airfilter-input').value;
-
-  
-        // Wysłanie zapytania POST do serwera
-        fetch("", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/x-www-form-urlencoded"
-            },
-            body: `user_id=${userId}&carModel=${carModel}&carYear=${carYear}&carEngine=${carEngine}&carKw=${carKw}&carOil=${carOil}&carOilFilter=${carOilFilter}&carAirFilter=${carAirFilter}`
-        })
-        .then(response => response.json()) // Parsowanie odpowiedzi jako JSON
-        .then(data => {
-            if (data.status === "success") {
-                alert(data.message); // Wyświetlenie komunikatu sukcesu
-                location.reload(); // Odświeżenie strony
-            } else {
-                alert(data.message); // Wyświetlenie komunikatu błędu
-            }
-        })
-        .catch(error => {
-            console.error("Wystąpił błąd:", error);
-            alert("Wystąpił błąd podczas dodawania pojazdu.");
-        });
-    }
-  
-</script>
