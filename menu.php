@@ -1,10 +1,5 @@
 <?php
-session_start();
-// Sprawdź, czy użytkownik jest zalogowany
-if (!isset($_SESSION["username"])) {
-    header("Location: login.php");
-    exit();
-}
+require 'config/session.php';
 ?>
 
 <!DOCTYPE html>
@@ -12,21 +7,14 @@ if (!isset($_SESSION["username"])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Menu z przyciskami w ramce</title>
+    <title>Menu</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
+   <link rel="stylesheet" href="css/style.css">
    
-    <style>
-        /* Podstawowe style strony */
-        body {
-            font-family: 'Poppins', Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            abackground-color: #f4f4f4;
-            background: linear-gradient(to bottom right, #e3f2fd, #bbdefb); /* Tło gradientowe */
-           
-        }
+  <style>
+       
         
       
         .menu-container {
@@ -38,42 +26,13 @@ if (!isset($_SESSION["username"])) {
     margin: 50px auto; /* Wyśrodkowanie */
     box-sizing: border-box; /* Uwzględnienie paddingu w szerokości */
       
-     box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
     
     background-color: #fff; /* Białe tło dla lepszego efektu */
 }
 
       
       
-.user-container {
-    width: 100%; /* Szerokość taka sama jak menu-container */
-    padding: 5px 30px; /* Wewnętrzny padding */
-    text-align: right; /* Wyśrodkowanie tekstu */
-    box-sizing: border-box; /* Uwzględnienie paddingu w szerokości */
-   background-color: silver;
-      border-radius: 5px;
-      
-       display: flex;
-            justify-content: space-between;
-            align-items: center;
-      
-}
-      
-      
-      
-       .title {
-            font-size: 22px;
-            font-weight: bold;
-            color: #333;
-        }
-      
-      
-      .username {
-    font-weight: bold;
-    color: #4caf50;
-    font-size: 18px;
-   
-}
         
         .top-menu, .bottom-menu {
             display: flex;
@@ -147,20 +106,21 @@ if (!isset($_SESSION["username"])) {
     <div class="menu-container">
         <div class="user-container">
           
+          <a href="menu.php" class=""><i class="fas fa-home"></i></a>
           <span class="title">Menu</span>
             <p>Zalogowany użytkownik: <span class="username"><?php echo htmlspecialchars($_SESSION['username']); ?></span></p>
       </div>
         
         <div class="top-menu">
-            <a href="home.php" class="menu-item menu-item-1">
+            <a href="list.php" class="menu-item menu-item-1">
                 <i class="fas fa-car"></i>
                 Lista pojazdów
             </a>
-            <a href="notes.php" class="menu-item menu-item-2">
+            <a href="note.php" class="menu-item menu-item-2">
                 <i class="fas fa-book"></i>
                 Notatnik
             </a>
-            <a href="#" class="menu-item menu-item-3">
+            <a href="fuel.php" class="menu-item menu-item-3">
                 <i class="fas fa-gas-pump"></i>
                 Spalanie
             </a>
@@ -180,6 +140,8 @@ if (!isset($_SESSION["username"])) {
                 Wyloguj
             </a>
         </div>
-    </div>
+    
+     
+  </div>
 </body>
 </html>

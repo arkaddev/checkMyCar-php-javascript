@@ -12,10 +12,10 @@ It archives the work that has been done on a given car,
 and tells you when the next replacement is due (e.g. oil, brakes)
 
 ## Technologies
-- HTML (version )
-- PHP (version )
-- CSS (version )
-- JavaScript (version )
+- HTML (version 5)
+- PHP (version 8.4)
+- CSS
+- JavaScript
 
 ## Tools
 - MySQL database
@@ -49,12 +49,17 @@ and tells you when the next replacement is due (e.g. oil, brakes)
 ### v0.5
 - creating new users
 - creating new cars, info about cars
+- deleting cars by admin
 - fuel cost analysis
+- fuel consumption charts
 
 ### v0.6
 - notes pagination
 - statistics of kilometers traveled
+- overall expenses analysis
 
 ### v0.7
 - log table
 - insurance and technical inspection reminder by email
+### v0.8
+- api
