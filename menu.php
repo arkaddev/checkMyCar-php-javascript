@@ -106,8 +106,10 @@ require 'config/session.php';
     <div class="menu-container">
         <div class="user-container">
           
-          <a href="menu.php" class=""><i class="fas fa-home"></i></a>
-          <span class="title">Menu</span>
+          
+          <span class="title">
+            <a href="menu.php" class=""><i class="fas fa-home"></i></a>
+             &nbsp; Menu</span>
             <p>Zalogowany użytkownik: <span class="username"><?php echo htmlspecialchars($_SESSION['username']); ?></span></p>
       </div>
         
@@ -127,7 +129,7 @@ require 'config/session.php';
         </div>
         
         <div class="bottom-menu">
-            <a href="#" class="menu-item menu-item-4">
+            <a href="statistic.php" class="menu-item menu-item-4">
                 <i class="fas fa-chart-line"></i>
                 Statystyki
             </a>
