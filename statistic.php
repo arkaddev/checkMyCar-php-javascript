@@ -5,7 +5,28 @@ if (!isset($_SESSION["username"])) {
     header("Location: login.php");
     exit();
 }
+
+
+$userId = $_SESSION['id'];
+
+
+
+$config = include('config/db_config.php');
+// Tworzymy połączenie
+$conn = mysqli_connect($config['servername'], $config['username'], $config['password'], $config['dbname']);
+
+if (!$conn) {
+    $db_message = "Brak połączenia: " . mysqli_connect_error();
+} else {
+    $db_message = "Połączono.";
+}
+
+
 ?>
+
+
+
+
 
 <!DOCTYPE html>
 <html lang="pl">
@@ -77,11 +98,41 @@ if (!isset($_SESSION["username"])) {
         <h2>Statystyki Ogólne</h2>
         <p>Tu znajdziesz ogólne statystyki.</p>
     </div>
+     
+     <div class="tab-content" id="activity">
+    <h2>Koszty</h2>
+    <?php
+    // Określ miesiąc i rok, np. bieżący miesiąc
+    $month = date('m'); // aktualny miesiąc
+    $year = date('Y');  // aktualny rok
 
-    <div class="tab-content" id="activity">
-        <h2>Koszty</h2>
-        <p>Informacje o kosztach.</p>
-    </div>
+    // Zapytanie SQL
+    $sql = "SELECT SUM(price) AS total_cost FROM parts WHERE MONTH(exchange_date) = ? AND YEAR(exchange_date) = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("ii", $month, $year); // wiązanie parametrów (miesiąc i rok)
+    $stmt->execute();
+    $stmt->bind_result($total_cost);
+    $stmt->fetch();
+
+    // Sprawdzenie i wyświetlenie wyników
+    if ($total_cost !== null) {
+        echo "<p>Całkowite koszty za miesiąc $month/$year: " . number_format($total_cost, 2) . " PLN</p>";
+    } else {
+        echo "<p>Brak danych dla tego miesiąca.</p>";
+    }
+
+    // Zamknięcie połączenia
+    $stmt->close();
+    ?>
+</div>
+     
+     
+     
+     
+     
+     
+     
+     
 
     <div class="tab-content" id="settings">
         <h2>Inne</h2>
