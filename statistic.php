@@ -88,7 +88,7 @@ if (!$conn) {
     <nav class="tab-menu">
         <ul>
             <li><a href="#general">Ogólne</a></li>
-            <li><a href="#activity">Koszty</a></li>
+            <li><a href="#cost">Koszty</a></li>
             <li><a href="#settings">Inne</a></li>
         </ul>
     </nav>
@@ -99,35 +99,37 @@ if (!$conn) {
         <p>Tu znajdziesz ogólne statystyki.</p>
     </div>
      
-     <div class="tab-content" id="activity">
+
+     
+     
+<div class="tab-content" id="cost">
     <h2>Koszty</h2>
     <?php
-    // Określ miesiąc i rok, np. bieżący miesiąc
-    $month = date('m'); // aktualny miesiąc
-    $year = date('Y');  // aktualny rok
+    $sql = "
+        SELECT 
+            YEAR(exchange_date) AS year, 
+            MONTH(exchange_date) AS month, 
+            car_id,
+            SUM(price) AS total_cost 
+        FROM parts 
+        GROUP BY year, month, car_id 
+        ORDER BY year DESC, month DESC, car_id
+    ";
 
-    // Zapytanie SQL
-    $sql = "SELECT SUM(price) AS total_cost FROM parts WHERE MONTH(exchange_date) = ? AND YEAR(exchange_date) = ?";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("ii", $month, $year); // wiązanie parametrów (miesiąc i rok)
-    $stmt->execute();
-    $stmt->bind_result($total_cost);
-    $stmt->fetch();
+    $result = $conn->query($sql);
 
-    // Sprawdzenie i wyświetlenie wyników
-    if ($total_cost !== null) {
-        echo "<p>Całkowite koszty za miesiąc $month/$year: " . number_format($total_cost, 2) . " PLN</p>";
+    if ($result->num_rows > 0) {
+        echo "<ul>";
+        while ($row = $result->fetch_assoc()) {
+            $formattedMonth = str_pad($row['month'], 2, '0', STR_PAD_LEFT); // np. 04 zamiast 4
+            echo "<li>Miesiąc {$formattedMonth}/{$row['year']}, Samochód ID {$row['car_id']}: " . number_format($row['total_cost'], 2) . " PLN</li>";
+        }
+        echo "</ul>";
     } else {
-        echo "<p>Brak danych dla tego miesiąca.</p>";
+        echo "<p>Brak danych kosztów w bazie.</p>";
     }
-
-    // Zamknięcie połączenia
-    $stmt->close();
     ?>
 </div>
-     
-     
-     
      
      
      
