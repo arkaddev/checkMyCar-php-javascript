@@ -66,7 +66,7 @@ $result = mysqli_query($conn, $query);
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['car_id'], $_POST['fuelLiters'])) {
     $car_id = intval($_POST['car_id']);
     $fuel_liters = $conn->real_escape_string($_POST['fuelLiters']);
-    $fuel_price = intval($_POST['fuelPrice']);
+    $fuel_price = $conn->real_escape_string($_POST['fuelPrice']);
     $fuel_type = $conn->real_escape_string($_POST['fuelType']);
     $fuel_date = $conn->real_escape_string($_POST['fuelDate']);
     $fuel_distance = intval($_POST['fuelDistance']);
