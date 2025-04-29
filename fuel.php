@@ -60,28 +60,9 @@ $query .= " ORDER BY c.model ASC";
 $result = mysqli_query($conn, $query);
 
 
+require 'requests/fuel/add_fuel.php';
 
 
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['car_id'], $_POST['fuelLiters'])) {
-    $car_id = intval($_POST['car_id']);
-    $fuel_liters = $conn->real_escape_string($_POST['fuelLiters']);
-    $fuel_price = $conn->real_escape_string($_POST['fuelPrice']);
-    $fuel_type = $conn->real_escape_string($_POST['fuelType']);
-    $fuel_date = $conn->real_escape_string($_POST['fuelDate']);
-    $fuel_distance = intval($_POST['fuelDistance']);
-    $fuel_details = $conn->real_escape_string($_POST['fuelDetails']);
-    
-    $update_query = "INSERT INTO fuel (id, liters, price, fuel_type, refueling_date, distance, details, car_id) 
-                     VALUES (NULL, '$fuel_liters', '$fuel_price', '$fuel_type', '$fuel_date', '$fuel_distance', '$fuel_details', '$car_id')";
-  
-    if ($conn->query($update_query) === TRUE) {
-        echo json_encode(['status' => 'success', 'message' => 'Tankowanie zostało dodane']);
-    } else {
-        echo json_encode(['status' => 'error', 'message' => 'Błąd podczas dodawania tankowania']);
-    }
-    exit();
-}
 
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['car_id_history']))  {
@@ -142,6 +123,9 @@ mysqli_close($conn);
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
    <link rel="stylesheet" href="css/style.css">
+  
+  <script src="js/fuel/menuFuel.js"></script>
+  <script src="js/fuel/fuelActions.js"></script>
   
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
@@ -277,56 +261,8 @@ mysqli_close($conn);
 </html>
 
 <script>
-  // Funkcja otwierająca okno z tankowaniem
-    function menuAddFuel(carId) {
-  selectedCarId = carId;
-        document.getElementById('add-fuel').style.display = 'block';
-      document.getElementById('overlay').style.display = 'block';
-    }
-
-    // Funkcja zamykająca okno z tankowaniem
-    function closeMenuAddFuel() {
-  selectedCarId = null;
-        document.getElementById('add-fuel').style.display = 'none';
-  document.getElementById('overlay').style.display = 'none';
-    }
   
   
-  
-  function addFuel() {
-        event.preventDefault(); // Zapobiega domyślnemu działaniu formularza
-alert(selectedCarId);
-        const fuelLiters = document.getElementById('add-fuel-liters-input').value;
-        const fuelType = document.getElementById('add-fuel-type-input').value;
-        const fuelPrice = document.getElementById('add-fuel-price-input').value;
-        const fuelDate = document.getElementById('add-fuel-date-input').value;
-        const fuelDistance = document.getElementById('add-fuel-distance-input').value;
-        const fuelDetails = document.getElementById('add-fuel-details-input').value;
-  
-        // Wysłanie zapytania POST do serwera
-        fetch("", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/x-www-form-urlencoded"
-            },
-            body: `car_id=${selectedCarId}&fuelLiters=${fuelLiters}&fuelType=${fuelType}&fuelPrice=${fuelPrice}&fuelDate=${fuelDate}&fuelDistance=${fuelDistance}&fuelDetails=${fuelDetails}`
-        })
-        .then(response => response.json()) // Parsowanie odpowiedzi jako JSON
-        .then(data => {
-            if (data.status === "success") {
-                alert(data.message); // Wyświetlenie komunikatu sukcesu
-                location.reload(); // Odświeżenie strony
-            } else {
-                alert(data.message); // Wyświetlenie komunikatu błędu
-            }
-        })
-        .catch(error => {
-            console.error("Wystąpił błąd:", error);
-            alert("Wystąpił błąd podczas dodawania tankowania.");
-        });
-    }
-
-
 
 
 
