@@ -284,6 +284,9 @@ mysqli_close($conn);
     
         <label for="add-car">Filtr powietrza:</label>
         <input type="text" id="add-car-airfilter-input" name="" required><br>
+    
+        <label for="add-car">Inne informacje:</label>
+        <input type="text" id="add-car-otherinfo-input" name="" required><br>
       
         <button type="submit" onclick="addCar(<?php echo $userId; ?>)">Zatwierdź</button>
         <button type="button" onclick="closeMenuAddCar()">Anuluj</button>

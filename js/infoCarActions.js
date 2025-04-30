@@ -26,6 +26,7 @@
                     <p><strong>Olej:</strong> ${info.oil_number}</p>
                     <p><strong>Filtr oleju:</strong> ${info.oil_filter_number}</p>
                     <p><strong>Filtr powietrza:</strong> ${info.air_filter_number}</p>
+                    <p><strong>Inne informacje:</strong> ${info.other_info}</p>
                 `;
                 infoContent.appendChild(infoDiv);
             });

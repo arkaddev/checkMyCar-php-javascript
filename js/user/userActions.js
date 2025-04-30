@@ -89,7 +89,7 @@
         const carOil = document.getElementById('add-car-oil-input').value;
         const carOilFilter = document.getElementById('add-car-oilfilter-input').value;
         const carAirFilter = document.getElementById('add-car-airfilter-input').value;
-
+        const carOtherInfo = document.getElementById('add-car-otherinfo-input').value;
   
         // Wysłanie zapytania POST do serwera
         fetch("", {
@@ -97,7 +97,7 @@
             headers: {
                 "Content-Type": "application/x-www-form-urlencoded"
             },
-            body: `user_id=${userId}&carModel=${carModel}&carYear=${carYear}&carEngine=${carEngine}&carKw=${carKw}&carOil=${carOil}&carOilFilter=${carOilFilter}&carAirFilter=${carAirFilter}`
+            body: `user_id=${userId}&carModel=${carModel}&carYear=${carYear}&carEngine=${carEngine}&carKw=${carKw}&carOil=${carOil}&carOilFilter=${carOilFilter}&carAirFilter=${carAirFilter}&carOtherInfo=${carOtherInfo}`
         })
         .then(response => response.json()) // Parsowanie odpowiedzi jako JSON
         .then(data => {
