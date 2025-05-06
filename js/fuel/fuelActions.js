@@ -1,3 +1,4 @@
+// dodanie nowego tankowania
 function addNewFuel() {
         event.preventDefault(); // Zapobiega domyślnemu działaniu formularza
 
@@ -31,3 +32,174 @@ function addNewFuel() {
             alert("Wystąpił błąd podczas dodawania części.");
         });
     }
+
+// usuniecie tankowania
+function deleteFuel(fuelId) {
+   selectedFuelId = fuelId;
+   event.preventDefault(); // Zapobiega domyślnemu działaniu formularza
+  
+        // Wysłanie zapytania POST do serwera
+        fetch("", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded"
+            },
+            body: `fuel_id_history=${selectedFuelId}`
+        })
+        .then(response => response.json()) // Parsowanie odpowiedzi jako JSON
+        .then(data => {
+            if (data.status === "success") {
+                alert(data.message); // Wyświetlenie komunikatu sukcesu
+                location.reload(); // Odświeżenie strony
+            } else {
+                alert(data.message); // Wyświetlenie komunikatu błędu
+            }
+        })
+        .catch(error => {
+            console.error("Wystąpił błąd:", error);
+            alert("Wystąpił błąd podczas usuwania tankowania.");
+        });
+}
+
+
+// otwarcie historii tankowan
+function openMenuFuelHistory(carId) {
+    selectedCarId = carId;
+
+    const fuelHistoryContent = document.getElementById('fuel-history-content');
+    fuelHistoryContent.innerHTML = "<p>Ładowanie danych...</p>"; // Wiadomość oczekiwania
+    document.getElementById('menu-fuel-history').style.display = 'block';
+    document.getElementById('overlay').style.display = 'block';
+
+    // Wysłanie zapytania POST do serwera
+    fetch("", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+        },
+        body: `car_id_history=${selectedCarId}`
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === "success") {
+            let tableHTML = `
+                <table border="1" style="width: 100%; border-collapse: collapse;">
+                    <thead>
+                        <tr>
+                          <th>Id samochodu</th>
+                            <th>Litry</th>
+                            <th>Rodzaj paliwa</th>
+                            <th>Koszt za litr</th>
+                            <th>Data tankowania</th>
+                            <th>Dystans w km</th> 
+                          <th>Szczegóły</th>  
+                          <th>Spalanie na 100 km</th>
+                          <th>Usuń</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+
+            data.data.forEach(history => {
+                tableHTML += `
+                    <tr>
+                        <td>${history.car_id}</td>
+                        <td>${history.liters}</td>  
+                        <td>${history.price}</td>
+                        <td>${history.fuel_type}</td>
+                        <td>${history.refueling_date}</td>
+                        <td>${history.distance}</td>
+                      <td>${history.details}</td>
+                       <td>${history.average_fuel_consumption}</td>
+                      <td><button onclick="deleteFuel('${history.id}')">Usuń</button></td>
+                    </tr>
+                `;
+            });
+
+            tableHTML += `
+                    </tbody>
+                </table>
+            `;
+
+            fuelHistoryContent.innerHTML = tableHTML; // Wstawienie tabeli do kontenera
+        } else {
+            fuelHistoryContent.innerHTML = `<p>${data.message}</p>`;
+        }
+    })
+    .catch(error => {
+        console.error("Wystąpił błąd:", error);
+        historyContent.innerHTML = "<p>Wystąpił błąd podczas pobierania danych.</p>";
+    });
+}
+
+
+// zamkniecie historii tankowan
+function closeMenuFuelHistory() {
+    selectedCarId = null;
+    document.getElementById('menu-fuel-history').style.display = 'none';
+  document.getElementById('overlay').style.display = 'none';
+}
+
+
+// wykres tankowan
+function openFuelHistoryChart(carId) {
+    selectedCarId = carId;
+
+    fetch("", { 
+        method: "POST",
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+        },
+        body: `car_id_history=${selectedCarId}`
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === "success") {
+            const labels = data.data.map(entry => entry.refueling_date);
+            const values = data.data.map(entry => entry.average_fuel_consumption);
+
+            const ctx = document.getElementById("fuelChart").getContext("2d");
+            
+            if (window.fuelChartInstance) {
+                window.fuelChartInstance.destroy(); // Usuwamy stary wykres, jeśli istnieje
+            }
+
+            window.fuelChartInstance = new Chart(ctx, {
+                type: "line",
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: "Spalanie (l/100km)",
+                        data: values,
+                        borderColor: "rgba(75, 192, 192, 1)",
+                        backgroundColor: "rgba(75, 192, 192, 0.2)",
+                        borderWidth: 2,
+                        tension: 0.3
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+
+            document.getElementById("chart-fuel-history").style.display = "block";
+  document.getElementById('overlay').style.display = 'block';
+        } else {
+            alert(data.message);
+        }
+    })
+    .catch(error => {
+        console.error("Błąd pobierania danych wykresu:", error);
+        alert("Błąd pobierania danych.");
+    });
+}
+
+function closeFuelHistoryChart() {
+    document.getElementById("chart-fuel-history").style.display = "none";
+  document.getElementById('overlay').style.display = 'none';
+}
