@@ -7,7 +7,7 @@ require 'helpers/functions.php';
 require 'requests/update_car_data.php';
 require 'requests/car_info.php';
 require 'requests/add_part.php';
-require 'requests/add_fuel.php';
+require 'requests/fuel/update_fuel.php';
 
 
 ?>
@@ -67,7 +67,7 @@ mysqli_close($conn);
 <script src="js/carDataActions.js"></script>
 <script src="js/infoCarActions.js"></script>
 <script src="js/partActions.js"></script>
-<script src="js/fuelActions.js"></script>
+<script src="js/fuel/fuelActions.js"></script>
 <script src="js/historyActions.js"></script>
 <script src="js/serviceActions.js"></script>
 

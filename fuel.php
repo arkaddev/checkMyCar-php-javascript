@@ -60,51 +60,7 @@ $query .= " ORDER BY c.model ASC";
 $result = mysqli_query($conn, $query);
 
 
-require 'requests/fuel/add_fuel.php';
-
-
-
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['car_id_history']))  {
-    $car_id = intval($_POST['car_id_history']);
-    
-    $query = "SELECT
-    id,
-    car_id,
-    liters, 
-    price, 
-    fuel_type, 
-    refueling_date, 
-    distance,
-    details,
-    ROUND((liters/distance)*100,2) AS average_fuel_consumption
-    FROM fuel WHERE car_id = $car_id ORDER BY refueling_date ASC";
-    $result = $conn->query($query);
-    
-    if ($result->num_rows > 0) {
-        $data = $result->fetch_all(MYSQLI_ASSOC);
-        echo json_encode(['status' => 'success', 'data' => $data]);
-    } else {
-        echo json_encode(['status' => 'error', 'message' => 'Brak danych o samochodzie']);
-    }
-    exit();
-}
-  
-
-
-// usuwanie tankowania
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['fuel_id_history']))  {
-    $fuel_id = intval($_POST['fuel_id_history']);
-    
-    $query = "DELETE FROM fuel WHERE id = $fuel_id";
-  
-   if ($conn->query($query) === TRUE) {
-        echo json_encode(['status' => 'success', 'message' => 'Dane zostały zaktualizowane']);
-    } else {
-        echo json_encode(['status' => 'error', 'message' => 'Błąd podczas aktualizacji danych']);
-    }
-    exit();
-}
+require 'requests/fuel/update_fuel.php';
 
 
 
