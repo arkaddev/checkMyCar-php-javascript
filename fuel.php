@@ -85,16 +85,11 @@ mysqli_close($conn);
   
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-       
-
-
-      
-      
-      
-      
-      
-      
-      
+    #menu-fuel-history{
+   width: 1100px;
+    font-size: 14px;
+}
+    
     </style>
   
 </head>

@@ -134,7 +134,7 @@ form button:hover {
 /* PRZYCISKI różnych menu */
 
 /* niebieski przycisk menu*/
-#list-menu button { 
+#list-menu button, #menu-fuel-history button, #chart-fuel-history button{ 
     display: block;
     width: 100%;
     margin: 10px 0;
