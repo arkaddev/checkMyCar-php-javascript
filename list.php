@@ -4,9 +4,9 @@ require 'config/db_connection.php';
 
 require 'helpers/functions.php';
 
-require 'requests/update_car_data.php';
-require 'requests/car_info.php';
-require 'requests/add_part.php';
+require 'requests/list/update_car_data.php';
+require 'requests/list/car_info.php';
+require 'requests/list/add_part.php';
 require 'requests/fuel/update_fuel.php';
 
 
@@ -63,13 +63,13 @@ mysqli_close($conn);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lista samochodów</title>
 
-<script src="js/listMenuActions.js"></script>
-<script src="js/carDataActions.js"></script>
-<script src="js/infoCarActions.js"></script>
-<script src="js/partActions.js"></script>
+<script src="js/list/listMenuActions.js"></script>
+<script src="js/list/carDataActions.js"></script>
+<script src="js/list/infoCarActions.js"></script>
+<script src="js/list/partActions.js"></script>
 <script src="js/fuel/fuelActions.js"></script>
-<script src="js/historyActions.js"></script>
-<script src="js/serviceActions.js"></script>
+<script src="js/list/historyActions.js"></script>
+<script src="js/list/serviceActions.js"></script>
 
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
