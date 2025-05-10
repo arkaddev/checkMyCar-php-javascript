@@ -14,10 +14,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['car_id_info']))  {
     exit();
 }
 
+// historia czesci
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['car_id_history']))  {
     $car_id = intval($_POST['car_id_history']);
-    
-    $query = "SELECT * FROM parts WHERE car_id = $car_id ORDER BY kilometers_status ASC";
+  
+  
+  $page = isset($_POST['page']) ? intval($_POST['page']) : 1;
+  $limit = 10;
+  $offset = ($page - 1) * $limit;
+
+  $query = "SELECT * FROM parts WHERE car_id = $car_id ORDER BY kilometers_status ASC LIMIT $limit OFFSET $offset";
+
+  
+    //$query = "SELECT * FROM parts WHERE car_id = $car_id ORDER BY kilometers_status ASC";
     $result = $conn->query($query);
     
     if ($result->num_rows > 0) {
@@ -29,6 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['car_id_history']))  {
     exit();
 }
   
+// serwis czesci
   if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['car_id_service']))  {
     $car_id = intval($_POST['car_id_service']);
     
