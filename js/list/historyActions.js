@@ -1,18 +1,23 @@
+let currentPage = 1;
+
 function openHistory(carId) {
     selectedCarId = carId;
-
+  
+    
     const historyContent = document.getElementById('list-history-content');
     historyContent.innerHTML = "<p>Ładowanie danych...</p>"; // Wiadomość oczekiwania
     document.getElementById('list-history').style.display = 'block';
   document.getElementById('overlay').style.display = 'block';
 
+ 
+  
     // Wysłanie zapytania POST do serwera
     fetch("", {
         method: "POST",
         headers: {
             "Content-Type": "application/x-www-form-urlencoded"
         },
-        body: `car_id_history=${selectedCarId}`
+        body: `car_id_history=${selectedCarId}&page=${currentPage}`
     })
     .then(response => response.json())
     .then(data => {
@@ -48,9 +53,17 @@ function openHistory(carId) {
             });
 
             tableHTML += `
+                   
                     </tbody>
                 </table>
+                <div>
+                    <button onclick="changePage(-1)" ${currentPage === 1 ? 'disabled' : ''}>Poprzednia</button>
+                    <span>Strona ${currentPage}</span>
+                    <button onclick="changePage(1)" ${data.data.length < 10 ? 'disabled' : ''}>Następna</button>
+                </div>
             `;
+                  
+                  
 
             historyContent.innerHTML = tableHTML; // Wstawienie tabeli do kontenera
         } else {
@@ -63,6 +76,13 @@ function openHistory(carId) {
     });
 }
 
+                               
+function changePage(direction) {
+    if (currentPage + direction < 1) return;
+    currentPage += direction;
+    openHistory(selectedCarId);
+}
+                               
 
 function closeListHistory() {
     selectedCarId = null;
