@@ -56,11 +56,12 @@ function openHistory(carId) {
                    
                     </tbody>
                 </table>
-                <div>
-                    <button onclick="changePage(-1)" ${currentPage === 1 ? 'disabled' : ''}>Poprzednia</button>
-                    <span>Strona ${currentPage}</span>
-                    <button onclick="changePage(1)" ${data.data.length < 10 ? 'disabled' : ''}>Następna</button>
-                </div>
+               <div>
+    <button onclick="changePage(-1)" ${currentPage === 1 ? 'disabled' : ''} style="all: unset; background-color: #f0f0f0; margin-top: 10px; padding: 5px 10px; border-radius: 5px; border: 1px solid #ccc;"><</button>
+    <span>Strona ${currentPage}</span>
+    <button onclick="changePage(1)" ${data.data.length < 10 ? 'disabled' : ''} style="all: unset; background-color: #f0f0f0; padding: 5px 10px; border-radius: 5px; border: 1px solid #ccc;">></button>
+</div>
+
             `;
                   
                   
@@ -87,5 +88,7 @@ function changePage(direction) {
 function closeListHistory() {
     selectedCarId = null;
     document.getElementById('list-history').style.display = 'none';
-  document.getElementById('overlay').style.display = 'none';
+    document.getElementById('overlay').style.display = 'none';
+  
+    currentPage = 1;
 }
