@@ -56,10 +56,11 @@ function openHistory(carId) {
                    
                     </tbody>
                 </table>
-               <div>
-    <button onclick="changePage(-1)" ${currentPage === 1 ? 'disabled' : ''} style="all: unset; background-color: #f0f0f0; margin-top: 10px; padding: 5px 10px; border-radius: 5px; border: 1px solid #ccc;"><</button>
+
+               <div class="pagination-container">
+    <button onclick="changePage(-1)" class="button-pagination" ${currentPage === 1 ? 'disabled' : ''}><</button>
     <span>Strona ${currentPage}</span>
-    <button onclick="changePage(1)" ${data.data.length < 10 ? 'disabled' : ''} style="all: unset; background-color: #f0f0f0; padding: 5px 10px; border-radius: 5px; border: 1px solid #ccc;">></button>
+    <button onclick="changePage(1)" class="button-pagination" ${data.data.length < 10 ? 'disabled' : ''}>></button>
 </div>
 
             `;
