@@ -42,6 +42,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['car_id_history']))  {
   if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['car_id_service']))  {
     $car_id = intval($_POST['car_id_service']);
     
+    
+    
     //$query = "SELECT * FROM parts WHERE car_id = $car_id";
     
     $query = "

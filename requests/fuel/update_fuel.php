@@ -52,7 +52,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['car_id_history']))  {
     distance,
     details,
     ROUND((liters/distance)*100,2) AS average_fuel_consumption
-    FROM fuel WHERE car_id = $car_id ORDER BY refueling_date ASC";
+    FROM fuel WHERE car_id = $car_id 
+    ORDER BY refueling_date DESC
+    ";
+  
     $result = $conn->query($query);
     
     if ($result->num_rows > 0) {
@@ -64,4 +67,33 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['car_id_history']))  {
     exit();
 }
 
+// wyswietlenie wykresu tankowan
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['car_id_history_chart']))  {
+    $car_id = intval($_POST['car_id_history_chart']);
+    
+    $query = "SELECT
+    id,
+    car_id,
+    liters, 
+    price, 
+    fuel_type, 
+    refueling_date, 
+    distance,
+    details,
+    consumption_100_km
+    FROM fuel 
+    WHERE car_id = $car_id AND consumption_100_km > 0
+    ORDER BY refueling_date ASC
+    ";
+  
+    $result = $conn->query($query);
+    
+    if ($result->num_rows > 0) {
+        $data = $result->fetch_all(MYSQLI_ASSOC);
+        echo json_encode(['status' => 'success', 'data' => $data]);
+    } else {
+        echo json_encode(['status' => 'error', 'message' => 'Brak danych o samochodzie']);
+    }
+    exit();
+}
 ?>

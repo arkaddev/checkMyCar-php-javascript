@@ -150,13 +150,13 @@ function openFuelHistoryChart(carId) {
         headers: {
             "Content-Type": "application/x-www-form-urlencoded"
         },
-        body: `car_id_history=${selectedCarId}`
+        body: `car_id_history_chart=${selectedCarId}`
     })
     .then(response => response.json())
     .then(data => {
         if (data.status === "success") {
             const labels = data.data.map(entry => entry.refueling_date);
-            const values = data.data.map(entry => entry.average_fuel_consumption);
+            const values = data.data.map(entry => entry.consumption_100_km);
 
             const ctx = document.getElementById("fuelChart").getContext("2d");
             
