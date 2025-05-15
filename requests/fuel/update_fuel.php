@@ -42,6 +42,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['fuel_id_history']))  
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['car_id_history']))  {
     $car_id = intval($_POST['car_id_history']);
     
+  $page = isset($_POST['page']) ? intval($_POST['page']) : 1;
+  $limit = 10;
+  $offset = ($page - 1) * $limit;
+  
     $query = "SELECT
     id,
     car_id,
@@ -54,6 +58,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['car_id_history']))  {
     ROUND((liters/distance)*100,2) AS average_fuel_consumption
     FROM fuel WHERE car_id = $car_id 
     ORDER BY refueling_date DESC
+    LIMIT $limit OFFSET $offset
     ";
   
     $result = $conn->query($query);
