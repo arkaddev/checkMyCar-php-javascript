@@ -88,8 +88,8 @@ function openMenuFuelHistory(carId) {
                         <tr>
                           <th>Id samochodu</th>
                             <th>Litry</th>
-                            <th>Rodzaj paliwa</th>
                             <th>Koszt za litr</th>
+                            <th>Rodzaj paliwa</th>
                             <th>Data tankowania</th>
                             <th>Dystans w km</th> 
                           <th>Szczegóły</th>  
@@ -111,7 +111,7 @@ function openMenuFuelHistory(carId) {
                         <td>${history.distance}</td>
                       <td>${history.details}</td>
                        <td>${history.average_fuel_consumption}</td>
-                      <td><button onclick="deleteFuel('${history.id}')">Usuń</button></td>
+                      <td><button class="delete-button" onclick="deleteFuel('${history.id}')">Usuń</button></td>
                     </tr>
                 `;
             });

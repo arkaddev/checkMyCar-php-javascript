@@ -184,8 +184,8 @@ form button:hover {
 
 
 /* Stylizacja dla przycisku usuwania - przycisk czerwony */
-.delete-note-button, .delete-car-button {
-    background-color: #e74c3c;
+.delete-note-button, .delete-car-button, .delete-button, #fuel-history-content .delete-button {
+  background-color: #e74c3c;
     color: #fff;
     border: none;
     border-radius: 3px;
@@ -195,7 +195,7 @@ form button:hover {
     transition: background-color 0.3s ease;
 }
 
-.delete-note-button:hover, .delete-car-button:hover {
+.delete-note-button:hover, .delete-car-button:hover, .delete-button:hover, #fuel-history-content .delete-button:hover {
     background-color: #c0392b;
 }
 

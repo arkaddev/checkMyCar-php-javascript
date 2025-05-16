@@ -52,7 +52,7 @@ function openService(carId) {
                         <td>${service.next_exchange_km}</td>
                         <td>${service.when_exchange}</td>
                         <td>
-                            <button onclick="makeReplaced('${service.id}')">Wymień</button>
+                            <button class="delete-button" onclick="makeReplaced('${service.id}')">Wymień</button>
                         </td>
                     </tr>
                 `;
