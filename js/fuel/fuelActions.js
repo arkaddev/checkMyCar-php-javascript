@@ -61,6 +61,7 @@ function deleteFuel(fuelId) {
         });
 }
 
+let currentPage = 1;
 
 // otwarcie historii tankowan
 function openMenuFuelHistory(carId) {
@@ -77,7 +78,7 @@ function openMenuFuelHistory(carId) {
         headers: {
             "Content-Type": "application/x-www-form-urlencoded"
         },
-        body: `car_id_history=${selectedCarId}`
+        body: `car_id_history=${selectedCarId}&page=${currentPage}`
     })
     .then(response => response.json())
     .then(data => {
@@ -119,8 +120,16 @@ function openMenuFuelHistory(carId) {
             tableHTML += `
                     </tbody>
                 </table>
-            `;
 
+               <div >
+  <button onclick="changePage(-1)"><</button>
+<span>Strona ${currentPage}</span>
+<button onclick="changePage(1)">></button>
+
+</div>
+
+            `;
+          
             fuelHistoryContent.innerHTML = tableHTML; // Wstawienie tabeli do kontenera
         } else {
             fuelHistoryContent.innerHTML = `<p>${data.message}</p>`;
@@ -132,7 +141,12 @@ function openMenuFuelHistory(carId) {
     });
 }
 
-
+function changePage(direction) {
+    if (currentPage + direction < 1) return;
+    currentPage += direction;
+    openHistory(selectedCarId);
+}
+     
 // zamkniecie historii tankowan
 function closeMenuFuelHistory() {
     selectedCarId = null;
