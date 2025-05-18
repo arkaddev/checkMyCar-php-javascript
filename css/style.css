@@ -240,7 +240,7 @@ form button:hover {
 
 /* PAGINACJA */
 
-.pagination-container {
+.pagination-container, #fuel-history-content .pagination-container {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -248,7 +248,7 @@ form button:hover {
     margin-top: 10px;
 }
 
-.button-pagination {
+.button-pagination, #fuel-history-content .button-pagination {
     all: unset;
     background-color: #f0f0f0;
     padding: 5px 10px;
@@ -257,7 +257,7 @@ form button:hover {
     cursor: pointer;
 }
 
-.button-pagination:disabled {
+.button-pagination:disabled, #fuel-history-content .button-pagination:disabled {
     opacity: 0.5;
     cursor: not-allowed;
 }

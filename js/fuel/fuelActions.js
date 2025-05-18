@@ -118,14 +118,13 @@ function openMenuFuelHistory(carId) {
             });
 
             tableHTML += `
-                    </tbody>
+                      </tbody>
                 </table>
 
-               <div >
-  <button onclick="changePage(-1)"><</button>
-<span>Strona ${currentPage}</span>
-<button onclick="changePage(1)">></button>
-
+               <div class="pagination-container">
+    <button onclick="changePage(-1)" class="button-pagination" ${currentPage === 1 ? 'disabled' : ''}><</button>
+    <span>Strona ${currentPage}</span>
+    <button onclick="changePage(1)" class="button-pagination" ${data.data.length < 5 ? 'disabled' : ''}>></button>
 </div>
 
             `;
@@ -144,7 +143,7 @@ function openMenuFuelHistory(carId) {
 function changePage(direction) {
     if (currentPage + direction < 1) return;
     currentPage += direction;
-    openHistory(selectedCarId);
+    openMenuFuelHistory(selectedCarId);
 }
      
 // zamkniecie historii tankowan
@@ -152,6 +151,8 @@ function closeMenuFuelHistory() {
     selectedCarId = null;
     document.getElementById('menu-fuel-history').style.display = 'none';
   document.getElementById('overlay').style.display = 'none';
+  
+  currentPage = 1;
 }
 
 
