@@ -1,4 +1,5 @@
 <?php
+
 // aktualizacja przebiegu
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['car_id'], $_POST['mileage'])) {
     $car_id = intval($_POST['car_id']);
@@ -6,7 +7,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['car_id'], $_POST['mil
 
     $update_query = "UPDATE cars SET mileage = $mileage WHERE id = $car_id";
     if ($conn->query($update_query) === TRUE) {
-        echo json_encode(['status' => 'success', 'message' => 'Przebieg został zaktualizowany']);
+        $current_date = date('Y-m-d H:i:s');
+        $insert_query = "INSERT INTO mileages (car_id, mileage, date) VALUES ($car_id, $mileage, '$current_date')";
+
+        if ($conn->query($insert_query) === TRUE) {
+            echo json_encode(['status' => 'success', 'message' => 'Przebieg został zaktualizowany']);
+        } else {
+            echo json_encode(['status' => 'warning', 'message' => 'Przebieg zaktualizowany, ale nie zapisano historii']);
+        }
     } else {
         echo json_encode(['status' => 'error', 'message' => 'Błąd podczas aktualizacji przebiegu']);
     }
