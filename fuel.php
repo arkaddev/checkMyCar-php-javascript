@@ -82,6 +82,7 @@ mysqli_close($conn);
   
   <script src="js/fuel/menuFuel.js"></script>
   <script src="js/fuel/fuelActions.js"></script>
+<script src="js/fuel/fuelChart.js"></script>
   
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
@@ -89,6 +90,8 @@ mysqli_close($conn);
    width: 1100px;
     font-size: 14px;
 }
+      
+      
     
     </style>
   
