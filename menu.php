@@ -110,7 +110,13 @@ require 'config/session.php';
           <span class="title">
             <a href="menu.php" class=""><i class="fas fa-home"></i></a>
              &nbsp; Menu</span>
-            <p>Zalogowany użytkownik: <span class="username"><?php echo htmlspecialchars($_SESSION['username']); ?></span></p>
+            <p>Zalogowany użytkownik: <span class="username"><?php echo htmlspecialchars($_SESSION['username']); ?></span>
+          &nbsp;
+          <a href="logout.php" title="Wyloguj">
+          <i class="fas fa-sign-out-alt"></i></a>
+          
+          </p>
+           
       </div>
         
         <div class="top-menu">
@@ -118,9 +124,9 @@ require 'config/session.php';
                 <i class="fas fa-car"></i>
                 Lista pojazdów
             </a>
-            <a href="note.php" class="menu-item menu-item-2">
-                <i class="fas fa-book"></i>
-                Notatnik
+            <a href="" class="menu-item menu-item-6">
+                <i class="fas fa-tools"></i>
+                Serwis
             </a>
             <a href="fuel.php" class="menu-item menu-item-3">
                 <i class="fas fa-gas-pump"></i>
@@ -137,9 +143,9 @@ require 'config/session.php';
                 <i class="fas fa-user-cog"></i>
                 Ustawienia
             </a>
-            <a href="logout.php" class="menu-item menu-item-6">
-                <i class="fas fa-sign-out-alt"></i>
-                Wyloguj
+            <a href="note.php" class="menu-item menu-item-2">
+                <i class="fas fa-book"></i>
+                Notatnik
             </a>
         </div>
     
