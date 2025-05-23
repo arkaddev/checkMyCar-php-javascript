@@ -1,10 +1,6 @@
 <?php
-
 require 'config/session.php';
 require 'config/db_connection.php';
-
-
-
 
 // Zmienna przechowująca dane sesji
 $userId = $_SESSION['id'];
@@ -89,12 +85,20 @@ ul li strong {
 </head>
 <body>
    <div class="main-container">
-        <div class="user-container">
+         <div class="user-container">
+          
+          
           <span class="title">
             <a href="menu.php" class=""><i class="fas fa-home"></i></a>
-            &nbsp; Notatki</span>
-            <p>Zalogowany użytkownik: <span class="username"><?php echo htmlspecialchars($_SESSION['username']); ?></span></p>
-     </div>
+             &nbsp; Notatnik</span>
+            <p>Zalogowany użytkownik: <span class="username"><?php echo htmlspecialchars($_SESSION['username']); ?></span>
+          &nbsp;
+          <a href="logout.php" title="Wyloguj">
+          <i class="fas fa-sign-out-alt"></i></a>
+          
+          </p>
+           
+      </div>
   
      <div>
       <button onclick="menuAddNote()">Nowa notatka</button>

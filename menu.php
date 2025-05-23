@@ -124,7 +124,7 @@ require 'config/session.php';
                 <i class="fas fa-car"></i>
                 Lista pojazdów
             </a>
-            <a href="" class="menu-item menu-item-6">
+            <a href="" class="menu-item menu-item-2">
                 <i class="fas fa-tools"></i>
                 Serwis
             </a>
@@ -139,14 +139,16 @@ require 'config/session.php';
                 <i class="fas fa-chart-line"></i>
                 Statystyki
             </a>
-            <a href="user.php" class="menu-item menu-item-5">
-                <i class="fas fa-user-cog"></i>
-                Ustawienia
-            </a>
-            <a href="note.php" class="menu-item menu-item-2">
+
+            <a href="note.php" class="menu-item menu-item-5">
                 <i class="fas fa-book"></i>
                 Notatnik
             </a>
+            <a href="user.php" class="menu-item menu-item-6">
+                <i class="fas fa-user-cog"></i>
+                Ustawienia
+            </a>
+            
         </div>
     
      

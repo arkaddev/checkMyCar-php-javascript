@@ -159,12 +159,20 @@ mysqli_close($conn);
   <div id="overlay"></div>
   
    <div class="main-container">
-        <div class="user-container">
+         <div class="user-container">
+          
+          
           <span class="title">
             <a href="menu.php" class=""><i class="fas fa-home"></i></a>
-            &nbsp; Panel użytkownika</span>
-            <p>Zalogowany użytkownik: <span class="username"><?php echo htmlspecialchars($_SESSION['username']); ?></span></p>
-     </div>
+             &nbsp; Ustawienia</span>
+            <p>Zalogowany użytkownik: <span class="username"><?php echo htmlspecialchars($_SESSION['username']); ?></span>
+          &nbsp;
+          <a href="logout.php" title="Wyloguj">
+          <i class="fas fa-sign-out-alt"></i></a>
+          
+          </p>
+           
+      </div>
      
      
      <div class="tabs">

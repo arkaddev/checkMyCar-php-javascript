@@ -101,11 +101,19 @@ mysqli_close($conn);
   
    <div class="main-container">
         <div class="user-container">
+          
+          
           <span class="title">
             <a href="menu.php" class=""><i class="fas fa-home"></i></a>
-            &nbsp; Spalanie</span>
-            <p>Zalogowany użytkownik: <span class="username"><?php echo htmlspecialchars($_SESSION['username']); ?></span></p>
-     </div>
+             &nbsp; Spalanie</span>
+            <p>Zalogowany użytkownik: <span class="username"><?php echo htmlspecialchars($_SESSION['username']); ?></span>
+          &nbsp;
+          <a href="logout.php" title="Wyloguj">
+          <i class="fas fa-sign-out-alt"></i></a>
+          
+          </p>
+           
+      </div>
      
      
      
