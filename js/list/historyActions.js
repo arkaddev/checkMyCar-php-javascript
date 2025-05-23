@@ -1,8 +1,7 @@
-let currentPage = 1;
+let currentHistoryPage = 1;
 
 function openHistory(carId) {
-    selectedCarId = carId;
-  
+  selectedCarId = carId;
     
     const historyContent = document.getElementById('list-history-content');
     historyContent.innerHTML = "<p>Ładowanie danych...</p>"; // Wiadomość oczekiwania
@@ -17,7 +16,7 @@ function openHistory(carId) {
         headers: {
             "Content-Type": "application/x-www-form-urlencoded"
         },
-        body: `car_id_history=${selectedCarId}&page=${currentPage}`
+        body: `car_id_history=${selectedCarId}&page=${currentHistoryPage}`
     })
     .then(response => response.json())
     .then(data => {
@@ -80,8 +79,8 @@ function openHistory(carId) {
 
                                
 function changePage(direction) {
-    if (currentPage + direction < 1) return;
-    currentPage += direction;
+    if (currentHistoryPage + direction < 1) return;
+    currentHistoryPage += direction;
     openHistory(selectedCarId);
 }
                                
