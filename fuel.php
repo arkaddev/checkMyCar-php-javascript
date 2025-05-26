@@ -25,6 +25,15 @@ $query = "
         c.year, 
         c.user_id,
         IFNULL(ROUND(SUM(f.liters)*100 / SUM(f.distance), 2), 'Brak danych') AS average_fuel_consumption,
+        
+           IFNULL(ROUND(
+            SUM(f.liters) * 100 / SUM(f.distance) * 
+            AVG(CASE 
+                WHEN f.price < 2 THEN f.price * 4.2 
+                ELSE f.price 
+            END), 
+        2), 'Brak danych') AS 100_km_price,
+   
         (
         SELECT 
             ROUND((f1.liters/f1.distance)*100,2)
@@ -86,12 +95,18 @@ mysqli_close($conn);
   
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
+         /* kontener glowny */
+.main-container {
+    max-width: 900px;
+}
+      
+      
+      
     #menu-fuel-history{
    width: 1100px;
     font-size: 14px;
 }
-      
-      
+   
     
     </style>
   
@@ -126,6 +141,7 @@ mysqli_close($conn);
                     <th>Rok</th>
                     <th>Średnie spalanie</th>
                   <th>Ostatnie spalanie</th>
+                   <th>Koszt 100 km</th>
                     <th>Opcje</th>
                  
                 </tr>
@@ -143,6 +159,7 @@ mysqli_close($conn);
                         
                       echo '<td>' . (isset($row['last_fuel_consumption']) ? htmlspecialchars($row['last_fuel_consumption']) : 'Brak danych') . '</td>';
                       
+                      echo '<td>' . (isset($row['100_km_price']) ? htmlspecialchars($row['100_km_price']) : 'Brak danych') . '</td>';
                       echo '<td>
                       
                       <button class="add-fuel-button" onclick="menuAddFuel(' . htmlspecialchars($row['id']) . ')" title="Dodaj tankowanie"><i class="fas fa-plus"></i></button>
