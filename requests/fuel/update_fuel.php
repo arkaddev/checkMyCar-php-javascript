@@ -43,7 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['car_id_history']))  {
     $car_id = intval($_POST['car_id_history']);
     
   $page = isset($_POST['page']) ? intval($_POST['page']) : 1;
-  $limit = 10;
+  $limit = 5;
   $offset = ($page - 1) * $limit;
   
     $query = "SELECT

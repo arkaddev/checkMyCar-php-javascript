@@ -1,8 +1,27 @@
 <?php
+
+// informacje o samochodzie
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['car_id_info']))  {
     $car_id = intval($_POST['car_id_info']);
     
     $query = "SELECT * FROM cars_info WHERE car_id = $car_id";
+    $result = $conn->query($query);
+    
+    if ($result->num_rows > 0) {
+        $data = $result->fetch_all(MYSQLI_ASSOC);
+        echo json_encode(['status' => 'success', 'data' => $data]);
+    } else {
+        echo json_encode(['status' => 'error', 'message' => 'Brak danych o samochodzie']);
+    }
+    exit();
+}
+
+
+// informacje o przebiegu
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['car_id_info_mileage']))  {
+    $car_id = intval($_POST['car_id_info_mileage']);
+    
+    $query = "SELECT * FROM mileages WHERE car_id = $car_id ORDER BY date DESC";
     $result = $conn->query($query);
     
     if ($result->num_rows > 0) {
@@ -23,7 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['car_id_history']))  {
   $limit = 10;
   $offset = ($page - 1) * $limit;
 
-  $query = "SELECT * FROM parts WHERE car_id = $car_id ORDER BY kilometers_status ASC LIMIT $limit OFFSET $offset";
+  $query = "SELECT * FROM parts WHERE car_id = $car_id ORDER BY kilometers_status DESC LIMIT $limit OFFSET $offset";
 
   
     //$query = "SELECT * FROM parts WHERE car_id = $car_id ORDER BY kilometers_status ASC";

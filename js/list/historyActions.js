@@ -57,8 +57,8 @@ function openHistory(carId) {
                 </table>
 
                <div class="pagination-container">
-    <button onclick="changePage(-1)" class="button-pagination" ${currentPage === 1 ? 'disabled' : ''}><</button>
-    <span>Strona ${currentPage}</span>
+    <button onclick="changePage(-1)" class="button-pagination" ${currentHistoryPage === 1 ? 'disabled' : ''}><</button>
+    <span>Strona ${currentHistoryPage}</span>
     <button onclick="changePage(1)" class="button-pagination" ${data.data.length < 10 ? 'disabled' : ''}>></button>
 </div>
 
@@ -90,5 +90,5 @@ function closeListHistory() {
     document.getElementById('list-history').style.display = 'none';
     document.getElementById('overlay').style.display = 'none';
   
-    currentPage = 1;
+    currentHistoryPage = 1;
 }

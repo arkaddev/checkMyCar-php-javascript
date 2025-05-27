@@ -169,7 +169,11 @@ mysqli_close($conn);
         echo '<td>' . htmlspecialchars($row['user_id']) . '</td>';
         echo '<td class="' . $insuranceClass . '">' . htmlspecialchars($row['insurance']) . '</td>';
         echo '<td class="' . $inspectionClass . '">' . htmlspecialchars($row['technical_inspection']) . '</td>';
-        echo '<td>' . htmlspecialchars($row['mileage']) . '</td>';
+        echo '<td>' . htmlspecialchars($row['mileage']) . '
+         <button class="list-info-button" onclick="openInfoMileage(' . htmlspecialchars($row['id']) . ')" title="Informacje"><i class="fas fa-info"></i></button>
+        
+        </td>';
+                      
        echo '<td>' . (isset($row['average_fuel_consumption']) ? htmlspecialchars($row['average_fuel_consumption']) : 'Brak danych') . '</td>';
       
       
@@ -315,6 +319,13 @@ mysqli_close($conn);
     <button type="button" onclick="closeListService()">Zamknij</button>
 </form>
   
+  <form id="list-info-mileage">
+    <h2>Informacje o przebiegu:</h2>
+    <div id="list-info-mileage-content">
+        <!-- dane z tabeli mileage -->
+    </div>
+    <button type="button" onclick="closeListInfoMileage()">Zamknij</button>
+</form>
   
   
 </body>

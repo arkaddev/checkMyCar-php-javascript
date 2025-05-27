@@ -46,7 +46,7 @@
 }
 
        /* glowne menu */
-        #list-menu, #list-edit-mileage, #list-part-replacement, #list-edit-insurance, #list-edit-inspection, #list-new-fuel, #list-info-car, #list-service, #list-history, #note-add-note, #add-car, #add-fuel{
+        #list-menu, #list-edit-mileage, #list-part-replacement, #list-edit-insurance, #list-edit-inspection, #list-new-fuel, #list-info-car, #list-service, #list-history, #note-add-note, #add-car, #add-fuel, #list-info-mileage{
     display: none;
     position: fixed;
     top: 20%;
