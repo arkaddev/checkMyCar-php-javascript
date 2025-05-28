@@ -170,7 +170,7 @@ mysqli_close($conn);
         echo '<td class="' . $insuranceClass . '">' . htmlspecialchars($row['insurance']) . '</td>';
         echo '<td class="' . $inspectionClass . '">' . htmlspecialchars($row['technical_inspection']) . '</td>';
         echo '<td>' . htmlspecialchars($row['mileage']) . '
-         <button class="list-info-button" onclick="openInfoMileage(' . htmlspecialchars($row['id']) . ')" title="Informacje"><i class="fas fa-info"></i></button>
+         <button class="list-info-button" onclick="openInfoMileage(' . htmlspecialchars($row['id']) . ')" title="Historia przebiegu"><i class="fas fa-info"></i></button>
         
         </td>';
                       
@@ -182,9 +182,9 @@ mysqli_close($conn);
       
       <button class="list-menu-button" onclick="openListMenu(' . htmlspecialchars($row['id']) . ')" title="Dodaj"><i class="fas fa-plus"></i></button>
           
-      <button class="list-menu-button" onclick="openHistory(' . htmlspecialchars($row['id']) . ')"><i class="fas fa-history"></i></button>
+      <button class="list-menu-button" onclick="openHistory(' . htmlspecialchars($row['id']) . ')" title="Historia"><i class="fas fa-history"></i></button>
       
-      <button class="list-menu-button" onclick="openService(' . htmlspecialchars($row['id']) . ')"><i class="fas fa-tools"></i></button>
+      <button class="list-menu-button" onclick="openService(' . htmlspecialchars($row['id']) . ')" title="Serwis"><i class="fas fa-tools"></i></button>
       
       </td>';
         

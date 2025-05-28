@@ -7,7 +7,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['car_id'], $_POST['mil
 
     $update_query = "UPDATE cars SET mileage = $mileage WHERE id = $car_id";
     if ($conn->query($update_query) === TRUE) {
-        $current_date = date('Y-m-d H:i:s');
+        $current_date = date('Y-m-d');
         $insert_query = "INSERT INTO mileages (car_id, mileage, date) VALUES ($car_id, $mileage, '$current_date')";
 
         if ($conn->query($insert_query) === TRUE) {
