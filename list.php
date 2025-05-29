@@ -24,19 +24,16 @@ $query = "
         c.insurance, 
         c.technical_inspection, 
         c.mileage,
+        ci.service_flag,
         IFNULL(ROUND(SUM(f.liters)*100 / SUM(f.distance), 2), 'Brak danych') AS average_fuel_consumption
-        
     FROM 
         cars c
     LEFT JOIN 
-        fuel f 
-    ON 
-        c.id = f.car_id
-      
-        
+        fuel f ON c.id = f.car_id
+    LEFT JOIN 
+        cars_info ci ON c.id = ci.car_id
     GROUP BY 
-        c.id, c.model, c.year, c.user_id, c.insurance, c.technical_inspection, c.mileage
-
+        c.id, c.model, c.year, c.user_id, c.insurance, c.technical_inspection, c.mileage, ci.service_flag
 ";
 
 
@@ -54,6 +51,12 @@ $result = mysqli_query($conn, $query);
 
 // Zamykamy połączenie
 mysqli_close($conn);
+
+
+
+
+
+
 ?> 
 
 <!DOCTYPE html>
@@ -102,6 +105,18 @@ mysqli_close($conn);
         background-color: #d4edda;   
     }
     
+    
+    
+   .service-alert {
+  background-color: orange;
+    color: #fff;
+    border: none;
+    border-radius: 3px;
+    padding: 5px 10px;
+    font-size: 0.9em;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+} 
 </style> 
 </head>
 
@@ -156,6 +171,8 @@ mysqli_close($conn);
       $inspectionClass = getInsuranceClass($row['technical_inspection']);
  
       
+                   // zmiana koloru dla przycisku button gdy service_flag jest 1
+$serviceButtonClass = ($row['service_flag'] == 1) ? 'service-alert' : '';   
       
       
         echo '<tr>';
@@ -170,6 +187,7 @@ mysqli_close($conn);
         echo '<td class="' . $insuranceClass . '">' . htmlspecialchars($row['insurance']) . '</td>';
         echo '<td class="' . $inspectionClass . '">' . htmlspecialchars($row['technical_inspection']) . '</td>';
         echo '<td>' . htmlspecialchars($row['mileage']) . '
+         
          <button class="list-info-button" onclick="openInfoMileage(' . htmlspecialchars($row['id']) . ')" title="Historia przebiegu"><i class="fas fa-info"></i></button>
         
         </td>';
@@ -184,7 +202,16 @@ mysqli_close($conn);
           
       <button class="list-menu-button" onclick="openHistory(' . htmlspecialchars($row['id']) . ')" title="Historia"><i class="fas fa-history"></i></button>
       
+      
       <button class="list-menu-button" onclick="openService(' . htmlspecialchars($row['id']) . ')" title="Serwis"><i class="fas fa-tools"></i></button>
+      
+      <button class="' . $serviceButtonClass . '" onclick="openService(' . htmlspecialchars($row['id']) . ')" title="Serwis">
+  <i class="fas fa-tools"></i>
+</button>
+      
+      
+      
+</button>
       
       </td>';
         
