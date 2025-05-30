@@ -2,13 +2,17 @@
 
 // aktualizacja przebiegu
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['car_id'], $_POST['mileage'])) {
-    $car_id = intval($_POST['car_id']);
+    set_service($car_id);
+  
+  $car_id = intval($_POST['car_id']);
     $mileage = intval($_POST['mileage']);
 
     $update_query = "UPDATE cars SET mileage = $mileage WHERE id = $car_id";
     if ($conn->query($update_query) === TRUE) {
         $current_date = date('Y-m-d');
         $insert_query = "INSERT INTO mileages (car_id, mileage, date) VALUES ($car_id, $mileage, '$current_date')";
+      
+      
 
         if ($conn->query($insert_query) === TRUE) {
             echo json_encode(['status' => 'success', 'message' => 'Przebieg został zaktualizowany']);
@@ -18,6 +22,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['car_id'], $_POST['mil
     } else {
         echo json_encode(['status' => 'error', 'message' => 'Błąd podczas aktualizacji przebiegu']);
     }
+  
+   set_service($car_id);
     exit();
 }
 
@@ -48,4 +54,75 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['car_id'], $_POST['ins
     }
     exit();
 }
+
+// ustawienie service_flag na 1 jezeli czesc jest do wymiany
+function set_service($car_id){
+   global $conn;
+
+     
+    $query = "
+        SELECT
+            parts.id,
+            parts.car_id, 
+            parts.name, 
+            parts.number, 
+            parts.price, 
+            parts.exchange_date, 
+            parts.kilometers_status, 
+            parts.next_exchange_km,
+            (parts.next_exchange_km + parts.kilometers_status  - cars.mileage) AS when_exchange
+        FROM parts 
+        JOIN cars ON parts.car_id = cars.id
+        WHERE parts.car_id = $car_id AND parts.is_replaced = 0
+        ORDER BY when_exchange ASC
+    ";
+  
+   
+    
+    
+    $result = $conn->query($query);
+    
+    if ($result->num_rows > 0) {
+        $data = $result->fetch_all(MYSQLI_ASSOC);
+      
+      
+      
+      
+      
+      
+      // Sprawdź, czy którakolwiek część ma when_exchange < 0
+            $requires_service = false;
+            foreach ($data as $part) {
+                if ($part['when_exchange'] < 0) {
+                    $requires_service = true;
+                    break;
+                }
+            }
+
+            // Ustaw service_flag = 1 jeśli potrzebna jest wymiana
+            if ($requires_service) {
+                $updateQuery = "UPDATE cars_info SET service_flag = 1 WHERE car_id = $car_id";
+                $conn->query($updateQuery);
+            }
+      
+      
+      
+      
+      
+      
+      
+      
+      
+        echo json_encode(['status' => 'success', 'data' => $data]);
+    } else {
+        echo json_encode(['status' => 'error', 'message' => 'Brak danych o samochodzie']);
+    }
+    exit();
+
+
+}
+
+
+
+
 ?>
