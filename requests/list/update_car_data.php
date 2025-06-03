@@ -1,18 +1,17 @@
 <?php
 
 // aktualizacja przebiegu
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['car_id'], $_POST['mileage'])) {
-    set_service($car_id);
-  
-  $car_id = intval($_POST['car_id']);
+    $car_id = intval($_POST['car_id']);
     $mileage = intval($_POST['mileage']);
+
 
     $update_query = "UPDATE cars SET mileage = $mileage WHERE id = $car_id";
     if ($conn->query($update_query) === TRUE) {
         $current_date = date('Y-m-d');
         $insert_query = "INSERT INTO mileages (car_id, mileage, date) VALUES ($car_id, $mileage, '$current_date')";
-      
-      
+
 
         if ($conn->query($insert_query) === TRUE) {
             echo json_encode(['status' => 'success', 'message' => 'Przebieg został zaktualizowany']);
@@ -22,11 +21,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['car_id'], $_POST['mil
     } else {
         echo json_encode(['status' => 'error', 'message' => 'Błąd podczas aktualizacji przebiegu']);
     }
-  
-   set_service($car_id);
+set_service();
     exit();
-}
 
+}
 // aktualizacja ubezpieczenia
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['car_id'], $_POST['insurance'])) {
     $car_id = intval($_POST['car_id']);
@@ -55,11 +53,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['car_id'], $_POST['ins
     exit();
 }
 
-// ustawienie service_flag na 1 jezeli czesc jest do wymiany
-function set_service($car_id){
-   global $conn;
 
-     
+// ustawienie service_flag na 1 jezeli czesc jest do wymiany
+function set_service(){
+    global $conn;
+
+    $car_id = intval($_POST['car_id']);
     $query = "
         SELECT
             parts.id,
@@ -77,17 +76,11 @@ function set_service($car_id){
         ORDER BY when_exchange ASC
     ";
   
-   
-    
     
     $result = $conn->query($query);
     
     if ($result->num_rows > 0) {
         $data = $result->fetch_all(MYSQLI_ASSOC);
-      
-      
-      
-      
       
       
       // Sprawdź, czy którakolwiek część ma when_exchange < 0
@@ -107,22 +100,12 @@ function set_service($car_id){
       
       
       
-      
-      
-      
-      
-      
-      
-        echo json_encode(['status' => 'success', 'data' => $data]);
-    } else {
-        echo json_encode(['status' => 'error', 'message' => 'Brak danych o samochodzie']);
+        //echo json_encode(['status' => 'success', 'data' => $data]);
+      // } else {
+        //echo json_encode(['status' => 'error', 'message' => 'Brak danych o samochodzie']);
     }
     exit();
 
-
 }
-
-
-
 
 ?>
