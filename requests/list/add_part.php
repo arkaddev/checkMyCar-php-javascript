@@ -42,7 +42,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['part_id_service']))  
 function update_service(){
     global $conn;
 
-    $car_id = intval($_POST['car_id']);
+  
+  $car_id = intval($_POST['car_id_service']);
+  
     $query = "
         SELECT
             parts.id,
