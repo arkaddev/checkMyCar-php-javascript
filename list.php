@@ -172,7 +172,7 @@ mysqli_close($conn);
  
       
                    // zmiana koloru dla przycisku button gdy service_flag jest 1
-$serviceButtonClass = ($row['service_flag'] == 1) ? 'service-alert' : '';   
+$serviceButtonClass = ($row['service_flag'] == 1) ? 'service-alert' : 'list-menu-button';   
       
       
         echo '<tr>';
@@ -202,9 +202,10 @@ $serviceButtonClass = ($row['service_flag'] == 1) ? 'service-alert' : '';
           
       <button class="list-menu-button" onclick="openHistory(' . htmlspecialchars($row['id']) . ')" title="Historia"><i class="fas fa-history"></i></button>
       
-      
-      <button class="list-menu-button" onclick="openService(' . htmlspecialchars($row['id']) . ')" title="Serwis"><i class="fas fa-tools"></i></button>
-      
+      <!-- przycisk serwis bez pocji powiadomienia
+                      <button class="list-menu-button" onclick="openService(' . htmlspecialchars($row['id']) . ')" title="Serwis"><i class="fas fa-tools"></i></button>
+      -->
+                        
       <button class="' . $serviceButtonClass . '" onclick="openService(' . htmlspecialchars($row['id']) . ')" title="Serwis">
   <i class="fas fa-tools"></i>
 </button>
