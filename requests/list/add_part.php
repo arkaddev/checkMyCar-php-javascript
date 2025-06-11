@@ -86,12 +86,31 @@ function update_service(){
       
       
       
-        //echo json_encode(['status' => 'success', 'data' => $data]);
-      // } else {
-        //echo json_encode(['status' => 'error', 'message' => 'Brak danych o samochodzie']);
+       // echo json_encode(['status' => 'success', 'data' => $data]);
+       //} else {
+       // echo json_encode(['status' => 'error', 'message' => 'Brak danych o samochodzie']);
     }
     exit();
 
 }
+
+
+
+// usuwanie czesci
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['part_id_delete'])) {
+    $part_id = intval($_POST['part_id_delete']); // Zabezpieczenie przed SQL Injection
+
+    // Zapytanie SQL do usunięcia notatki
+    $delete_query = "DELETE FROM parts WHERE id = $part_id";
+
+    // Wykonanie zapytania
+    if ($conn->query($delete_query) === TRUE) {
+        echo json_encode(['status' => 'success', 'message' => 'Część została usunięta']);
+    } else {
+        echo json_encode(['status' => 'error', 'message' => 'Błąd podczas usuwania części']);
+    }
+    exit();
+}
+
 
 ?>
