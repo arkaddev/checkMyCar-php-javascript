@@ -49,7 +49,7 @@ function openHistory(carId) {
                         <td>${history.kilometers_status}</td>
                         <td>${history.next_exchange_km}</td>
                        <td>
-                          <button class="delete-button" onclick="deletePart('${service.id}')">Usuń</button>
+                          <button class="delete-button" onclick="deletePart('${history.id}')">Usuń</button>
                         </td>
                     </tr>
                 `;
