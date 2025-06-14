@@ -35,13 +35,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['user_id'], $_POST['ca
     $car_oil = $conn->real_escape_string($_POST['carOil']);
     $car_oil_filter = $conn->real_escape_string($_POST['carOilFilter']);
     $car_air_filter = $conn->real_escape_string($_POST['carAirFilter']);
+    $car_tires = $conn->real_escape_string($_POST['carTires']);
     $car_other_info = $conn->real_escape_string($_POST['carOtherInfo']);
     
   
   $update_query = "INSERT INTO cars (id, model, year, mileage, insurance, technical_inspection, user_id) VALUES (NULL, '$car_model', '$car_year', 0, 0, 0, '$user_id');
   
  
- INSERT INTO cars_info (id, engine_number, km_kw, oil_number, oil_filter_number, air_filter_number, other_info, service_flag, car_id) VALUES (NULL, '$car_engine', '$car_kw', '$car_oil', '$car_oil_filter', '$car_air_filter', '$car_other_info', 0, LAST_INSERT_ID());
+ INSERT INTO cars_info (id, engine_number, km_kw, oil_number, oil_filter_number, air_filter_number, tires, other_info, service_flag, car_id) VALUES (NULL, '$car_engine', '$car_kw', '$car_oil', '$car_oil_filter', '$car_air_filter', '$car_tires', '$car_other_info', 0, LAST_INSERT_ID());
 
  ";
   

@@ -6,7 +6,7 @@ function openHistory(carId) {
     const historyContent = document.getElementById('list-history-content');
     historyContent.innerHTML = "<p>Ładowanie danych...</p>"; // Wiadomość oczekiwania
     document.getElementById('list-history').style.display = 'block';
-  document.getElementById('overlay').style.display = 'block';
+    document.getElementById('overlay').style.display = 'block';
 
  
   

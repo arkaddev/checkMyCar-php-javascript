@@ -293,6 +293,9 @@ mysqli_close($conn);
         <label for="add-car">Filtr powietrza:</label>
         <input type="text" id="add-car-airfilter-input" name="" required><br>
     
+        <label for="add-car">Opony:</label>
+        <input type="text" id="add-car-tires-input" name="" required><br>
+          
         <label for="add-car">Inne informacje:</label>
         <input type="text" id="add-car-otherinfo-input" name="" required><br>
       

@@ -83,9 +83,10 @@ function closeListService() {
      
    
    
-   function makeReplaced(partId, cadId) {
+   function makeReplaced(partId, carId) {
    selectedPartId = partId;
-     selectedCarId = carId;
+   selectedCarId = carId;
+     
    event.preventDefault(); // Zapobiega domyślnemu działaniu formularza
 
         // Wysłanie zapytania POST do serwera
@@ -109,4 +110,8 @@ function closeListService() {
             console.error("Wystąpił błąd:", error);
             alert("Wystąpił błąd podczas aktualizacji przebiegu.");
         });
+        
+       
+    
+     
 }
