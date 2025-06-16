@@ -117,6 +117,21 @@ mysqli_close($conn);
     cursor: pointer;
     transition: background-color 0.3s ease;
 } 
+
+
+
+
+  #list-history-content table th,
+  #list-history-content table td {
+   padding: 2px 4px;
+  }
+
+ #list-service-content table th,
+  #list-service-content table td {
+   padding: 2px 4px;
+  }
+
+
 </style> 
 </head>
 
@@ -202,7 +217,7 @@ $serviceButtonClass = ($row['service_flag'] == 1) ? 'service-alert' : 'list-menu
           
       <button class="list-menu-button" onclick="openHistory(' . htmlspecialchars($row['id']) . ')" title="Historia"><i class="fas fa-history"></i></button>
       
-      <!-- przycisk serwis bez pocji powiadomienia
+      <!-- przycisk serwis bez opcji powiadomienia
                       <button class="list-menu-button" onclick="openService(' . htmlspecialchars($row['id']) . ')" title="Serwis"><i class="fas fa-tools"></i></button>
       -->
                         
