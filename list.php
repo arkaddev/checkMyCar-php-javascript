@@ -121,15 +121,7 @@ mysqli_close($conn);
 
 
 
-  #list-history-content table th,
-  #list-history-content table td {
-   padding: 2px 4px;
-  }
-
- #list-service-content table th,
-  #list-service-content table td {
-   padding: 2px 4px;
-  }
+  
 
 
 </style> 

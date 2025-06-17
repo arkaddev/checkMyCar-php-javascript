@@ -29,6 +29,26 @@
             background-color: #f2f2f2;
         }
 
+/* tabela historia czesci */
+
+#list-history-content table th,
+  #list-history-content table td {
+   padding: 2px 4px;
+  }
+
+/* tabela serwis czesci */
+
+#list-service-content table th,
+ #list-service-content table td {
+   padding: 2px 4px;
+ }
+
+/* tabela serwis czesci */
+
+#fuel-history-content table th,
+ #fuel-history-content table td {
+   padding: 2px 4px;
+ }
 
   /* DODATKOWE OKNA, FORMULARZE */    
     
