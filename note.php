@@ -7,6 +7,7 @@ $userId = $_SESSION['id'];
 
 // Zapytanie do bazy
 $query = "SELECT * FROM notes WHERE user_id = $userId ORDER BY id DESC";
+
 $result = $conn->query($query);
 
 $notes = []; // Tablica do przechowywania notatek
@@ -24,7 +25,7 @@ require 'requests/note/update_note.php';
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Twoje notatki</title>
+    <title>Notatnik - Auto Serwis Online</title>
   
    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">

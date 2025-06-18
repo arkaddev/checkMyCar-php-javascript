@@ -7,7 +7,7 @@ require 'config/session.php';
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Menu</title>
+    <title>Menu - Auto Serwis Online</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
@@ -124,7 +124,7 @@ require 'config/session.php';
                 <i class="fas fa-car"></i>
                 Lista pojazdów
             </a>
-            <a href="" class="menu-item menu-item-2">
+            <a href="service.php" class="menu-item menu-item-2">
                 <i class="fas fa-tools"></i>
                 Serwis
             </a>

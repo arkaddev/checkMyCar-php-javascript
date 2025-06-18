@@ -69,7 +69,7 @@ mysqli_close($conn);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Logowanie</title>
+    <title>Logowanie - Auto Serwis Online</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -86,6 +86,7 @@ mysqli_close($conn);
             border-radius: 5px;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
             text-align: center;
+      width: 100%;
         }
         input[type="text"], input[type="password"] {
             width: 100%;

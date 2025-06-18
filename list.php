@@ -64,7 +64,7 @@ mysqli_close($conn);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lista samochodów</title>
+    <title>Lista pojazdów - Auto Serwis Online</title>
 
 <script src="js/list/listMenuActions.js"></script>
 <script src="js/list/carDataActions.js"></script>
