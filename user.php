@@ -98,7 +98,7 @@ mysqli_close($conn);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Witaj</title>
+    <title>Ustawienia - Auto Serwis Online</title>
   
    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
@@ -159,12 +159,20 @@ mysqli_close($conn);
   <div id="overlay"></div>
   
    <div class="main-container">
-        <div class="user-container">
+         <div class="user-container">
+          
+          
           <span class="title">
             <a href="menu.php" class=""><i class="fas fa-home"></i></a>
-            &nbsp; Panel użytkownika</span>
-            <p>Zalogowany użytkownik: <span class="username"><?php echo htmlspecialchars($_SESSION['username']); ?></span></p>
-     </div>
+             &nbsp; Ustawienia</span>
+            <p>Zalogowany użytkownik: <span class="username"><?php echo htmlspecialchars($_SESSION['username']); ?></span>
+          &nbsp;
+          <a href="logout.php" title="Wyloguj">
+          <i class="fas fa-sign-out-alt"></i></a>
+          
+          </p>
+           
+      </div>
      
      
      <div class="tabs">
@@ -284,6 +292,12 @@ mysqli_close($conn);
     
         <label for="add-car">Filtr powietrza:</label>
         <input type="text" id="add-car-airfilter-input" name="" required><br>
+    
+        <label for="add-car">Opony:</label>
+        <input type="text" id="add-car-tires-input" name="" required><br>
+          
+        <label for="add-car">Inne informacje:</label>
+        <input type="text" id="add-car-otherinfo-input" name="" required><br>
       
         <button type="submit" onclick="addCar(<?php echo $userId; ?>)">Zatwierdź</button>
         <button type="button" onclick="closeMenuAddCar()">Anuluj</button>

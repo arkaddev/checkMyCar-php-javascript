@@ -1,18 +1,22 @@
-function openHistory(carId) {
-    selectedCarId = carId;
+let currentHistoryPage = 1;
 
+function openHistory(carId) {
+  selectedCarId = carId;
+    
     const historyContent = document.getElementById('list-history-content');
     historyContent.innerHTML = "<p>Ładowanie danych...</p>"; // Wiadomość oczekiwania
     document.getElementById('list-history').style.display = 'block';
-  document.getElementById('overlay').style.display = 'block';
+    document.getElementById('overlay').style.display = 'block';
 
+ 
+  
     // Wysłanie zapytania POST do serwera
     fetch("", {
         method: "POST",
         headers: {
             "Content-Type": "application/x-www-form-urlencoded"
         },
-        body: `car_id_history=${selectedCarId}`
+        body: `car_id_history=${selectedCarId}&page=${currentHistoryPage}`
     })
     .then(response => response.json())
     .then(data => {
@@ -28,6 +32,7 @@ function openHistory(carId) {
                             <th>Data wymiany</th>
                             <th>Przebieg</th>
                             <th>Następna wymiana</th>
+                            <th>Opcje</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -43,14 +48,27 @@ function openHistory(carId) {
                         <td>${history.exchange_date}</td>
                         <td>${history.kilometers_status}</td>
                         <td>${history.next_exchange_km}</td>
+                       <td>
+                          <button class="delete-button" onclick="deletePart('${history.id}')">Usuń</button>
+                        </td>
                     </tr>
                 `;
             });
 
             tableHTML += `
+                   
                     </tbody>
                 </table>
+
+               <div class="pagination-container">
+    <button onclick="changePage(-1)" class="button-pagination" ${currentHistoryPage === 1 ? 'disabled' : ''}><</button>
+    <span>Strona ${currentHistoryPage}</span>
+    <button onclick="changePage(1)" class="button-pagination" ${data.data.length < 10 ? 'disabled' : ''}>></button>
+</div>
+
             `;
+                  
+                  
 
             historyContent.innerHTML = tableHTML; // Wstawienie tabeli do kontenera
         } else {
@@ -63,9 +81,49 @@ function openHistory(carId) {
     });
 }
 
+                               
+function changePage(direction) {
+    if (currentHistoryPage + direction < 1) return;
+    currentHistoryPage += direction;
+    openHistory(selectedCarId);
+}
+                               
 
 function closeListHistory() {
     selectedCarId = null;
     document.getElementById('list-history').style.display = 'none';
-  document.getElementById('overlay').style.display = 'none';
+    document.getElementById('overlay').style.display = 'none';
+  
+    currentHistoryPage = 1;
+}
+
+ function deletePart(partId) {
+   selectedPartId = partId;
+  
+     
+   event.preventDefault(); // Zapobiega domyślnemu działaniu formularza
+
+        // Wysłanie zapytania POST do serwera
+        fetch("", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded"
+            },
+            body: `part_id_delete=${selectedPartId}`
+        })
+        .then(response => response.json()) // Parsowanie odpowiedzi jako JSON
+        .then(data => {
+            if (data.status === "success") {
+                alert(data.message); // Wyświetlenie komunikatu sukcesu
+                location.reload(); // Odświeżenie strony
+            } else {
+                alert(data.message); // Wyświetlenie komunikatu błędu
+            }
+        })
+        .catch(error => {
+            console.error("Wystąpił błąd:", error);
+            alert("Wystąpił błąd podczas usuwania części.");
+        });
+        
+     
 }

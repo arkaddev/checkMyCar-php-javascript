@@ -29,6 +29,26 @@
             background-color: #f2f2f2;
         }
 
+/* tabela historia czesci */
+
+#list-history-content table th,
+  #list-history-content table td {
+   padding: 2px 4px;
+  }
+
+/* tabela serwis czesci */
+
+#list-service-content table th,
+ #list-service-content table td {
+   padding: 2px 4px;
+ }
+
+/* tabela serwis czesci */
+
+#fuel-history-content table th,
+ #fuel-history-content table td {
+   padding: 2px 4px;
+ }
 
   /* DODATKOWE OKNA, FORMULARZE */    
     
@@ -46,7 +66,7 @@
 }
 
        /* glowne menu */
-        #list-menu, #list-edit-mileage, #list-part-replacement, #list-edit-insurance, #list-edit-inspection, #list-new-fuel, #list-info-car, #list-service, #list-history, #note-add-note, #add-car, #add-fuel{
+        #list-menu, #list-edit-mileage, #list-part-replacement, #list-edit-insurance, #list-edit-inspection, #list-new-fuel, #list-info-car, #list-service, #list-history, #note-add-note, #add-car, #add-fuel, #list-info-mileage{
     display: none;
     position: fixed;
     top: 20%;
@@ -134,7 +154,7 @@ form button:hover {
 /* PRZYCISKI różnych menu */
 
 /* niebieski przycisk menu*/
-#list-menu button { 
+#list-menu button, #menu-fuel-history button, #chart-fuel-history button{ 
     display: block;
     width: 100%;
     margin: 10px 0;
@@ -184,8 +204,8 @@ form button:hover {
 
 
 /* Stylizacja dla przycisku usuwania - przycisk czerwony */
-.delete-note-button, .delete-car-button {
-    background-color: #e74c3c;
+.delete-note-button, .delete-car-button, .delete-button, #fuel-history-content .delete-button {
+  background-color: #e74c3c;
     color: #fff;
     border: none;
     border-radius: 3px;
@@ -195,7 +215,7 @@ form button:hover {
     transition: background-color 0.3s ease;
 }
 
-.delete-note-button:hover, .delete-car-button:hover {
+.delete-note-button:hover, .delete-car-button:hover, .delete-button:hover, #fuel-history-content .delete-button:hover {
     background-color: #c0392b;
 }
 
@@ -237,3 +257,28 @@ form button:hover {
     color: #4caf50;
     font-size: 18px; 
 }
+
+/* PAGINACJA */
+
+.pagination-container, #fuel-history-content .pagination-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.button-pagination, #fuel-history-content .button-pagination {
+    all: unset;
+    background-color: #f0f0f0;
+    padding: 5px 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    cursor: pointer;
+}
+
+.button-pagination:disabled, #fuel-history-content .button-pagination:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+

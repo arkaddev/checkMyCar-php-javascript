@@ -52,7 +52,7 @@ function openService(carId) {
                         <td>${service.next_exchange_km}</td>
                         <td>${service.when_exchange}</td>
                         <td>
-                            <button onclick="makeReplaced('${service.id}')">Oznacz jako wymienioną</button>
+                            <button class="delete-button" onclick="makeReplaced('${service.id}', '${service.car_id}')">Wymień</button>
                         </td>
                     </tr>
                 `;
@@ -83,8 +83,10 @@ function closeListService() {
      
    
    
-   function makeReplaced(partId) {
+   function makeReplaced(partId, carId) {
    selectedPartId = partId;
+   selectedCarId = carId;
+     
    event.preventDefault(); // Zapobiega domyślnemu działaniu formularza
 
         // Wysłanie zapytania POST do serwera
@@ -93,7 +95,7 @@ function closeListService() {
             headers: {
                 "Content-Type": "application/x-www-form-urlencoded"
             },
-            body: `part_id_service=${selectedPartId}`
+            body: `part_id_service=${selectedPartId}&car_id_service=${selectedCarId}`
         })
         .then(response => response.json()) // Parsowanie odpowiedzi jako JSON
         .then(data => {
@@ -108,4 +110,8 @@ function closeListService() {
             console.error("Wystąpił błąd:", error);
             alert("Wystąpił błąd podczas aktualizacji przebiegu.");
         });
+        
+       
+    
+     
 }

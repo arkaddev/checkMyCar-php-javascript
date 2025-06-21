@@ -6,10 +6,12 @@ if (!isset($_SESSION["username"])) {
     exit();
 }
 
+$userId = $_SESSION['id'];
 
 $config = include('config/db_config.php');
 // Tworzymy połączenie
 $conn = mysqli_connect($config['servername'], $config['username'], $config['password'], $config['dbname']);
+
 
 
 // Sprawdzamy rolę użytkownika
@@ -25,15 +27,6 @@ $query = "
         c.year, 
         c.user_id,
         IFNULL(ROUND(SUM(f.liters)*100 / SUM(f.distance), 2), 'Brak danych') AS average_fuel_consumption,
-        
-           IFNULL(ROUND(
-            SUM(f.liters) * 100 / SUM(f.distance) * 
-            AVG(CASE 
-                WHEN f.price < 2 THEN f.price * 4.2 
-                ELSE f.price 
-            END), 
-        2), 'Brak danych') AS 100_km_price,
-   
         (
         SELECT 
             ROUND((f1.liters/f1.distance)*100,2)
@@ -76,37 +69,26 @@ require 'requests/fuel/update_fuel.php';
 
 // Zamykamy połączenie
 mysqli_close($conn);
-?> 
+
+
+
+?>
+
 <!DOCTYPE html>
 <html lang="pl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Spalanie - Auto Serwis Online</title>
+    <title>Serwis - Auto Serwis Online</title>
   
    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
    <link rel="stylesheet" href="css/style.css">
-  
-  <script src="js/fuel/menuFuel.js"></script>
-  <script src="js/fuel/fuelActions.js"></script>
-<script src="js/fuel/fuelChart.js"></script>
-  
+ 
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-         /* kontener glowny */
-.main-container {
-    max-width: 900px;
-}
-      
-      
-      
-    #menu-fuel-history{
-   width: 1100px;
-    font-size: 14px;
-}
-   
+    
     
     </style>
   
@@ -120,7 +102,7 @@ mysqli_close($conn);
           
           <span class="title">
             <a href="menu.php" class=""><i class="fas fa-home"></i></a>
-             &nbsp; Spalanie</span>
+             &nbsp; Serwis</span>
             <p>Zalogowany użytkownik: <span class="username"><?php echo htmlspecialchars($_SESSION['username']); ?></span>
           &nbsp;
           <a href="logout.php" title="Wyloguj">
@@ -131,8 +113,7 @@ mysqli_close($conn);
       </div>
      
      
-     
-     
+         
       <!-- Tabela z danymi z bazy -->
         <table>
             <thead>
@@ -141,7 +122,6 @@ mysqli_close($conn);
                     <th>Rok</th>
                     <th>Średnie spalanie</th>
                   <th>Ostatnie spalanie</th>
-                   <th>Koszt 100 km</th>
                     <th>Opcje</th>
                  
                 </tr>
@@ -159,7 +139,6 @@ mysqli_close($conn);
                         
                       echo '<td>' . (isset($row['last_fuel_consumption']) ? htmlspecialchars($row['last_fuel_consumption']) : 'Brak danych') . '</td>';
                       
-                      echo '<td>' . (isset($row['100_km_price']) ? htmlspecialchars($row['100_km_price']) : 'Brak danych') . '</td>';
                       echo '<td>
                       
                       <button class="add-fuel-button" onclick="menuAddFuel(' . htmlspecialchars($row['id']) . ')" title="Dodaj tankowanie"><i class="fas fa-plus"></i></button>
@@ -184,55 +163,8 @@ mysqli_close($conn);
      
      
      
+     
     
-   
-  </div>
-  
-  
-  
-  <form id="add-fuel">
-        <h2>Nowe tankowanie:</h2>
-        
-        <label for="add-fuel">Litry:</label>
-        <input type="number" id="add-fuel-liters-input" name="" required><br>
-
-        <label for="add-fuel-type-input">Rodzaj paliwa:</label>
-    <select id="add-fuel-type-input" name="fuel_type" required>
-        <option value="petrol">Benzyna</option>
-        <option value="diesel">Diesel</option>
-        <option value="lpg">LPG</option>
-    </select><br>
-      
-        <label for="add-fuel">Koszt za litr:</label>
-        <input type="number" id="add-fuel-price-input" name="" step="0.01" required><br>
-
-        <label for="add-fuel">Data tankowania:</label><br>
-        <input type="date" id="add-fuel-date-input" name="" required><br>
-
-        <label for="add-fuel">Dystans w km:</label><br>
-        <input type="number" id="add-fuel-distance-input" name="" required><br>
-    
-        <label for="add-fuel">Szczegóły:</label>
-        <input type="text" id="add-fuel-details-input" name="" required><br>
-      
-        <button type="submit" onclick="addNewFuel()">Zatwierdź</button>
-        <button type="button" onclick="closeMenuAddFuel()">Anuluj</button>
-    </form>
-  
-  
-  <div id="menu-fuel-history">
-    <h2>Informacje o tankowaniach:</h2>
-    <div id="fuel-history-content">
-        <!-- dane z tabeli cars_info -->
-    </div>
-    <button onclick="closeMenuFuelHistory()">Zamknij</button>
-   
-</div>
-  
-  <div id="chart-fuel-history" style="display: none;">
-    <h2>Wykres spalania</h2>
-    <canvas id="fuelChart"></canvas>
-    <button onclick="closeFuelHistoryChart()">Zamknij</button>
 </div>
 
  

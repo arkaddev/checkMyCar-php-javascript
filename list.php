@@ -4,10 +4,10 @@ require 'config/db_connection.php';
 
 require 'helpers/functions.php';
 
-require 'requests/update_car_data.php';
-require 'requests/car_info.php';
-require 'requests/add_part.php';
-require 'requests/add_fuel.php';
+require 'requests/list/update_car_data.php';
+require 'requests/list/car_info.php';
+require 'requests/list/add_part.php';
+require 'requests/fuel/update_fuel.php';
 
 
 ?>
@@ -24,19 +24,16 @@ $query = "
         c.insurance, 
         c.technical_inspection, 
         c.mileage,
+        ci.service_flag,
         IFNULL(ROUND(SUM(f.liters)*100 / SUM(f.distance), 2), 'Brak danych') AS average_fuel_consumption
-        
     FROM 
         cars c
     LEFT JOIN 
-        fuel f 
-    ON 
-        c.id = f.car_id
-      
-        
+        fuel f ON c.id = f.car_id
+    LEFT JOIN 
+        cars_info ci ON c.id = ci.car_id
     GROUP BY 
-        c.id, c.model, c.year, c.user_id, c.insurance, c.technical_inspection, c.mileage
-
+        c.id, c.model, c.year, c.user_id, c.insurance, c.technical_inspection, c.mileage, ci.service_flag
 ";
 
 
@@ -54,6 +51,12 @@ $result = mysqli_query($conn, $query);
 
 // Zamykamy połączenie
 mysqli_close($conn);
+
+
+
+
+
+
 ?> 
 
 <!DOCTYPE html>
@@ -61,15 +64,15 @@ mysqli_close($conn);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lista samochodów</title>
+    <title>Lista pojazdów - Auto Serwis Online</title>
 
-<script src="js/listMenuActions.js"></script>
-<script src="js/carDataActions.js"></script>
-<script src="js/infoCarActions.js"></script>
-<script src="js/partActions.js"></script>
-<script src="js/fuelActions.js"></script>
-<script src="js/historyActions.js"></script>
-<script src="js/serviceActions.js"></script>
+<script src="js/list/listMenuActions.js"></script>
+<script src="js/list/carDataActions.js"></script>
+<script src="js/list/infoCarActions.js"></script>
+<script src="js/list/partActions.js"></script>
+<script src="js/fuel/fuelActions.js"></script>
+<script src="js/list/historyActions.js"></script>
+<script src="js/list/serviceActions.js"></script>
 
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
@@ -102,18 +105,45 @@ mysqli_close($conn);
         background-color: #d4edda;   
     }
     
+    
+    
+   .service-alert {
+  background-color: orange;
+    color: #fff;
+    border: none;
+    border-radius: 3px;
+    padding: 5px 10px;
+    font-size: 0.9em;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+} 
+
+
+
+
+  
+
+
 </style> 
 </head>
 
 <body>
   
   <div class="main-container">
-        <div class="user-container">
+         <div class="user-container">
+          
+          
           <span class="title">
             <a href="menu.php" class=""><i class="fas fa-home"></i></a>
-            &nbsp; Lista pojazdów</span>
-            <p>Zalogowany użytkownik: <span class="username"><?php echo htmlspecialchars($_SESSION['username']); ?></span></p>
-     </div>
+             &nbsp; Lista pojazdów</span>
+            <p>Zalogowany użytkownik: <span class="username"><?php echo htmlspecialchars($_SESSION['username']); ?></span>
+          &nbsp;
+          <a href="logout.php" title="Wyloguj">
+          <i class="fas fa-sign-out-alt"></i></a>
+          
+          </p>
+           
+      </div>
   
    
       <!-- Tabela z danymi z bazy -->
@@ -148,6 +178,8 @@ mysqli_close($conn);
       $inspectionClass = getInsuranceClass($row['technical_inspection']);
  
       
+                   // zmiana koloru dla przycisku button gdy service_flag jest 1
+$serviceButtonClass = ($row['service_flag'] == 1) ? 'service-alert' : 'list-menu-button';   
       
       
         echo '<tr>';
@@ -161,7 +193,12 @@ mysqli_close($conn);
         echo '<td>' . htmlspecialchars($row['user_id']) . '</td>';
         echo '<td class="' . $insuranceClass . '">' . htmlspecialchars($row['insurance']) . '</td>';
         echo '<td class="' . $inspectionClass . '">' . htmlspecialchars($row['technical_inspection']) . '</td>';
-        echo '<td>' . htmlspecialchars($row['mileage']) . '</td>';
+        echo '<td>' . htmlspecialchars($row['mileage']) . '
+         
+         <button class="list-info-button" onclick="openInfoMileage(' . htmlspecialchars($row['id']) . ')" title="Historia przebiegu"><i class="fas fa-info"></i></button>
+        
+        </td>';
+                      
        echo '<td>' . (isset($row['average_fuel_consumption']) ? htmlspecialchars($row['average_fuel_consumption']) : 'Brak danych') . '</td>';
       
       
@@ -170,9 +207,19 @@ mysqli_close($conn);
       
       <button class="list-menu-button" onclick="openListMenu(' . htmlspecialchars($row['id']) . ')" title="Dodaj"><i class="fas fa-plus"></i></button>
           
-      <button class="list-menu-button" onclick="openHistory(' . htmlspecialchars($row['id']) . ')"><i class="fas fa-history"></i></button>
+      <button class="list-menu-button" onclick="openHistory(' . htmlspecialchars($row['id']) . ')" title="Historia"><i class="fas fa-history"></i></button>
       
-      <button class="list-menu-button" onclick="openService(' . htmlspecialchars($row['id']) . ')"><i class="fas fa-tools"></i></button>
+      <!-- przycisk serwis bez opcji powiadomienia
+                      <button class="list-menu-button" onclick="openService(' . htmlspecialchars($row['id']) . ')" title="Serwis"><i class="fas fa-tools"></i></button>
+      -->
+                        
+      <button class="' . $serviceButtonClass . '" onclick="openService(' . htmlspecialchars($row['id']) . ')" title="Serwis">
+  <i class="fas fa-tools"></i>
+</button>
+      
+      
+      
+</button>
       
       </td>';
         
@@ -307,6 +354,13 @@ mysqli_close($conn);
     <button type="button" onclick="closeListService()">Zamknij</button>
 </form>
   
+  <form id="list-info-mileage">
+    <h2>Informacje o przebiegu:</h2>
+    <div id="list-info-mileage-content">
+        <!-- dane z tabeli mileage -->
+    </div>
+    <button type="button" onclick="closeListInfoMileage()">Zamknij</button>
+</form>
   
   
 </body>

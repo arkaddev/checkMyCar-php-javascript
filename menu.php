@@ -7,7 +7,7 @@ require 'config/session.php';
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Menu</title>
+    <title>Menu - Auto Serwis Online</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
@@ -106,9 +106,17 @@ require 'config/session.php';
     <div class="menu-container">
         <div class="user-container">
           
-          <a href="menu.php" class=""><i class="fas fa-home"></i></a>
-          <span class="title">Menu</span>
-            <p>Zalogowany użytkownik: <span class="username"><?php echo htmlspecialchars($_SESSION['username']); ?></span></p>
+          
+          <span class="title">
+            <a href="menu.php" class=""><i class="fas fa-home"></i></a>
+             &nbsp; Menu</span>
+            <p>Zalogowany użytkownik: <span class="username"><?php echo htmlspecialchars($_SESSION['username']); ?></span>
+          &nbsp;
+          <a href="logout.php" title="Wyloguj">
+          <i class="fas fa-sign-out-alt"></i></a>
+          
+          </p>
+           
       </div>
         
         <div class="top-menu">
@@ -116,9 +124,9 @@ require 'config/session.php';
                 <i class="fas fa-car"></i>
                 Lista pojazdów
             </a>
-            <a href="note.php" class="menu-item menu-item-2">
-                <i class="fas fa-book"></i>
-                Notatnik
+            <a href="service.php" class="menu-item menu-item-2">
+                <i class="fas fa-tools"></i>
+                Serwis
             </a>
             <a href="fuel.php" class="menu-item menu-item-3">
                 <i class="fas fa-gas-pump"></i>
@@ -127,18 +135,20 @@ require 'config/session.php';
         </div>
         
         <div class="bottom-menu">
-            <a href="#" class="menu-item menu-item-4">
+            <a href="statistic.php" class="menu-item menu-item-4">
                 <i class="fas fa-chart-line"></i>
                 Statystyki
             </a>
-            <a href="user.php" class="menu-item menu-item-5">
+
+            <a href="note.php" class="menu-item menu-item-5">
+                <i class="fas fa-book"></i>
+                Notatnik
+            </a>
+            <a href="user.php" class="menu-item menu-item-6">
                 <i class="fas fa-user-cog"></i>
                 Ustawienia
             </a>
-            <a href="logout.php" class="menu-item menu-item-6">
-                <i class="fas fa-sign-out-alt"></i>
-                Wyloguj
-            </a>
+            
         </div>
     
      
