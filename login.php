@@ -1,4 +1,6 @@
 <?php
+require 'helpers/logger.php';
+
 session_start();
 
 
@@ -48,6 +50,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $_SESSION["username"] = $user['username'];
         $_SESSION["role"] = $user['role'];
         $_SESSION["id"] = $user['id'];
+      
+      // log
+       log_action($conn, $user['id'], "login", "user logged in");
 
         // Przekierowanie na stronę powitalną
         header("Location: menu.php");

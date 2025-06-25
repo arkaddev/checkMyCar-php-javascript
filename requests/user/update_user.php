@@ -47,6 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['user_id'], $_POST['ca
  ";
   
     if ($conn->multi_query($update_query) === TRUE) {
+      
         echo json_encode(['status' => 'success', 'message' => 'Pojazd został dodany']);
     } else {
         echo json_encode(['status' => 'error', 'message' => 'Błąd podczas dodawania pojazdu: ' . $conn->error]);

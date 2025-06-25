@@ -14,7 +14,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['car_id'], $_POST['mil
 
 
         if ($conn->query($insert_query) === TRUE) {
-            echo json_encode(['status' => 'success', 'message' => 'Przebieg został zaktualizowany']);
+          
+            
+          echo json_encode(['status' => 'success', 'message' => 'Przebieg został zaktualizowany']);
         } else {
             echo json_encode(['status' => 'warning', 'message' => 'Przebieg zaktualizowany, ale nie zapisano historii']);
         }
