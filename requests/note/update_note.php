@@ -11,7 +11,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['user_id'], $_POST['no
                      VALUES (NULL, '$note_title', '$note_contnet', '$user_id')";
   
     if ($conn->query($update_query) === TRUE) {
-       log_action($conn, $user_id, "new note", $note_title);
+       log_action($conn, $user_id, "note added", $note_title, 0);
         echo json_encode(['status' => 'success', 'message' => 'Notatka została dodana']);
     } else {
         echo json_encode(['status' => 'error', 'message' => 'Błąd podczas dodawania notatki']);
@@ -31,7 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['note_id'])) {
     if ($conn->query($delete_query) === TRUE) {
       
       // log
-       log_action($conn, $userId, "delete note", "id: " . $note_id);
+       log_action($conn, $userId, "note deleted", "note id: " . $note_id, 0);
       
         echo json_encode(['status' => 'success', 'message' => 'Notatka została usunięta']);
     } else {
