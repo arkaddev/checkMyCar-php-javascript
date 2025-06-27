@@ -52,12 +52,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $_SESSION["id"] = $user['id'];
       
       // log
-       log_action($conn, $user['id'], "login", "user logged in");
+       log_action($conn, $user['id'], "login", "success", "", "");
 
         // Przekierowanie na stronę powitalną
         header("Location: menu.php");
         exit();
     } else {
+      log_action($conn, $user['id'], "login", "failure", "", "");
         // Jeśli dane logowania są niepoprawne
         $error = "Błędna nazwa użytkownika lub hasło.";
     }

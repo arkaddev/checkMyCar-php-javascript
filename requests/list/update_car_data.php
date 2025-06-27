@@ -15,14 +15,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['car_id'], $_POST['mil
         $userId = $_SESSION['id'];
         if ($conn->query($insert_query) === TRUE) {
             
-            log_action($conn, $userId, "mileage updated", "car id: " . $car_id, $mileage);
+            log_action($conn, $userId, "mileage updated", "success", "car id: " . $car_id, $mileage);
           
           echo json_encode(['status' => 'success', 'message' => 'Przebieg został zaktualizowany']);
         } else {
             echo json_encode(['status' => 'warning', 'message' => 'Przebieg zaktualizowany, ale nie zapisano historii']);
         }
     } else {
-        log_action($conn, $userId, "mileage updated", "failure", 0);
+        log_action($conn, $userId, "mileage updated", "failure", "", "");
         echo json_encode(['status' => 'error', 'message' => 'Błąd podczas aktualizacji przebiegu']);
     }
 set_service();
@@ -39,10 +39,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['car_id'], $_POST['ins
   $userId = $_SESSION['id'];
   if ($conn->query($update_query) === TRUE) {
             
-            log_action($conn, $userId, "insurance updated", "car id: " . $car_id, $insurance);
+            log_action($conn, $userId, "insurance updated", "success", "car id: " . $car_id, $insurance);
         echo json_encode(['status' => 'success', 'message' => 'Ubezpieczenie zostało zaktualizowane']);
     } else {
-    log_action($conn, $userId, "insurance updated", "failure", 0);
+    log_action($conn, $userId, "insurance updated", "failure", "", "");
         echo json_encode(['status' => 'error', 'message' => 'Błąd podczas aktualizacji ubezpieczenia']);
     }
     exit();
@@ -58,10 +58,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['car_id'], $_POST['ins
   $userId = $_SESSION['id'];
   if ($conn->query($update_query) === TRUE) {
    
-            log_action($conn, $userId, "inspection updated", "car id: " . $car_id, $inspection);
+            log_action($conn, $userId, "inspection updated", "success", "car id: " . $car_id, $inspection);
         echo json_encode(['status' => 'success', 'message' => 'Przegląd został zaktualizowany']);
     } else {
-    log_action($conn, $userId, "inspection updated", "failure", 0);
+    log_action($conn, $userId, "inspection updated", "failure", "", "");
         echo json_encode(['status' => 'error', 'message' => 'Błąd podczas aktualizacji przeglądu']);
     }
     exit();

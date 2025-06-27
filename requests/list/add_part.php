@@ -15,10 +15,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['car_id'], $_POST['par
   $userId = $_SESSION['id'];
   
     if ($conn->query($update_query) === TRUE) {
-      log_action($conn, $userId, "part added", "success", "part name: " . $part_name);
+      log_action($conn, $userId, "part added", "success", "", "part name: " . $part_name);
         echo json_encode(['status' => 'success', 'message' => 'Część została dodana']);
     } else {
-      log_action($conn, $userId, "part updated", "failure", "part name: " . $part_name);
+      log_action($conn, $userId, "part updated", "failure", "", "part name: " . $part_name);
         echo json_encode(['status' => 'error', 'message' => 'Błąd podczas dodawania części']);
     }
     exit();
@@ -33,10 +33,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['part_id_service']))  
   
   $userId = $_SESSION['id'];
    if ($conn->query($query) === TRUE) {
-     log_action($conn, $userId, "part replaced", "success", "part id: " . $part_id);
+     log_action($conn, $userId, "part replaced", "success", "", "part id: " . $part_id);
         echo json_encode(['status' => 'success', 'message' => 'Dane zostały zaktualizowane']);
     } else {
-     log_action($conn, $userId, "part replaced", "failure", 0);
+     log_action($conn, $userId, "part replaced", "failure", "", "");
         echo json_encode(['status' => 'error', 'message' => 'Błąd podczas aktualizacji danych']);
     }
   
@@ -115,10 +115,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['part_id_delete'])) {
   
     // Wykonanie zapytania
     if ($conn->query($delete_query) === TRUE) {
-      log_action($conn, $userId, "part deleted", "success", "part id: " . $part_id);
+      log_action($conn, $userId, "part deleted", "success", "", "part id: " . $part_id);
         echo json_encode(['status' => 'success', 'message' => 'Część została usunięta']);
     } else {
-      log_action($conn, $userId, "part deleted", "failure", "part id: " . $part_id);
+      log_action($conn, $userId, "part deleted", "failure", "", "part id: " . $part_id);
         echo json_encode(['status' => 'error', 'message' => 'Błąd podczas usuwania części']);
     }
     exit();
