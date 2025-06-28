@@ -29,7 +29,7 @@ function addNewFuel() {
         })
         .catch(error => {
             console.error("Wystąpił błąd:", error);
-            alert("Wystąpił błąd podczas dodawania części.");
+            alert("Wystąpił błąd podczas dodawania tankowania.");
         });
     }
 

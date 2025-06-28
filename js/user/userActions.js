@@ -99,7 +99,7 @@
             headers: {
                 "Content-Type": "application/x-www-form-urlencoded"
             },
-            body: `user_id=${userId}&carModel=${carModel}&carYear=${carYear}&carEngine=${carEngine}&carKw=${carKw}&carOil=${carOil}&carOilFilter=${carOilFilter}&carAirFilter=${carAirFilter}&carTires=${carTires}$carOtherInfo=${carOtherInfo}`
+            body: `user_id=${userId}&carModel=${carModel}&carYear=${carYear}&carEngine=${carEngine}&carKw=${carKw}&carOil=${carOil}&carOilFilter=${carOilFilter}&carAirFilter=${carAirFilter}&carTires=${carTires}&carOtherInfo=${carOtherInfo}`
         })
         .then(response => response.json()) // Parsowanie odpowiedzi jako JSON
         .then(data => {

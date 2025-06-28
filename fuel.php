@@ -6,6 +6,7 @@ if (!isset($_SESSION["username"])) {
     exit();
 }
 
+require 'helpers/logger.php';
 
 $config = include('config/db_config.php');
 // Tworzymy połączenie

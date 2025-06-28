@@ -14,9 +14,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['car_id'], $_POST['fue
     $update_query = "INSERT INTO fuel (id, liters, price, fuel_type, refueling_date, distance, details, consumption_100_km, car_id) 
                      VALUES (NULL, '$fuel_liters', '$fuel_price', '$fuel_type', '$fuel_date', '$fuel_distance', '$fuel_details', $fuel_consumption, '$car_id')";
   
+  $userId = $_SESSION['id'];
     if ($conn->query($update_query) === TRUE) {
+      log_action($conn, $userId, "fuel added", "success", "car id: " . $car_id, "");
         echo json_encode(['status' => 'success', 'message' => 'Tankowanie zostało dodane']);
     } else {
+      log_action($conn, $userId, "fuel added", "failure", "car id: " . $car_id, "");
         echo json_encode(['status' => 'error', 'message' => 'Błąd podczas dodawania tankowania']);
     }
     exit();
@@ -29,9 +32,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['fuel_id_history']))  
     
     $query = "DELETE FROM fuel WHERE id = $fuel_id";
   
+  $userId = $_SESSION['id'];
    if ($conn->query($query) === TRUE) {
+     log_action($conn, $userId, "fuel deleted", "success", "fuel id: " . $fuel_id, "");
         echo json_encode(['status' => 'success', 'message' => 'Dane zostały zaktualizowane']);
     } else {
+     log_action($conn, $userId, "fuel deleted", "failure", "fuel id: " . $fuel_id, "");
         echo json_encode(['status' => 'error', 'message' => 'Błąd podczas aktualizacji danych']);
     }
     exit();
