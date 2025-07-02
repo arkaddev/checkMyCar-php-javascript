@@ -7,10 +7,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['car_id_info']))  {
     $query = "SELECT * FROM cars_info WHERE car_id = $car_id";
     $result = $conn->query($query);
     
+  $userId = $_SESSION['id'];
     if ($result->num_rows > 0) {
         $data = $result->fetch_all(MYSQLI_ASSOC);
+      
+      log_action($conn, $userId, "info displayed", "success", "car id: " . $car_id, "");
         echo json_encode(['status' => 'success', 'data' => $data]);
     } else {
+      log_action($conn, $userId, "info displayed", "failure", "car id: " . $car_id, "");
         echo json_encode(['status' => 'error', 'message' => 'Brak danych o samochodzie']);
     }
     exit();
@@ -24,10 +28,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['car_id_info_mileage']
     $query = "SELECT * FROM mileages WHERE car_id = $car_id ORDER BY date DESC";
     $result = $conn->query($query);
     
+  $userId = $_SESSION['id'];
     if ($result->num_rows > 0) {
         $data = $result->fetch_all(MYSQLI_ASSOC);
+      
+       log_action($conn, $userId, "mileage displayed", "success", "car id: " . $car_id, "");
         echo json_encode(['status' => 'success', 'data' => $data]);
     } else {
+        log_action($conn, $userId, "mileage displayed", "failure", "car id: " . $car_id, "");
         echo json_encode(['status' => 'error', 'message' => 'Brak danych o samochodzie']);
     }
     exit();
@@ -48,10 +56,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['car_id_history']))  {
     //$query = "SELECT * FROM parts WHERE car_id = $car_id ORDER BY kilometers_status ASC";
     $result = $conn->query($query);
     
+  $userId = $_SESSION['id'];
     if ($result->num_rows > 0) {
         $data = $result->fetch_all(MYSQLI_ASSOC);
+      
+      log_action($conn, $userId, "history displayed", "success", "car id: " . $car_id, "");
         echo json_encode(['status' => 'success', 'data' => $data]);
     } else {
+      log_action($conn, $userId, "history displayed", "failure", "car id: " . $car_id, "");
         echo json_encode(['status' => 'error', 'message' => 'Brak danych o samochodzie']);
     }
     exit();
@@ -85,10 +97,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['car_id_history']))  {
     
     $result = $conn->query($query);
     
+    $userId = $_SESSION['id'];
     if ($result->num_rows > 0) {
         $data = $result->fetch_all(MYSQLI_ASSOC);
+      
+      log_action($conn, $userId, "service displayed", "success", "car id: " . $car_id, "");
         echo json_encode(['status' => 'success', 'data' => $data]);
     } else {
+      log_action($conn, $userId, "service displayed", "failure", "car id: " . $car_id, "");
         echo json_encode(['status' => 'error', 'message' => 'Brak danych o samochodzie']);
     }
     exit();
