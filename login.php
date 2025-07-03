@@ -117,6 +117,26 @@ mysqli_close($conn);
             color: red;
             margin-top: 10px;
         }
+      
+     @media (max-width: 600px) {
+    .container {
+        width: 90%;
+        padding: 15px;
+    }
+
+    input[type="text"], input[type="password"] {
+        font-size: 1em;
+        padding: 12px;
+    }
+
+    button {
+        width: 100%;
+        font-size: 1em;
+    }
+}
+     
+      
+      
     </style>
 </head>
 <body>
