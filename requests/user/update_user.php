@@ -14,9 +14,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['new_password'])) {
     // Zapytanie SQL do aktualizacji hasła
     $update_query = "UPDATE users SET password = '$hashed_password' WHERE username = '$username'";
     
+  $userId = $_SESSION['id'];
     if ($conn->query($update_query) === TRUE) {
+      log_action($conn, $userId, "password updated", "success", "", "");
+      
         echo json_encode(['status' => 'success', 'message' => 'Hasło zostało zaktualizowane']);
     } else {
+      
+      log_action($conn, $userId, "password updated", "failure", "", "");
         echo json_encode(['status' => 'error', 'message' => 'Błąd podczas aktualizacji hasła: ' . $conn->error]);
     }
     exit();
@@ -46,10 +51,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['user_id'], $_POST['ca
 
  ";
   
+  $userId = $_SESSION['id'];
     if ($conn->multi_query($update_query) === TRUE) {
       
+      log_action($conn, $userId, "car added", "success", "car model: " . $car_model, "");
         echo json_encode(['status' => 'success', 'message' => 'Pojazd został dodany']);
     } else {
+      
+      log_action($conn, $userId, "car added", "failure", "", "");
         echo json_encode(['status' => 'error', 'message' => 'Błąd podczas dodawania pojazdu: ' . $conn->error]);
     }
     
@@ -68,9 +77,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['car_id'])) {
     DELETE FROM cars WHERE id = $car_id";
 
     // Wykonanie zapytania
+  
+  $userId = $_SESSION['id'];
     if ($conn->multi_query($delete_query) === TRUE) {
+      
+      log_action($conn, $userId, "car deleted", "success", "car id: " . $car_id, "");
         echo json_encode(['status' => 'success', 'message' => 'Pojazd został usunięty']);
     } else {
+      
+      log_action($conn, $userId, "car deleted", "failure", "car id: " . $car_id, "");
       echo json_encode(['status' => 'error', 'message' => 'Błąd podczas usuwania pojazdu: ' . $conn->error]);
     }
     exit();
