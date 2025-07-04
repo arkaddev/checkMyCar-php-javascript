@@ -62,11 +62,11 @@ and tells you when the next replacement is due (e.g. oil, brakes)
 
 ### v0.7
 - log table
-- insurance and technical inspection reminder by email
 - overall expenses analysis
 
 ### v0.8
 - version for mobile devices
+- insurance and technical inspection reminder by email
 
 ### v0.9
 - api
